@@ -1,0 +1,12 @@
+{
+  "name": "green-sampah",
+  "version": "1.0.0",
+  "description": "ZeroWaste Command Center with Express backend and local file database",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

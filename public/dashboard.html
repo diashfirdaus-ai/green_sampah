@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero-Waste Command Center</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hidden-view {
+            display: none !important;
+        }
+
+        .active-tab {
+            background-color: #059669 !important;
+            color: white !important;
+            box-shadow: 0 10px 15px -3px rgba(6, 78, 59, 0.5) !important;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Chat Scrollbar */
+        .chat-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* Background untuk Chat */
+        .bg-chat-pattern {
+            background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-slate-50 flex text-slate-800 overflow-hidden">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-2xl shrink-0 z-20 h-screen">
+        <div class="p-6">
+            <div class="flex items-center gap-2 text-emerald-400 mb-2">
+                <i class="ph-fill ph-database text-3xl"></i>
+                <h1 class="text-xl font-bold text-white tracking-tight">Zero<span class="text-emerald-400">Waste</span>
+                </h1>
+            </div>
+            <p class="text-[10px] text-slate-400 font-medium bg-slate-800 inline-block px-2 py-1 rounded">Super App v3.0
+            </p>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-1 mt-2 overflow-y-auto">
+            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-4 tracking-wider">Modul Utama</p>
+            <button onclick="switchTab('dashboard')" id="btn-tab-dashboard"
+                class="nav-btn active-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white">
+                <i class="ph-bold ph-squares-four text-xl"></i> Dashboard
+            </button>
+
+            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Telemetri IoT</p>
+            <button onclick="switchTab('biopond')" id="btn-tab-biopond"
+                class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white">
+                <i class="ph-bold ph-bug text-xl"></i> Bio-Pond BSF
+            </button>
+            <button onclick="switchTab('biocng')" id="btn-tab-biocng"
+                class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white relative">
+                <i class="ph-bold ph-fire text-xl"></i> Reaktor BioCNG
+                <span id="biocng-alert-badge"
+                    class="hidden ml-auto w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+            </button>
+
+            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Otomasi AI</p>
+            <button onclick="switchTab('chat')" id="btn-tab-chat"
+                class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white relative">
+                <i class="ph-bold ph-chat-circle-dots text-xl"></i> WhatsApp Agent
+                <span id="chat-alert-badge"
+                    class="hidden absolute right-4 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+            </button>
+
+            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Simulator</p>
+            <a href="simulator.html"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white text-slate-300 no-underline"
+                style="text-decoration:none;">
+                <i class="ph-bold ph-flask text-xl text-emerald-400"></i>
+                <span class="font-medium">Simulator Sirkular</span>
+                <span class="ml-auto text-[9px] font-bold bg-emerald-500 text-white px-2 py-0.5 rounded-full">NEW</span>
+            </a>
+
+            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Toko Komunitas</p>
+            <a href="shop.html"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white text-slate-300 no-underline"
+                style="text-decoration:none;">
+                <i class="ph-bold ph-shopping-cart text-xl text-blue-400"></i>
+                <span class="font-medium">Marketplace Hijau</span>
+                <span class="ml-auto text-[9px] font-bold bg-blue-500 text-white px-2 py-0.5 rounded-full">SHOP</span>
+            </a>
+            <a href="game.html"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white text-slate-300 no-underline"
+                style="text-decoration:none;">
+                <i class="ph-bold ph-game-controller text-xl text-amber-400"></i>
+                <span class="font-medium">Game Sirkular</span>
+                <span class="ml-auto text-[9px] font-bold bg-amber-500 text-slate-900 px-2 py-0.5 rounded-full">GAME</span>
+            </a>
+
+            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Hibah</p>
+            <a href="index.html"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-amber-900 hover:text-white text-slate-300 no-underline"
+                style="text-decoration:none; background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(212,175,55,0.04)); border: 1px solid rgba(212,175,55,0.2);">
+                <i class="ph-bold ph-trophy text-xl text-yellow-400"></i>
+                <span class="font-medium text-yellow-200">Proposal Green Jobs</span>
+                <span class="ml-auto text-[9px] font-bold bg-yellow-500 text-slate-900 px-2 py-0.5 rounded-full">🏆</span>
+            </a>
+        </nav>
+
+        <div class="p-6 mt-auto border-t border-slate-800">
+            <div class="bg-slate-800 rounded-xl p-4 flex items-center gap-3 border border-slate-700">
+                <div class="bg-emerald-500/20 p-2 rounded-lg"><i class="ph-fill ph-users text-emerald-400 text-xl"></i>
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-400">Warga Terdaftar</p>
+                    <p class="text-lg font-bold text-white" id="val-citizens">42 KK</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="flex-1 p-8 h-screen overflow-y-auto relative">
+        <header class="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-4">
+            <div>
+                <h1 id="page-title" class="text-3xl font-bold text-slate-800 mb-1">Dashboard Ekonomi Sirkular</h1>
+                <p id="page-desc" class="text-slate-500">Pusat Kendali Pengelolaan Sampah & Transisi Energi Tingkat RW
+                </p>
+            </div>
+            <div
+                class="hidden lg:flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm text-sm font-medium text-slate-600">
+                Node Server: <span class="text-emerald-500 flex items-center gap-1"><i
+                        class="ph-fill ph-check-circle"></i> Online</span>
+            </div>
+        </header>
+
+        <!-- VIEW: DASHBOARD -->
+        <div id="view-dashboard" class="space-y-6 animate-fade-in block">
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-sm font-medium">Sampah Kering</p>
+                        <div class="bg-blue-100 p-2 rounded-lg"><i class="ph-fill ph-scales text-xl text-blue-600"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800"><span id="val-dry">125.5</span> <span
+                            class="text-sm font-normal text-slate-500">kg</span></h3>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-sm font-medium">Stok Maggot BSF</p>
+                        <div class="bg-emerald-100 p-2 rounded-lg"><i
+                                class="ph-fill ph-bug text-xl text-emerald-600"></i></div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800"><span id="val-maggot">12.0</span> <span
+                            class="text-sm font-normal text-slate-500">kg</span></h3>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-sm font-medium">Tabung BioCNG</p>
+                        <div class="bg-orange-100 p-2 rounded-lg"><i
+                                class="ph-fill ph-fire text-xl text-orange-600"></i></div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800"><span id="val-biocng">8</span> <span
+                            class="text-sm font-normal text-slate-500">Unit</span></h3>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col lg:col-span-2">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-sm font-medium">Emisi Karbon Terhindari</p>
+                        <div class="bg-teal-100 p-2 rounded-lg"><i
+                                class="ph-fill ph-cloud-rain text-xl text-teal-600"></i></div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800"><span id="val-carbon">58.5</span> <span
+                            class="text-sm font-normal text-slate-500">kg CO2e</span></h3>
+                    <p class="text-teal-600 text-xs mt-1 font-medium">Memenuhi standar ESG & NDC Indonesia</p>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <p class="text-slate-500 text-sm font-medium">Total Pendapatan</p>
+                        <div class="bg-amber-100 p-2 rounded-lg"><i
+                                class="ph-fill ph-currency-circle-dollar text-xl text-amber-600"></i></div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800" id="val-revenue">Rp 450.000</h3>
+                </div>
+            </div>
+
+            <!-- Simulation Controls -->
+            <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                <i class="ph-fill ph-factory text-6xl text-slate-800 absolute right-10 top-10 pointer-events-none"></i>
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">Orkestrasi Super-App (Simulasi)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
+                    <!-- Maggot Simulator -->
+                    <div class="space-y-3 bg-slate-800 p-4 rounded-xl border border-slate-700">
+                        <h3 class="font-semibold text-emerald-400 text-sm flex items-center gap-2"><i
+                                class="ph-bold ph-leaf"></i> Sirkular Pangan (Maggot)</h3>
+                        <button onclick="simDepositOrganic()"
+                            class="w-full bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-sm text-left flex items-center gap-3 transition-all cursor-pointer">
+                            <div class="bg-slate-600 p-1.5 rounded"><i class="ph-bold ph-download-simple"></i></div> 1.
+                            Warga Setor Sampah Dapur
+                        </button>
+                        <button onclick="simHarvestMaggot()"
+                            class="w-full bg-emerald-600 hover:bg-emerald-500 p-3 rounded-lg text-sm text-left flex items-center gap-3 transition-all cursor-pointer">
+                            <div class="bg-emerald-700 p-1.5 rounded"><i class="ph-bold ph-bug"></i></div> 2. Panen &
+                            Jual Maggot Otomatis
+                        </button>
+                    </div>
+                    <!-- BioCNG Simulator -->
+                    <div class="space-y-3 bg-slate-800 p-4 rounded-xl border border-slate-700">
+                        <h3 class="font-semibold text-orange-400 text-sm flex items-center gap-2"><i
+                                class="ph-bold ph-lightning"></i> Sirkular Energi (BioCNG)</h3>
+                        <button onclick="simDepositSlurry()"
+                            class="w-full bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-sm text-left flex items-center gap-3 transition-all cursor-pointer">
+                            <div class="bg-slate-600 p-1.5 rounded"><i class="ph-bold ph-drop"></i></div> 1. Input
+                            Limbah ke Digester
+                        </button>
+                        <button onclick="simHarvestBioCNG()"
+                            class="w-full bg-orange-600 hover:bg-orange-500 p-3 rounded-lg text-sm text-left flex items-center gap-3 transition-all cursor-pointer">
+                            <div class="bg-orange-700 p-1.5 rounded"><i class="ph-bold ph-fire"></i></div> 2. Botolkan &
+                            Jual Gas ke UMKM
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW: BIO-POND -->
+        <div id="view-biopond" class="hidden-view animate-fade-in">
+            <div class="p-10 text-center bg-white rounded-2xl border border-slate-200 shadow-sm mt-10">
+                <i class="ph-fill ph-bug text-7xl mx-auto text-slate-300 mb-4 block"></i>
+                <h2 class="text-xl font-bold text-slate-600">Modul Bio-Pond Aktif</h2>
+                <p class="text-slate-500 mt-2">Sensor IoT BSF berjalan normal (Suhu 31.5°C).<br>Silakan navigasi ke
+                    modul <strong>Reaktor BioCNG</strong> untuk melihat demonstrasi peringatan bahaya (Hazard Warning)
+                    IoT.</p>
+            </div>
+        </div>
+
+        <!-- VIEW: BIOCNG -->
+        <div id="view-biocng" class="hidden-view animate-fade-in space-y-6">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">Telemetri Reaktor BioCNG</h2>
+                </div>
+                <div id="biocng-status-badge"
+                    class="px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 bg-emerald-100 text-emerald-700 border border-emerald-200">
+                    <i class="ph-fill ph-check-circle text-lg"></i> STATUS: OPTIMAL
+                </div>
+            </div>
+
+            <!-- Sensor Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Pressure -->
+                <div
+                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center relative overflow-hidden">
+                    <div id="bar-pressure"
+                        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-red-500"></div>
+                    <i id="icon-pressure" class="ph-fill ph-gauge text-5xl mx-auto mb-4 text-orange-500"></i>
+                    <p class="text-slate-500 font-medium text-sm">Tekanan Reaktor</p>
+                    <h3 id="ui-pressure" class="text-4xl font-black mt-2 text-slate-800">1.2 <span
+                            class="text-lg">Bar</span></h3>
+                    <p class="text-xs text-slate-400 mt-2">Batas Aman: &lt; 2.0 Bar</p>
+                </div>
+                <!-- Methane -->
+                <div
+                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 to-emerald-500"></div>
+                    <i class="ph-fill ph-fire text-5xl mx-auto mb-4 text-teal-500"></i>
+                    <p class="text-slate-500 font-medium text-sm">Kadar Metana (CH4)</p>
+                    <h3 id="ui-methane" class="text-4xl font-black mt-2 text-slate-800">65%</h3>
+                    <p class="text-xs text-slate-400 mt-2">Siap dibakar: &gt; 60%</p>
+                </div>
+                <!-- pH -->
+                <div
+                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-indigo-400"></div>
+                    <i class="ph-fill ph-drop text-5xl mx-auto mb-4 text-indigo-400"></i>
+                    <p class="text-slate-500 font-medium text-sm">pH Digester</p>
+                    <h3 id="ui-ph" class="text-4xl font-black mt-2 text-slate-800">7.1</h3>
+                    <p class="text-xs text-slate-400 mt-2">Optimal: 6.8 - 7.2</p>
+                </div>
+            </div>
+
+            <!-- Danger Control Panel -->
+            <div class="bg-orange-50 p-6 rounded-2xl border border-orange-200 shadow-sm mt-4">
+                <h3 class="font-bold text-orange-900 mb-4 flex items-center gap-2"><i class="ph-fill ph-warning"></i>
+                    Uji Coba Keamanan Reaktor (AI Safety Protocol)</h3>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="triggerOverpressure()"
+                        class="bg-white text-red-600 hover:bg-red-50 border border-red-200 px-5 py-3 rounded-xl font-medium transition-all shadow-sm cursor-pointer text-sm">
+                        Simulasi Overpressure (Tekanan Kritis)
+                    </button>
+                    <button onclick="resolveOverpressure()" id="btn-resolve-biocng"
+                        class="hidden bg-emerald-600 text-white hover:bg-emerald-700 px-5 py-3 rounded-xl font-medium transition-all shadow-sm cursor-pointer text-sm">
+                        Selesaikan Darurat (Buka Katup)
+                    </button>
+                </div>
+                <p class="text-xs text-orange-700 mt-3">*Jika ditekan, LLM Agent akan mengirim peringatan tingkat tinggi
+                    ke WhatsApp Teknisi dan memutus aliran input secara virtual.</p>
+            </div>
+        </div>
+
+        <!-- VIEW: CHAT AI -->
+        <div id="view-chat"
+            class="hidden-view flex-col h-[calc(100vh-140px)] bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden animate-fade-in">
+            <!-- Header Chat -->
+            <div class="bg-[#075E54] text-white p-4 flex justify-between items-center z-10 shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/20 p-2 rounded-full"><i class="ph-fill ph-robot text-2xl"></i></div>
+                    <div>
+                        <h3 class="font-bold text-lg leading-tight">Super-Agent LLM</h3>
+                        <p class="text-[11px] text-emerald-100 flex items-center gap-1">
+                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> Mengelola Maggot &
+                            BioCNG
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Area -->
+            <div id="chat-container"
+                class="flex-1 bg-chat-pattern bg-[#E5DDD5] p-4 overflow-y-auto space-y-4 chat-scroll">
+                <!-- Chat dicreate lewat JavaScript -->
+            </div>
+
+            <!-- Input Area -->
+            <form id="chat-form" onsubmit="handleSendChat(event)"
+                class="bg-[#F0F0F0] p-3 flex gap-2 items-center shrink-0">
+                <input type="text" id="chat-input" placeholder="Lapor ke AI Agent (misal: Katup gas sudah ditutup)..."
+                    class="flex-1 rounded-full py-3 px-5 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#075E54] shadow-sm text-sm">
+                <button type="submit"
+                    class="bg-[#00897B] text-white w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#00695C] transition-colors shadow-sm cursor-pointer">
+                    <i class="ph-fill ph-paper-plane-right text-xl"></i>
+                </button>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        // --- 1. GLOBAL STATE ---
+        let state = {
+            stats: {
+                dryWaste: 125.5,
+                organicWaste: 84.2,
+                maggotStock: 12.0,
+                biocngStock: 8,
+                revenue: 450000,
+                carbonSaved: 58.5,
+                activeCitizens: 42
+            },
+            biocng: {
+                status: 'OPTIMAL', // OPTIMAL | KRITIS
+                pressure: 1.2,
+                methane: 65,
+                ph: 7.1
+            },
+            chats: [
+                { sender: 'Bot', text: '🟢 Super-App Zero-Waste Micro-Agent aktif.\nMemantau:\n- 1 Timbangan IoT\n- 2 Bio-Pond Maggot\n- 1 Reaktor BioCNG', time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) }
+            ]
+        };
+
+        // UI Text Mapping untuk Tab Titles
+        const pageTitles = {
+            'dashboard': { title: 'Dashboard Ekonomi Sirkular', desc: 'Pusat Kendali Pengelolaan Sampah & Transisi Energi Tingkat RW' },
+            'biopond': { title: 'Monitoring Maggot BSF', desc: 'Telemetri IoT Pertanian Urban' },
+            'biocng': { title: 'Telemetri Reaktor BioCNG', desc: 'Sirkular Energi: Mengubah Limbah Organik menjadi Gas Masak Bersih' },
+            'chat': { title: 'Log AI Orchestrator', desc: 'Pusat Komunikasi Otonom Sistem' }
+        };
+
+        // --- 2. INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStateFromLocalStorage();
+            updateDashboardUI();
+            updateBioCNGUI();
+            renderChats();
+        });
+
+        // Sync with local database (API / localStorage)
+        function loadStateFromLocalStorage() {
+            if (window.location.protocol.startsWith('http')) {
+                fetch('/api/stats')
+                    .then(res => res.json())
+                    .then(sync => {
+                        if (sync.maggotStock !== undefined) state.stats.maggotStock = sync.maggotStock;
+                        if (sync.biocngStock !== undefined) state.stats.biocngStock = sync.biocngStock;
+                        if (sync.carbonSaved !== undefined) state.stats.carbonSaved = sync.carbonSaved;
+                        if (sync.revenue !== undefined) state.stats.revenue = sync.revenue;
+                        if (sync.organicWasteOlah !== undefined) state.stats.dryWaste = sync.organicWasteOlah;
+                        updateDashboardUI();
+                    })
+                    .catch(err => {
+                        console.log("Local Express API not detected, running localStorage fallback.");
+                        loadLocalStorageFallback();
+                    });
+            } else {
+                loadLocalStorageFallback();
+            }
+        }
+
+        function loadLocalStorageFallback() {
+            var data = localStorage.getItem('zero_waste_sim_state');
+            if (data) {
+                try {
+                    var sync = JSON.parse(data);
+                    if (sync.maggotStock !== undefined) state.stats.maggotStock = sync.maggotStock;
+                    if (sync.biocngStock !== undefined) state.stats.biocngStock = sync.biocngStock;
+                    if (sync.carbonSaved !== undefined) state.stats.carbonSaved = sync.carbonSaved;
+                    if (sync.revenue !== undefined) state.stats.revenue = sync.revenue;
+                    if (sync.organicWasteOlah !== undefined) state.stats.dryWaste = sync.organicWasteOlah;
+                } catch(e) {
+                    console.error("Local storage database sync error:", e);
+                }
+            }
+        }
+
+        // Real-time synchronization interval (every 2 seconds)
+        setInterval(loadStateFromLocalStorage, 2000);
+
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'zero_waste_sim_state') {
+                loadLocalStorageFallback();
+                updateDashboardUI();
+            }
+        });
+
+        // --- 3. HELPER FUNCTIONS ---
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+        }
+
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('chat-container');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // --- STREAMING_CHUNK:Core UI updaters... ---
+        // --- 4. UI UPDATER FUNCTIONS ---
+
+        function updateDashboardUI() {
+            document.getElementById('val-dry').innerText = state.stats.dryWaste.toFixed(1);
+            document.getElementById('val-maggot').innerText = state.stats.maggotStock.toFixed(1);
+            document.getElementById('val-biocng').innerText = state.stats.biocngStock;
+            document.getElementById('val-carbon').innerText = state.stats.carbonSaved.toFixed(1);
+            document.getElementById('val-revenue').innerText = formatRupiah(state.stats.revenue);
+            document.getElementById('val-citizens').innerText = `${state.stats.activeCitizens} KK`;
+        }
+
+        function updateBioCNGUI() {
+            const isKritis = state.biocng.status === 'KRITIS';
+
+            // Update Values
+            document.getElementById('ui-pressure').innerHTML = `${state.biocng.pressure.toFixed(1)} <span class="text-lg">Bar</span>`;
+            document.getElementById('ui-methane').innerText = `${state.biocng.methane}%`;
+            document.getElementById('ui-ph').innerText = state.biocng.ph.toFixed(1);
+
+            // Update Badge Status
+            const badge = document.getElementById('biocng-status-badge');
+            if (isKritis) {
+                badge.className = 'px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 bg-red-100 text-red-700 border border-red-200 animate-pulse';
+                badge.innerHTML = `<i class="ph-fill ph-warning text-lg"></i> STATUS: KRITIS`;
+                document.getElementById('ui-pressure').classList.add('text-red-600');
+                document.getElementById('ui-pressure').classList.remove('text-slate-800');
+                document.getElementById('icon-pressure').classList.add('text-red-500', 'animate-bounce');
+                document.getElementById('icon-pressure').classList.remove('text-orange-500');
+                document.getElementById('btn-resolve-biocng').classList.remove('hidden');
+
+                // Sidebar Alerts
+                document.getElementById('biocng-alert-badge').classList.remove('hidden');
+                document.getElementById('chat-alert-badge').classList.remove('hidden');
+            } else {
+                badge.className = 'px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 bg-emerald-100 text-emerald-700 border border-emerald-200';
+                badge.innerHTML = `<i class="ph-fill ph-check-circle text-lg"></i> STATUS: OPTIMAL`;
+                document.getElementById('ui-pressure').classList.remove('text-red-600');
+                document.getElementById('ui-pressure').classList.add('text-slate-800');
+                document.getElementById('icon-pressure').classList.remove('text-red-500', 'animate-bounce');
+                document.getElementById('icon-pressure').classList.add('text-orange-500');
+                document.getElementById('btn-resolve-biocng').classList.add('hidden');
+
+                // Clear Sidebar Alerts
+                document.getElementById('biocng-alert-badge').classList.add('hidden');
+                document.getElementById('chat-alert-badge').classList.add('hidden');
+            }
+        }
+
+        function renderChats() {
+            const container = document.getElementById('chat-container');
+            container.innerHTML = ''; // Clear
+
+            state.chats.forEach(msg => {
+                const isBot = msg.sender === 'Bot';
+                const isUser = msg.sender === 'Kader/Teknisi';
+                const isThirdParty = !isBot && !isUser;
+
+                let alignClass = isBot ? 'justify-start' : 'justify-end';
+                let bubbleClass = isBot ? 'bg-white rounded-tl-none' :
+                    isUser ? 'bg-[#DCF8C6] rounded-tr-none' :
+                        'bg-blue-50 border border-blue-100 rounded-tl-none';
+
+                let html = `
+                    <div class="flex ${alignClass} animate-fade-in">
+                        <div class="max-w-[85%] rounded-xl p-3 shadow-sm relative ${bubbleClass}">
+                            ${!isBot && !isUser ? `<p class="text-xs font-bold text-blue-700 mb-1">${msg.sender}</p>` : ''}
+                            ${isBot ? `<p class="text-xs font-bold text-[#075E54] mb-1"><i class="ph-fill ph-robot"></i> AI Super-Agent</p>` : ''}
+                            
+                            <p class="text-[14px] whitespace-pre-wrap leading-relaxed text-slate-800">${msg.text}</p>
+                            
+                            <span class="text-[10px] text-slate-400 mt-2 block text-right">
+                                ${msg.time} ${isUser ? '<i class="ph-bold ph-check-circle text-blue-500 ml-1"></i>' : ''}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+            scrollToBottom();
+        }
+
+        function addChatMessage(sender, text) {
+            state.chats.push({ sender, text, time: getCurrentTime() });
+
+            // Re-render UI ONLY if chat is open, else just update array
+            // But to ensure it's there when we open it, we just call render
+            renderChats();
+        }
+
+        // --- STREAMING_CHUNK:Interaction and simulation logic... ---
+        // --- 5. NAVIGATION LOGIC ---
+        function switchTab(tabId) {
+            // Sembunyikan semua view
+            ['dashboard', 'biopond', 'biocng', 'chat'].forEach(id => {
+                document.getElementById(`view-${id}`).classList.add('hidden-view');
+                document.getElementById(`view-${id}`).classList.remove('block', 'flex');
+
+                // Hapus style active dari tombol
+                document.getElementById(`btn-tab-${id}`).classList.remove('active-tab');
+            });
+
+            // Tampilkan view yang dituju
+            const targetView = document.getElementById(`view-${tabId}`);
+            targetView.classList.remove('hidden-view');
+
+            if (tabId === 'chat') {
+                targetView.classList.add('flex'); // Chat butuh display flex
+                scrollToBottom();
+            } else {
+                targetView.classList.add('block');
+            }
+
+            // Aktifkan tombol
+            document.getElementById(`btn-tab-${tabId}`).classList.add('active-tab');
+
+            // Ganti Header Title
+            document.getElementById('page-title').innerText = pageTitles[tabId].title;
+            document.getElementById('page-desc').innerText = pageTitles[tabId].desc;
+        }
+
+        // --- 6. SIMULATION ACTIONS ---
+
+        // SIMULASI 1: Setor Organik (Maggot)
+        function simDepositOrganic() {
+            const added = parseFloat((Math.random() * 5 + 2).toFixed(1));
+            state.stats.organicWaste += added;
+            state.stats.carbonSaved += (added * 0.5); // mitigasi metana
+            updateDashboardUI();
+
+            addChatMessage('Bot', `♻️ [Timbangan IoT]: Deposit ${added}kg Sampah Basah (Sisa Makanan). Arahkan ke Bio-Pond BSF Blok 2.`);
+        }
+
+        // SIMULASI 2: Panen Maggot
+        function simHarvestMaggot() {
+            state.stats.maggotStock += 15;
+            updateDashboardUI();
+
+            addChatMessage('Bot', `🐛 [Panen BSF]: 15kg Fresh Maggot siap. Menyiarkan ketersediaan ke Grup "Peternak Ikan Lokal"...`);
+
+            setTimeout(() => {
+                addChatMessage('Pak Ahmad (Peternak)', 'Ambil 10kg mas. Otw Bank Sampah.');
+                state.stats.revenue += 70000;
+                state.stats.maggotStock -= 10;
+                updateDashboardUI();
+            }, 2000);
+        }
+
+        // SIMULASI 3: Input Limbah ke BioCNG
+        function simDepositSlurry() {
+            const added = parseFloat((Math.random() * 10 + 5).toFixed(1));
+            state.stats.carbonSaved += (added * 0.8);
+            updateDashboardUI();
+
+            addChatMessage('Bot', `💩 [Flow Meter IoT]: Input ${added} Liter limbah cair/organik masuk ke Digester BioCNG Utama. Proses fermentasi anaerobik dimulai.`);
+        }
+
+        // SIMULASI 4: Botolkan & Jual BioCNG
+        function simHarvestBioCNG() {
+            state.stats.biocngStock += 3;
+            updateDashboardUI();
+
+            addChatMessage('Bot', `🔥 [Kompresor BioCNG]: Proses pemurnian selesai. Berhasil membotolkan 3 Tabung BioCNG (Setara LPG 3Kg).\n\nMembuat draft WA ke Grup "Paguyuban UMKM Tahu Tempe"...`);
+
+            setTimeout(() => {
+                addChatMessage('Bu Siti (UMKM Gorengan)', 'Saya pesan 2 tabung ya buat goreng sore ini. Nanti anak saya yang ambil.');
+                state.stats.revenue += 30000; // Rp15.000 x 2
+                state.stats.biocngStock -= 2;
+                updateDashboardUI();
+            }, 3000);
+        }
+
+        // SIMULASI 5: Bahaya BioCNG (Overpressure)
+        function triggerOverpressure() {
+            state.biocng.status = 'KRITIS';
+            state.biocng.pressure = 3.8;
+            state.biocng.methane = 45;
+            state.biocng.ph = 5.5;
+
+            updateBioCNGUI();
+            switchTab('chat'); // Pindah otomatis ke chat
+
+            addChatMessage('Bot', `🚨 [ALERT - REAKTOR BioCNG]: \nTekanan gas melonjak tajam ke 3.8 Bar (Overpressure) dan pH drop ke 5.5 (Asam).\n\n⚠️ TINDAKAN DARURAT:\nSistem IoT gagal membuka katup otomatis. Kader piket mohon SEGERA putar Safety Valve Manual ke arah kiri untuk membuang gas berlebih!`);
+        }
+
+        // SIMULASI 6: Penyelesaian Bahaya
+        function resolveOverpressure() {
+            state.biocng.status = 'OPTIMAL';
+            state.biocng.pressure = 1.5;
+            state.biocng.methane = 65;
+            state.biocng.ph = 7.0;
+
+            updateBioCNGUI();
+
+            addChatMessage('Kader/Teknisi', 'Safety valve manual sudah saya buka min, tekanan perlahan turun.');
+
+            setTimeout(() => {
+                addChatMessage('Bot', `✅ [Sensor Pulih]: Tekanan BioCNG kembali aman di 1.5 Bar. pH stabil. Terima kasih atas respon cepatnya, potensi ledakan digester berhasil dicegah.`);
+            }, 1500);
+        }
+
+        // SIMULASI 7: Chat Manual Form Submit
+        function handleSendChat(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            addChatMessage('Kader/Teknisi', text);
+            input.value = '';
+
+            setTimeout(() => {
+                addChatMessage('Bot', 'Instruksi/Laporan diterima dan diunggah ke cloud database ESG Kelurahan.');
+            }, 1000);
+        }
+
+    </script>
+</body>
+
+</html>

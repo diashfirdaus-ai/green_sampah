@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Game Sirkular — Edukasi Pilah Sampah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    :root {
+      --bg-dark: #070b19;
+      --bg-card: #0f172a;
+      --border: rgba(255,255,255,0.08);
+      --green: #10b981;
+      --blue: #3b82f6;
+      --orange: #f97316;
+      --red: #ef4444;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+    }
+    
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none; -webkit-user-select: none;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      padding-top: calc(16px + env(safe-area-inset-top));
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: white;
+    }
+    .nav-logo span { color: var(--green); }
+    .back-btn {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: white; }
+
+    /* ===== GAME AREA ===== */
+    .game-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 90px 16px 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* ===== HEADER INFO ===== */
+    .game-stats {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 12px 20px;
+      border-radius: 16px;
+      margin-bottom: 10px;
+    }
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .stat-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+    .stat-val { font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 800; color: white; }
+    .stat-val.score { color: var(--green); }
+    .stat-val.timer { color: var(--orange); }
+
+    /* ===== SPARKLES & EFFECTS ===== */
+    .feedback-toast {
+      position: absolute;
+      top: 160px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      z-index: 50;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+      max-width: 90%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .feedback-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .feedback-toast.correct { border-color: var(--green); color: #34d399; }
+    .feedback-toast.incorrect { border-color: var(--red); color: #f87171; }
+
+    /* ===== DRAGGABLE SPAWNER ===== */
+    .spawner-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+      min-height: 200px;
+    }
+    .drag-item {
+      width: 110px; height: 110px;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      cursor: grab;
+      position: absolute;
+      z-index: 10;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+      transition: transform 0.1s ease, border-color 0.2s;
+      touch-action: none;
+    }
+    .drag-item:active { cursor: grabbing; transform: scale(1.05); }
+    .drag-item span.item-name {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 6px;
+      text-align: center;
+      padding: 0 4px;
+    }
+
+    /* ===== DROP TARGETS ===== */
+    .dropzones-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .dropzone {
+      background: var(--bg-card);
+      border: 2px dashed var(--border);
+      border-radius: 20px;
+      padding: 16px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.3s;
+      min-height: 120px;
+      position: relative;
+      overflow: hidden;
+    }
+    .dropzone-icon { font-size: 2rem; margin-bottom: 6px; transition: transform 0.2s; }
+    .dropzone-title { font-family: 'Outfit', sans-serif; font-size: 0.72rem; font-weight: 800; color: white; line-height: 1.2; }
+    .dropzone-desc { font-size: 0.55rem; color: var(--muted); margin-top: 4px; line-height: 1.2; }
+    
+    /* Hover Glow Active dropzones */
+    .dropzone.drag-over-maggot { border-color: var(--green); background: rgba(16,185,129,0.06); box-shadow: 0 0 15px var(--green-glow); }
+    .dropzone.drag-over-cng { border-color: var(--orange); background: rgba(249,115,22,0.06); box-shadow: 0 0 15px var(--orange-glow); }
+    .dropzone.drag-over-bank { border-color: var(--blue); background: rgba(59,130,246,0.06); box-shadow: 0 0 15px var(--blue-glow); }
+
+    .dropzone.drag-over-maggot .dropzone-icon { transform: scale(1.15) rotate(-5deg); }
+    .dropzone.drag-over-cng .dropzone-icon { transform: scale(1.15) translateY(-3px); }
+    .dropzone.drag-over-bank .dropzone-icon { transform: scale(1.15) rotate(5deg); }
+
+    /* ===== OVERLAY SHEET (INSTRUCTIONS & GAME OVER) ===== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 11, 25, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .overlay.show { opacity: 1; pointer-events: auto; }
+    .overlay-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      width: 100%;
+      max-width: 400px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+    }
+    .overlay-icon { font-size: 4rem; margin-bottom: 12px; }
+    .overlay-card h2 { font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 8px; }
+    .overlay-card p { font-size: 0.82rem; color: var(--muted); margin-bottom: 24px; line-height: 1.4; }
+    
+    .btn-action {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 30px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.1s, background 0.2s;
+    }
+    .btn-action:hover { background: #059669; }
+    .btn-action:active { transform: scale(0.97); }
+
+    /* ===== CONFETTI SPARKLES ===== */
+    .particle {
+      position: absolute;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 60;
+      animation: particleOut 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    @keyframes particleOut {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-logo">
+      <div class="logo-icon">♻️</div>
+      <span>Game<span style="color:var(--green)">Sirkular</span></span>
+    </div>
+    <a href="dashboard.html" class="back-btn"><i class="ph ph-house"></i> Dashboard</a>
+  </nav>
+
+  <!-- GAME AREA -->
+  <div class="game-container">
+    
+    <!-- STATS -->
+    <div class="game-stats">
+      <div class="stat-box">
+        <span class="stat-label">🎯 Poin</span>
+        <span class="stat-val score" id="game-score">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">⏱️ Waktu</span>
+        <span class="stat-val timer" id="game-timer">60</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">♻️ Carbon</span>
+        <span class="stat-val" id="game-co2">0.0 kg</span>
+      </div>
+    </div>
+
+    <!-- FEEDBACK TOAST -->
+    <div class="feedback-toast" id="feedback-toast">Edukasi Pilah Sampah</div>
+
+    <!-- SPAWNER DRAG AREA -->
+    <div class="spawner-area" id="spawner-area">
+      <!-- Active item will be spawned here via javascript -->
+      <div class="drag-item" id="drag-item">🍎<span class="item-name">Sisa Apel</span></div>
+    </div>
+
+    <!-- DROP DESTINATIONS -->
+    <div class="dropzones-grid">
+      
+      <!-- Target 1: Maggot BSF -->
+      <div class="dropzone" id="dz-maggot" data-target="maggot">
+        <div class="dropzone-icon">🐛</div>
+        <div class="dropzone-title">Larva BSF</div>
+        <div class="dropzone-desc">Limbah Organik Tinggi Protein</div>
+      </div>
+
+      <!-- Target 2: BioCNG -->
+      <div class="dropzone" id="dz-biocng" data-target="biocng">
+        <div class="dropzone-icon">🔥</div>
+        <div class="dropzone-title">Reaktor CNG</div>
+        <div class="dropzone-desc">Biomassa Lunak & Kotoran</div>
+      </div>
+
+      <!-- Target 3: Bank Sampah -->
+      <div class="dropzone" id="dz-bank" data-target="bank">
+        <div class="dropzone-icon">🏦</div>
+        <div class="dropzone-title">Bank Sampah</div>
+        <div class="dropzone-desc">Material Non-Organik Daur Ulang</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- PLAY INSTRUCTIONS OVERLAY -->
+  <div class="overlay show" id="start-overlay">
+    <div class="overlay-card">
+      <div class="overlay-icon">🎮</div>
+      <h2>Pilah Sirkular!</h2>
+      <p>Bantu kelola sampah RW 01 Sukup Lama! Tarik (*drag*) sampah yang muncul di tengah ke tempat pengolahan sirkular yang tepat dalam waktu 60 detik.</p>
+      <button class="btn-action" onclick="startGame()">Mulai Bermain</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER OVERLAY -->
+  <div class="overlay" id="gameover-overlay">
+    <div class="overlay-card">
+      <div class="overlay-icon" id="gameover-icon">🏆</div>
+      <h2 id="gameover-title">Hebat!</h2>
+      <p id="gameover-desc">Anda berhasil memilah sampah dan menyuplai ekonomi sirkular!</p>
+      
+      <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:16px; padding:16px; display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px;">
+        <div>
+          <div style="font-size:0.6rem; color:var(--muted); text-transform:uppercase;">Skor Akhir</div>
+          <div style="font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:800; color:var(--green);" id="final-score">0</div>
+        </div>
+        <div>
+          <div style="font-size:0.6rem; color:var(--muted); text-transform:uppercase;">CO₂ Terhindar</div>
+          <div style="font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:800; color:var(--blue);" id="final-co2">0.0 kg</div>
+        </div>
+      </div>
+
+      <button class="btn-action" onclick="startGame()">Main Lagi</button>
+    </div>
+  </div>
+
+  <script>
+    // Educational sorting dataset
+    var items = [
+      { char: '🍎', name: 'Sisa Apel', target: 'maggot', okText: 'Sisa apel disukai Larva BSF karena manis dan lunak!' },
+      { char: '🥩', name: 'Sisa Daging', target: 'maggot', okText: 'Limbah protein tinggi seperti daging mempercepat pertumbuhan larva BSF!' },
+      { char: '🍚', name: 'Nasi Basi', target: 'maggot', okText: 'Nasi basi terurai dengan cepat di bio-pond Maggot BSF!' },
+      { char: '🦴', name: 'Tulang Rawan', target: 'maggot', okText: 'Larva BSF mengonsumsi residu daging pada tulang rawan dengan cepat!' },
+      { char: '🍉', name: 'Kulit Semangka', target: 'maggot', okText: 'Residu buah berair seperti kulit semangka memberi kelembaban bagi maggot!' },
+      
+      { char: '💩', name: 'Kohe Ternak', target: 'biocng', okText: 'Kotoran hewan (kohe) mengandung bakteri metanogenik aktif untuk biogas!' },
+      { char: '🥬', name: 'Sisa Sayur', target: 'biocng', okText: 'Serat hijau sisa sayur mudah dicerna dalam tangki anaerob digester!' },
+      { char: '🌾', name: 'Rumput / Jerami', target: 'biocng', okText: 'Rumput adalah biomassa kaya selulosa pembentuk gas metana!' },
+      { char: '🍌', name: 'Kulit Pisang', target: 'biocng', okText: 'Kulit pisang kaya zat organik penunjang fermentasi biogas BioCNG!' },
+      { char: '🧫', name: 'Lumpur Aktif', target: 'biocng', okText: 'Lumpur aktif memicu percepatan laju hidrolisis biomassa di reaktor!' },
+
+      { char: '🧴', name: 'Botol Plastik', target: 'bank', okText: 'Botol plastik disetor ke Bank Sampah untuk didaur ulang menjadi biji plastik!' },
+      { char: '📦', name: 'Kardus Bekas', target: 'bank', okText: 'Kardus bekas didaur ulang kembali menjadi bubur kertas (pulp) berkualitas!' },
+      { char: '🥫', name: 'Kaleng Minuman', target: 'bank', okText: 'Aluminium pada kaleng minuman dilebur kembali dengan nilai ekonomi tinggi!' },
+      { char: '📰', name: 'Kertas Koran', target: 'bank', okText: 'Kertas koran dipilah untuk memperpanjang siklus hidup serat selulosa kertas!' },
+      { char: '🥛', name: 'Gelas Kaca', target: 'bank', okText: 'Kaca bekas dilebur 100% tanpa menurunkan kualitas materialnya!' }
+    ];
+
+    // Game stats
+    var score = 0;
+    var co2 = 0.0;
+    var timeLeft = 60;
+    var gameInterval = null;
+    var currentItem = null;
+    var isPlaying = false;
+
+    // Draggable element positioning variables
+    var activeEl = document.getElementById('drag-item');
+    var isDragging = false;
+    var startX, startY;
+    var initialLeft, initialTop;
+
+    // Initialize custom drag-and-drop mechanics (Touch & Mouse safe)
+    activeEl.addEventListener('mousedown', dragStart);
+    activeEl.addEventListener('touchstart', dragStart, { passive: false });
+
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('touchmove', dragMove, { passive: false });
+
+    document.addEventListener('mouseup', dragEnd);
+    document.addEventListener('touchend', dragEnd);
+
+    function dragStart(e) {
+      if (!isPlaying) return;
+      isDragging = true;
+      activeEl.style.transition = 'none';
+
+      var pageX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
+      var pageY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY;
+
+      var rect = activeEl.getBoundingClientRect();
+      // Calculate offset inside the drag item
+      startX = pageX - (rect.left + window.scrollX);
+      startY = pageY - (rect.top + window.scrollY);
+
+      e.preventDefault();
+    }
+
+    function dragMove(e) {
+      if (!isDragging) return;
+
+      var pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+      var pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
+
+      // Position the element relative to cursor position
+      var x = pageX - startX;
+      var y = pageY - startY;
+
+      activeEl.style.left = x + 'px';
+      activeEl.style.top = y + 'px';
+
+      // Check collision/overlap with drop zones
+      checkDropzonesOverlap();
+    }
+
+    function dragEnd(e) {
+      if (!isDragging) return;
+      isDragging = false;
+
+      // Determine dropzone overlap
+      var itemRect = activeEl.getBoundingClientRect();
+      var itemCenterX = itemRect.left + itemRect.width / 2;
+      var itemCenterY = itemRect.top + itemRect.height / 2;
+
+      var matchedZone = null;
+      var zones = ['maggot', 'biocng', 'bank'];
+
+      for (var i = 0; i < zones.length; i++) {
+        var zoneEl = document.getElementById('dz-' + zones[i]);
+        var zRect = zoneEl.getBoundingClientRect();
+        if (itemCenterX >= zRect.left && itemCenterX <= zRect.right &&
+            itemCenterY >= zRect.top && itemCenterY <= zRect.bottom) {
+          matchedZone = zones[i];
+          break;
+        }
+      }
+
+      // Reset hover classes on zones
+      document.querySelectorAll('.dropzone').forEach(function(dz) {
+        dz.classList.remove('drag-over-maggot', 'drag-over-cng', 'drag-over-bank');
+      });
+
+      if (matchedZone) {
+        evaluateDrop(matchedZone, itemCenterX, itemCenterY);
+      } else {
+        // Return item to center
+        resetDragItemPosition();
+      }
+    }
+
+    function checkDropzonesOverlap() {
+      var itemRect = activeEl.getBoundingClientRect();
+      var itemCenterX = itemRect.left + itemRect.width / 2;
+      var itemCenterY = itemRect.top + itemRect.height / 2;
+
+      var zones = ['maggot', 'biocng', 'bank'];
+      var glowClasses = ['drag-over-maggot', 'drag-over-cng', 'drag-over-bank'];
+
+      zones.forEach(function(zone, idx) {
+        var zoneEl = document.getElementById('dz-' + zone);
+        var zRect = zoneEl.getBoundingClientRect();
+        if (itemCenterX >= zRect.left && itemCenterX <= zRect.right &&
+            itemCenterY >= zRect.top && itemCenterY <= zRect.bottom) {
+          zoneEl.classList.add(glowClasses[idx]);
+        } else {
+          zoneEl.classList.remove(glowClasses[idx]);
+        }
+      });
+    }
+
+    function resetDragItemPosition() {
+      activeEl.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      activeEl.style.left = 'calc(50% - 55px)';
+      activeEl.style.top = 'calc(50% - 55px)';
+    }
+
+    // Spawn a random waste item
+    function spawnItem() {
+      var unusedItems = items.filter(x => x !== currentItem);
+      var rand = unusedItems[Math.floor(Math.random() * unusedItems.length)];
+      currentItem = rand;
+
+      activeEl.innerHTML = currentItem.char + `<span class="item-name">${currentItem.name}</span>`;
+      
+      // Visual entry animation
+      activeEl.style.transform = 'scale(0)';
+      resetDragItemPosition();
+      setTimeout(function() {
+        activeEl.style.transform = 'scale(1)';
+      }, 50);
+    }
+
+    // Evaluate sorting correctness
+    function evaluateDrop(zone, x, y) {
+      if (currentItem.target === zone) {
+        // Correct drop!
+        score += 10;
+        co2 += (zone === 'bank' ? 0.85 : zone === 'biocng' ? 0.65 : 0.45);
+        
+        showFeedback(true, currentItem.okText);
+        spawnExplosion(x, y, '#10b981');
+        
+        // Dynamic stock incremental effect in simulator local storage!
+        updateSimulatorStock(zone);
+      } else {
+        // Incorrect drop!
+        score = Math.max(0, score - 5);
+        
+        var penaltyText = `Salah! ${currentItem.name} seharusnya masuk ke `;
+        if (currentItem.target === 'maggot') penaltyText += '🐛 Larva BSF.';
+        if (currentItem.target === 'biocng') penaltyText += '🔥 Reaktor CNG.';
+        if (currentItem.target === 'bank') penaltyText += '🏦 Bank Sampah.';
+        
+        showFeedback(false, penaltyText);
+        spawnExplosion(x, y, '#ef4444');
+      }
+
+      // Update HUD
+      document.getElementById('game-score').textContent = score;
+      document.getElementById('game-co2').textContent = co2.toFixed(1) + ' kg';
+
+      // Hide active item briefly then spawn next
+      activeEl.style.transform = 'scale(0)';
+      setTimeout(spawnItem, 250);
+    }
+
+    // Show temporary educational toast feedback
+    var toastTimeout = null;
+    function showFeedback(isCorrect, text) {
+      var toast = document.getElementById('feedback-toast');
+      toast.className = 'feedback-toast ' + (isCorrect ? 'correct' : 'incorrect') + ' show';
+      toast.textContent = text;
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(function() {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    // Sparkle explosion animation on drop
+    function spawnExplosion(x, y, color) {
+      var parent = document.body;
+      for (var i = 0; i < 15; i++) {
+        var p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.backgroundColor = color;
+
+        // Custom angle velocities
+        var angle = Math.random() * Math.PI * 2;
+        var velocity = 40 + Math.random() * 60;
+        var dx = Math.cos(angle) * velocity;
+        var dy = Math.sin(angle) * velocity;
+
+        p.style.setProperty('--dx', dx + 'px');
+        p.style.setProperty('--dy', dy + 'px');
+
+        parent.appendChild(p);
+
+        // Remove element after animation
+        (function(el) {
+          setTimeout(function() {
+            if (el.parentNode) el.parentNode.removeChild(el);
+          }, 600);
+        })(p);
+      }
+    }
+
+    // Increment stocks dynamically in general simulation state
+    function updateSimulatorStock(zone) {
+      var saved = localStorage.getItem('zero_waste_sim_state');
+      if (saved) {
+        var S_sim = JSON.parse(saved);
+        if (zone === 'maggot') S_sim.maggotStock += 0.2; // Add 0.2 kg BSF feed
+        if (zone === 'biocng') S_sim.biocngStock += 0.1;  // Add 0.1 tabung BioCNG
+        if (zone === 'bank') S_sim.organicWasteOlah += 0.5; // Equivalent mass processed
+        
+        localStorage.setItem('zero_waste_sim_state', JSON.stringify(S_sim));
+      }
+    }
+
+    // Start Game logic
+    function startGame() {
+      document.getElementById('start-overlay').classList.remove('show');
+      document.getElementById('gameover-overlay').classList.remove('show');
+
+      score = 0;
+      co2 = 0.0;
+      timeLeft = 60;
+      isPlaying = true;
+
+      document.getElementById('game-score').textContent = score;
+      document.getElementById('game-co2').textContent = '0.0 kg';
+      document.getElementById('game-timer').textContent = timeLeft;
+
+      spawnItem();
+
+      // Countdown loop
+      if (gameInterval) clearInterval(gameInterval);
+      gameInterval = setInterval(function() {
+        timeLeft--;
+        document.getElementById('game-timer').textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    // End Game logic
+    function endGame() {
+      isPlaying = false;
+      clearInterval(gameInterval);
+      
+      // Update victory overlays
+      document.getElementById('final-score').textContent = score;
+      document.getElementById('final-co2').textContent = co2.toFixed(1) + ' kg';
+
+      var title = document.getElementById('gameover-title');
+      var desc = document.getElementById('gameover-desc');
+      var icon = document.getElementById('gameover-icon');
+
+      if (score >= 120) {
+        title.textContent = 'Pahlawan Sirkular! 👑';
+        desc.textContent = 'Luar biasa! Pemilahan sampah Anda sempurna dan menyuplai penuh sistem sirkular Sukup Lama!';
+        icon.textContent = '👑';
+      } else if (score >= 60) {
+        title.textContent = 'Relawan Hijau! 🌱';
+        desc.textContent = 'Kerja bagus! Anda membantu menekan emisi gas rumah kaca di komunitas Sukup Lama!';
+        icon.textContent = '🌱';
+      } else {
+        title.textContent = 'Duta Pemula! 📚';
+        desc.textContent = 'Terus belajar! Mari perhatikan kembali jenis-jenis sampah agar pengolahan sirkular berjalan maksimal.';
+        icon.textContent = '📚';
+      }
+
+      document.getElementById('gameover-overlay').classList.add('show');
+    }
+  </script>
+</body>
+</html>

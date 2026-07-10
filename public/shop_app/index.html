@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Toko Sirkular — Edukasi ZeroWaste</title>
+  <meta name="description" content="Aplikasi Edukasi Toko Sirkular Komunitas. Belajar siklus tertutup sampah menjadi pangan dan energi di RW 01 Sukup Lama.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    :root {
+      --bg-dark: #070b19;
+      --bg-card: #0f172a;
+      --bg-card2: #1e293b;
+      --border: rgba(255,255,255,0.08);
+      --green: #10b981;
+      --green-glow: rgba(16,185,129,0.25);
+      --blue: #3b82f6;
+      --blue-glow: rgba(59,130,246,0.25);
+      --orange: #f97316;
+      --orange-glow: rgba(249,115,22,0.25);
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+    }
+    
+    * {
+      margin:0; padding:0; box-sizing:border-box;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      user-select: none;
+      -webkit-user-select: none;
+      padding-top: env(safe-area-inset-top);
+    }
+    input, textarea {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    /* ===== HEADER & NAVIGATION ===== */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      padding-top: calc(16px + env(safe-area-inset-top));
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: white;
+    }
+    .nav-logo span { color: var(--green); }
+    .nav-badge {
+      font-size: 0.58rem;
+      font-weight: 700;
+      background: rgba(16,185,129,0.15);
+      color: #6ee7b7;
+      border: 1px solid rgba(16,185,129,0.3);
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .wallet-pill {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .wallet-pill strong { color: var(--green); }
+    .edu-link {
+      background: var(--blue-glow);
+      border: 1px solid rgba(59,130,246,0.3);
+      color: #93c5fd;
+      padding: 6px 12px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+    .edu-link:hover {
+      background: var(--blue);
+      color: white;
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      padding: 110px 24px 30px;
+      text-align: center;
+      background: radial-gradient(circle at top, rgba(16,185,129,0.06), transparent 60%);
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+    .hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 6px;
+    }
+    .hero p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+
+    /* ===== LAYOUT CONTAINER ===== */
+    .store-container {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ===== PRODUCT LISTING ===== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 20px;
+    }
+    
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      position: relative;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+      border-color: rgba(255,255,255,0.15);
+    }
+    
+    .product-image-container {
+      width: 100%;
+      height: 130px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      position: relative;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .product-card.maggot-card .product-image-container {
+      background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.02));
+      border-color: rgba(16,185,129,0.15);
+    }
+    .product-card.fertilizer-card .product-image-container {
+      background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02));
+      border-color: rgba(59,130,246,0.15);
+    }
+    .product-card.cng-card .product-image-container {
+      background: linear-gradient(135deg, rgba(249,115,22,0.08), rgba(249,115,22,0.02));
+      border-color: rgba(249,115,22,0.15);
+    }
+    
+    .product-badge-overlay {
+      position: absolute;
+      top: 8px; left: 8px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      border-radius: 100px;
+      padding: 2px 8px;
+      font-size: 0.58rem;
+      font-weight: 700;
+    }
+    .product-card.maggot-card .product-badge-overlay { color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
+    .product-card.fertilizer-card .product-badge-overlay { color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+    .product-card.cng-card .product-badge-overlay { color: #fdba74; border: 1px solid rgba(249,115,22,0.3); }
+
+    .product-info-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-grow: 1;
+    }
+    .product-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 750;
+      color: white;
+      line-height: 1.3;
+      min-height: 38px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+    .rating-star { color: #f59e0b; }
+    
+    .product-stock-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .stock-highlight {
+      color: var(--text);
+      font-weight: 700;
+    }
+    
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      padding-top: 10px;
+    }
+    .product-price-bold {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: white;
+    }
+    .price-unit { font-size: 0.65rem; color: var(--muted); font-weight: 500; }
+    
+    .btn-buy-round {
+      width: 32px; height: 32px;
+      background: var(--blue);
+      border: none;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+    .btn-buy-round:hover {
+      background: #2563eb;
+      transform: scale(1.08);
+    }
+    .btn-buy-round:active {
+      transform: scale(0.95);
+    }
+    .btn-buy-round:disabled {
+      background: #334155;
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+
+    /* ===== CART PANEL ===== */
+    .cart-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      height: fit-content;
+      position: sticky;
+      top: 90px;
+    }
+    .cart-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .cart-count {
+      font-size: 0.65rem;
+      background: var(--green);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+    .cart-empty {
+      text-align: center;
+      padding: 30px 10px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+    .cart-item-info h4 { font-size:0.8rem; font-weight:700; color:white; }
+    .cart-item-info span { font-size:0.7rem; color:var(--muted); }
+    .cart-item-qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qty-btn {
+      width: 20px; height: 20px;
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .qty-val { font-size: 0.8rem; font-family:'JetBrains Mono',monospace; width: 14px; text-align:center; }
+    
+    .cart-summary {
+      border-top: 1px solid var(--border);
+      padding-top: 15px;
+      margin-bottom: 20px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+    .summary-row.total {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: white;
+      margin-top: 5px;
+    }
+    
+    .btn-checkout {
+      width: 100%;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn-checkout:hover { background: #2563eb; }
+    .btn-checkout:disabled {
+      background: #334155;
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+
+    /* ===== CHECKOUT SUCCESS MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.show { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 400px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.show .modal { transform: scale(1); }
+    .modal-icon {
+      font-size: 3.5rem;
+      margin-bottom: 15px;
+      animation: pulseGlow 1.5s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      from { transform: scale(1); filter: drop-shadow(0 0 2px var(--green)); }
+      to { transform: scale(1.1); filter: drop-shadow(0 0 15px var(--green)); }
+    }
+    .modal h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .modal p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    .qr-box {
+      background: white;
+      padding: 12px;
+      border-radius: 16px;
+      width: 160px; height: 160px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+    .btn-close-modal {
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      color: white;
+      border-radius: 10px;
+      padding: 8px 24px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-close-modal:hover { background: #334155; }
+
+    /* ===== TRANSACTION LOG ===== */
+    .transactions {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+    .transactions-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+    .transactions-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      color: white;
+    }
+    .transaction-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .transaction-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.8rem;
+    }
+    .transaction-row:last-child { border-bottom: none; }
+    .tx-item { font-weight:700; color:white; }
+    .tx-date { font-size:0.7rem; color:var(--muted); margin-top:2px; }
+    .tx-status {
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+    .tx-status.success { background: rgba(16,185,129,0.12); color:#34d399; }
+
+    /* ===== INTEGRATED GAME SYSTEM STYLES ===== */
+    .game-panel {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 500px;
+      margin: 40px auto;
+      min-height: 480px;
+      height: calc(100vh - 240px);
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 16px;
+    }
+    
+    .game-stats {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 16px;
+      margin-bottom: 10px;
+    }
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .stat-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+    .stat-val { font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 800; color: white; }
+    .stat-val.score { color: var(--green); }
+    .stat-val.timer { color: var(--orange); }
+
+    .feedback-toast {
+      position: absolute;
+      top: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      z-index: 50;
+      opacity: 0;
+      transition: all 0.3s ease;
+      text-align: center;
+      max-width: 90%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .feedback-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .feedback-toast.correct { border-color: var(--green); color: #34d399; }
+    .feedback-toast.incorrect { border-color: var(--red); color: #f87171; }
+
+    .spawner-area {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      width: 100%;
+      min-height: 180px;
+    }
+    .drag-item {
+      width: 90px; height: 90px;
+      background: var(--bg-card2);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      cursor: grab;
+      position: absolute;
+      z-index: 10;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+      transition: transform 0.1s ease, border-color 0.2s;
+      touch-action: none;
+      left: calc(50% - 45px);
+      top: calc(50% - 45px);
+    }
+    .drag-item:active { cursor: grabbing; transform: scale(1.05); }
+    .drag-item span.item-name {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-top: 4px;
+      text-align: center;
+      padding: 0 2px;
+    }
+
+    .dropzones-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+    .dropzone {
+      background: rgba(255,255,255,0.01);
+      border: 2px dashed var(--border);
+      border-radius: 16px;
+      padding: 12px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.2s;
+      min-height: 100px;
+    }
+    .dropzone-icon { font-size: 1.6rem; margin-bottom: 4px; transition: transform 0.2s; }
+    .dropzone-title { font-family: 'Outfit', sans-serif; font-size: 0.68rem; font-weight: 800; color: white; line-height: 1.2; }
+    .dropzone-desc { font-size: 0.5rem; color: var(--muted); margin-top: 2px; line-height: 1.2; }
+    
+    .dropzone.drag-over-maggot { border-color: var(--green); background: rgba(16,185,129,0.06); }
+    .dropzone.drag-over-cng { border-color: var(--orange); background: rgba(249,115,22,0.06); }
+    .dropzone.drag-over-bank { border-color: var(--blue); background: rgba(59,130,246,0.06); }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 11, 25, 0.96);
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      border-radius: 22px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .overlay.show { opacity: 1; pointer-events: auto; }
+    .overlay-card {
+      text-align: center;
+    }
+    .overlay-icon { font-size: 3rem; margin-bottom: 8px; }
+    .overlay-card h2 { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 900; margin-bottom: 6px; }
+    .overlay-card p { font-size: 0.78rem; color: var(--muted); margin-bottom: 18px; line-height: 1.4; }
+    
+    .btn-action {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 24px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      transition: transform 0.1s;
+    }
+    .btn-action:hover { background: #059669; }
+    .btn-action:active { transform: scale(0.97); }
+
+    .particle {
+      position: absolute;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 60;
+      animation: particleOut 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    /* ===== MOBILE BOTTOM NAVIGATION & TABBING ===== */
+    .bottom-nav { display: none; }
+    
+    @media(max-width: 768px) {
+      .hero { padding: 95px 16px 20px; }
+      .hero h1 { font-size: 1.7rem; }
+      .hero p { font-size: 0.8rem; }
+      
+      nav { padding: 12px 16px; padding-top: calc(12px + env(safe-area-inset-top)); }
+      .nav-logo span { display: none; }
+      .nav-badge { display: none; }
+      .wallet-pill { padding: 4px 10px; font-size: 0.72rem; }
+      
+      .store-container {
+        padding: 0 16px calc(90px + env(safe-area-inset-bottom));
+        grid-template-columns: 1fr;
+      }
+      .transactions {
+        padding: 0 16px calc(90px + env(safe-area-inset-bottom));
+      }
+      
+      .products-grid, .cart-panel, .transactions, .game-panel {
+        display: none !important;
+      }
+      .products-grid.active-tab {
+        display: grid !important;
+      }
+      .cart-panel.active-tab {
+        display: block !important;
+        position: static;
+      }
+      .transactions.active-tab {
+        display: block !important;
+      }
+      .game-panel.active-tab {
+        display: flex !important;
+      }
+      
+      .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(12px);
+        border-top: 1px solid var(--border);
+        justify-content: space-around;
+        padding: 10px 0;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom));
+        z-index: 500;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+      }
+      .bottom-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--muted);
+        font-size: 0.65rem;
+        font-weight: 600;
+        text-decoration: none;
+        gap: 4px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        flex: 1;
+        transition: all 0.2s ease;
+      }
+      .bottom-nav-item.active {
+        color: var(--blue);
+      }
+      .bottom-nav-icon {
+        font-size: 1.4rem;
+        transition: transform 0.2s;
+      }
+      .bottom-nav-item.active .bottom-nav-icon {
+        transform: scale(1.1);
+      }
+      .bottom-nav-badge {
+        position: absolute;
+        top: -4px; right: 28%;
+        background: #ef4444;
+        color: white;
+        font-size: 0.58rem;
+        font-weight: 700;
+        padding: 1px 5px;
+        border-radius: 100px;
+        min-width: 16px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        animation: badgePop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      }
+      @keyframes badgePop {
+        from { transform: scale(0.5); }
+        to { transform: scale(1); }
+      }
+    }
+
+    /* ===== EDUCATIONAL DETAILS SHEET ===== */
+    .edu-sheet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1100;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .edu-sheet-overlay.show { opacity: 1; pointer-events: auto; }
+    .edu-sheet {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 24px;
+      box-shadow: 0 -15px 40px rgba(0,0,0,0.5);
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    }
+    .edu-sheet-overlay.show .edu-sheet { transform: translateY(0); }
+    
+    .edu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .edu-header h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: white;
+    }
+    .btn-close-edu {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      color: white;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .edu-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .edu-item {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .edu-item-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .edu-item-icon { font-size: 1.5rem; }
+    .edu-item-title { font-weight: 750; color: white; font-size: 0.95rem; }
+    .edu-item-text { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="nav-logo">
+      <div class="logo-icon">♻️</div>
+      <span>Toko<span>Sirkular</span></span>
+      <div class="nav-badge">Edukasi</div>
+    </div>
+    <div class="nav-actions">
+      <div class="wallet-pill">
+        <span>💵 Saldo:</span>
+        <strong id="warga-balance">Rp 250.000</strong>
+      </div>
+      <button class="edu-link edu-link-tab active" id="header-item-toko" onclick="switchMobileTab('toko')" style="background:rgba(16,185,129,0.1); border-color:rgba(16,185,129,0.2); color:#10b981;">
+        <i class="ph-bold ph-storefront"></i> Toko
+      </button>
+      <button class="edu-link edu-link-tab" id="header-item-game" onclick="switchMobileTab('game')" style="background:rgba(245,158,11,0.15); border-color:rgba(245,158,11,0.3); color:#f59e0b;">
+        <i class="ph-bold ph-game-controller"></i> Game
+      </button>
+      <button class="edu-link" onclick="openEdu()">
+        <i class="ph-bold ph-book-open"></i> Info Edukasi
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">🎓 Aplikasi Edukasi Ekonomi Sirkular</div>
+    <h1>Toko Sirkular Sukup Lama</h1>
+    <p>Belajar rantai nilai pengolahan sampah menjadi produk komersial. Beli produk di bawah menggunakan saldo simulasi untuk memahami konsep ekonomi sirkular.</p>
+  </div>
+
+  <!-- CENTER PANEL: GAME SYSTEM (TAB CONTENT) -->
+  <div class="game-panel" id="game-panel">
+    
+    <!-- STATS -->
+    <div class="game-stats">
+      <div class="stat-box">
+        <span class="stat-label">🎯 Poin</span>
+        <span class="stat-val score" id="game-score">0</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">⏱️ Waktu</span>
+        <span class="stat-val timer" id="game-timer">60</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">💰 Koin Bonus</span>
+        <span class="stat-val" id="game-co2">Rp 0</span>
+      </div>
+    </div>
+
+    <!-- FEEDBACK TOAST -->
+    <div class="feedback-toast" id="feedback-toast">Edukasi Pilah Sampah</div>
+
+    <!-- SPAWNER DRAG AREA -->
+    <div class="spawner-area" id="spawner-area">
+      <div class="drag-item" id="drag-item">🍎<span class="item-name">Sisa Apel</span></div>
+    </div>
+
+    <!-- DROP DESTINATIONS -->
+    <div class="dropzones-grid">
+      <div class="dropzone" id="dz-maggot" data-target="maggot">
+        <div class="dropzone-icon">🐛</div>
+        <div class="dropzone-title">Larva BSF</div>
+        <div class="dropzone-desc">Organik Tinggi Protein</div>
+      </div>
+      <div class="dropzone" id="dz-biocng" data-target="biocng">
+        <div class="dropzone-icon">🔥</div>
+        <div class="dropzone-title">Reaktor CNG</div>
+        <div class="dropzone-desc">Biomassa Lunak & Kotoran</div>
+      </div>
+      <div class="dropzone" id="dz-bank" data-target="bank">
+        <div class="dropzone-icon">🏦</div>
+        <div class="dropzone-title">Bank Sampah</div>
+        <div class="dropzone-desc">Daur Ulang Non-Organik</div>
+      </div>
+    </div>
+
+    <!-- INSTRUCTIONS / GAME OVER OVERLAYS -->
+    <div class="overlay show" id="start-overlay">
+      <div class="overlay-card">
+        <div class="overlay-icon">🎮</div>
+        <h2>Main Game & Koin Belanja!</h2>
+        <p>Pilahlah sampah organik dan non-organik ke tempat pemrosesan yang benar. Setiap poin benar akan dikonversi menjadi saldo koin belanja warga (1 Poin = Rp 100!).</p>
+        <button class="btn-action" onclick="startGame()">Mulai Game</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="gameover-overlay">
+      <div class="overlay-card">
+        <div class="overlay-icon" id="gameover-icon">🏆</div>
+        <h2 id="gameover-title">Game Selesai!</h2>
+        <p id="gameover-desc">Anda berhasil memilah sampah dan menyuplai ekonomi sirkular!</p>
+        
+        <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:16px; padding:12px; display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;">
+          <div>
+            <div style="font-size:0.55rem; color:var(--muted); text-transform:uppercase;">Skor Akhir</div>
+            <div style="font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:800; color:var(--green);" id="final-score">0</div>
+          </div>
+          <div>
+            <div style="font-size:0.55rem; color:var(--muted); text-transform:uppercase;">Bonus Belanja</div>
+            <div style="font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:800; color:var(--blue);" id="final-co2">Rp 0</div>
+          </div>
+        </div>
+
+        <button class="btn-action" onclick="startGame()">Main Lagi</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MAIN SECTION -->
+  <div class="store-container">
+    
+    <!-- LEFT: PRODUCTS LIST -->
+    <div class="products-grid">
+      
+      <!-- Product 1: BSF Maggot Feed -->
+      <div class="product-card maggot-card">
+        <div class="product-image-container">
+          <span>🐛</span>
+          <div class="product-badge-overlay">Protein Tinggi (42%)</div>
+        </div>
+        <div class="product-info-wrap">
+          <h3 class="product-title">Pakan Maggot BSF Basah</h3>
+          <div class="product-rating">
+            <span class="rating-star">★</span> 4.9 <span style="color:rgba(255,255,255,0.08)">|</span> 42 Terjual
+          </div>
+          <div class="product-stock-label">📦 Tersedia: <strong id="stock-maggot" class="stock-highlight">24.5 kg</strong></div>
+        </div>
+        <div class="product-footer">
+          <div class="product-price-bold">Rp 8.000<span class="price-unit">/kg</span></div>
+          <button class="btn-buy-round" id="btn-buy-maggot" onclick="addToCart('maggot', 'Pakan Maggot BSF', 8000)">
+            <i class="ph-bold ph-plus"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Product 2: Kasgot Organic Fertilizer -->
+      <div class="product-card fertilizer-card">
+        <div class="product-image-container">
+          <span>🪱</span>
+          <div class="product-badge-overlay">100% Organik</div>
+        </div>
+        <div class="product-info-wrap">
+          <h3 class="product-title">Pupuk Kasgot Organik Super</h3>
+          <div class="product-rating">
+            <span class="rating-star">★</span> 4.8 <span style="color:rgba(255,255,255,0.08)">|</span> 89 Terjual
+          </div>
+          <div class="product-stock-label">📦 Tersedia: <strong id="stock-fertilizer" class="stock-highlight">45.0 kg</strong></div>
+        </div>
+        <div class="product-footer">
+          <div class="product-price-bold">Rp 2.500<span class="price-unit">/kg</span></div>
+          <button class="btn-buy-round" id="btn-buy-fertilizer" onclick="addToCart('fertilizer', 'Pupuk Kasgot Organik', 2500)">
+            <i class="ph-bold ph-plus"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Product 3: BioCNG Gas Tank -->
+      <div class="product-card cng-card">
+        <div class="product-image-container">
+          <span>⛽</span>
+          <div class="product-badge-overlay">Energi Bersih</div>
+        </div>
+        <div class="product-info-wrap">
+          <h3 class="product-title">Tabung Gas BioCNG Komunal</h3>
+          <div class="product-rating">
+            <span class="rating-star">★</span> 5.0 <span style="color:rgba(255,255,255,0.08)">|</span> 14 Terjual
+          </div>
+          <div class="product-stock-label">📦 Tersedia: <strong id="stock-cng" class="stock-highlight">12 tabung</strong></div>
+        </div>
+        <div class="product-footer">
+          <div class="product-price-bold">Rp 20.000<span class="price-unit">/tabung</span></div>
+          <button class="btn-buy-round" id="btn-buy-cng" onclick="addToCart('cng', 'Tabung Gas BioCNG', 20000)">
+            <i class="ph-bold ph-plus"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: SHOPPING CART -->
+    <div class="cart-panel">
+      <div class="cart-title">
+        <span>🛒 Keranjang Belanja</span>
+        <span class="cart-count" id="cart-count">0</span>
+      </div>
+      
+      <div class="cart-items" id="cart-items">
+        <div class="cart-empty">Keranjang Belanja Kosong.</div>
+      </div>
+      
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="cart-subtotal">Rp 0</span>
+        </div>
+        <div class="summary-row">
+          <span>Metode Distribusi</span>
+          <span id="cart-shipping">Ambil di Pos RW 01</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="cart-total">Rp 0</span>
+        </div>
+      </div>
+      
+      <button class="btn-checkout" id="btn-checkout" onclick="openCheckout()" disabled>
+        💳 Konfirmasi Bayar (Order)
+      </button>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM: TRANSACTION LOG -->
+  <div class="transactions">
+    <div class="transactions-card">
+      <div class="transactions-title">📄 Histori Pembelian Edukasi</div>
+      <div class="transaction-list" id="transaction-list">
+        <div style="font-size:0.75rem; color:var(--muted); text-align:center; padding:10px;">Belum ada riwayat pembelian.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT SUCCESS MODAL -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal">
+      <div class="modal-icon">✅</div>
+      <h2>Order Berhasil dibuat!</h2>
+      <p>Pembelian demo sukses. Saldo simulasi Anda berkurang. Tunjukkan QR Code di bawah ke fasilitator RW 01 untuk validasi pengambilan barang.</p>
+      
+      <div class="qr-box">
+        <svg width="136" height="136" viewBox="0 0 100 100">
+          <path d="M5,5 h30 v30 h-30 z M12,12 h16 v16 h-16 z M5,65 h30 v30 h-30 z M12,72 h16 v16 h-16 z M65,5 h30 v30 h-30 z M72,12 h16 v16 h-16 z M65,65 h10 v10 h-10 z M75,75 h10 v10 h-10 z M85,85 h10 v10 h-10 z M65,85 h10 v10 h-10 z M75,65 h10 v10 h-10 z M85,75 h10 v10 h-10 z M50,15 h5 v5 h-5 z M45,45 h10 v10 h-10 z M55,55 h10 v10 h-10 z M35,45 h10 v5 h-10 z M25,45 h5 v10 h-5 z M45,25 h15 v5 h-15 z M75,45 h15 v10 h-15 z M15,45 h5 v5 h-5 z" fill="#0f172a" />
+        </svg>
+      </div>
+      
+      <div style="font-size:0.78rem; font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--green); margin-bottom:20px;" id="order-id-label">
+        ORDER-ID: #EDU-94285
+      </div>
+      
+      <button class="btn-close-modal" onclick="closeModal()">Tutup</button>
+    </div>
+  </div>
+
+  <!-- EDUCATIONAL DETAILS BOTTOM SHEET -->
+  <div class="edu-sheet-overlay" id="edu-sheet-overlay">
+    <div class="edu-sheet">
+      <div class="edu-header">
+        <h2>🎓 Aliran Ekonomi Sirkular Sukup Lama</h2>
+        <button class="btn-close-edu" onclick="closeEdu()"><i class="ph ph-x"></i></button>
+      </div>
+      <div class="edu-content">
+        <div class="edu-item">
+          <div class="edu-item-header">
+            <span class="edu-item-icon">🐛</span>
+            <div class="edu-item-title">Sirkular Pangan — Maggot BSF</div>
+          </div>
+          <div class="edu-item-text">
+            Sampah organik dapur warga dikumpulkan → dicacah → difermentasi → diberikan ke bio-pond BSF. Dalam 12-14 hari, maggot memanen dirinya sendiri menjadi pakan ternak tinggi protein (42%), sedangkan sisa kotorannya diolah menjadi pupuk organik kasgot.
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-item-header">
+            <span class="edu-item-icon">🪱</span>
+            <div class="edu-item-title">Kasgot (Bekas Maggot)</div>
+          </div>
+          <div class="edu-item-text">
+            Sisa residu media tumbuh maggot dikeringkan dan diayak menjadi pupuk organik kasgot super. Mengandung nutrisi lengkap untuk kebun hidroponik atau tanaman hias warga, mengurangi kebutuhan pupuk kimia sintetis.
+          </div>
+        </div>
+        <div class="edu-item">
+          <div class="edu-item-header">
+            <span class="edu-item-icon">⛽</span>
+            <div class="edu-item-title">Sirkular Energi — Reaktor BioCNG</div>
+          </div>
+          <div class="edu-item-text">
+            Sampah organik lunak dimasukkan ke dalam kubah digester anaerob. Bakteri memfermentasikannya menjadi biogas (metana & CO2) → disaring melalui scrubber sulfur → dikompresi ke tabung penampung gas portabel (CNG) setara LPG 3kg untuk dibagikan ke warga sekitar.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Isolated educational demo data state (so it runs standalone!)
+    var S = {
+      maggotStock: 24.5,
+      compostStock: 45.0,
+      biocngStock: 12,
+      revenue: 250000
+    };
+    
+    var cart = {};
+    var transactions = [];
+
+    // Load state from local storage (isolated to this app!)
+    function loadState() {
+      var saved = localStorage.getItem('zero_waste_shop_app_state');
+      if (saved) {
+        S = JSON.parse(saved);
+      } else {
+        localStorage.setItem('zero_waste_shop_app_state', JSON.stringify(S));
+      }
+      
+      // Update UI elements
+      document.getElementById('warga-balance').textContent = fRp(S.revenue);
+      
+      // Maggot Stock (BSF)
+      document.getElementById('stock-maggot').textContent = S.maggotStock.toFixed(1) + ' kg';
+      document.getElementById('btn-buy-maggot').disabled = S.maggotStock < 1.0;
+      
+      // Fertilizer Stock
+      document.getElementById('stock-fertilizer').textContent = S.compostStock.toFixed(1) + ' kg';
+      document.getElementById('btn-buy-fertilizer').disabled = S.compostStock < 1.0;
+      
+      // BioCNG Cylinder Stock
+      document.getElementById('stock-cng').textContent = Math.floor(S.biocngStock) + ' tabung';
+      document.getElementById('btn-buy-cng').disabled = Math.floor(S.biocngStock) < 1;
+    }
+
+    // Add product to cart
+    function addToCart(key, name, price) {
+      var limit = 0;
+      if (key === 'maggot') limit = S.maggotStock;
+      if (key === 'fertilizer') limit = S.compostStock;
+      if (key === 'cng') limit = S.biocngStock;
+
+      if ((cart[key]?.qty || 0) + 1 > limit) {
+        alert('Stok simulasi tidak mencukupi!');
+        return;
+      }
+
+      if (cart[key]) {
+        cart[key].qty++;
+      } else {
+        cart[key] = { name: name, price: price, qty: 1 };
+      }
+      
+      renderCart();
+    }
+
+    // Change qty
+    function changeQty(key, delta) {
+      if (!cart[key]) return;
+      
+      var limit = 0;
+      if (key === 'maggot') limit = S.maggotStock;
+      if (key === 'fertilizer') limit = S.compostStock;
+      if (key === 'cng') limit = S.biocngStock;
+
+      if (cart[key].qty + delta > limit) {
+        alert('Stok tidak mencukupi!');
+        return;
+      }
+      
+      cart[key].qty += delta;
+      if (cart[key].qty <= 0) {
+        delete cart[key];
+      }
+      renderCart();
+    }
+
+    // Render shopping cart
+    function renderCart() {
+      var container = document.getElementById('cart-items');
+      container.innerHTML = '';
+      
+      var keys = Object.keys(cart);
+      if (keys.length === 0) {
+        container.innerHTML = '<div class="cart-empty">Keranjang Belanja Kosong.</div>';
+        document.getElementById('cart-count').textContent = '0';
+        document.getElementById('cart-subtotal').textContent = 'Rp 0';
+        document.getElementById('cart-total').textContent = 'Rp 0';
+        document.getElementById('btn-checkout').disabled = true;
+        
+        var badge = document.getElementById('bottom-cart-badge');
+        if (badge) badge.style.display = 'none';
+        return;
+      }
+      
+      var count = 0;
+      var subtotal = 0;
+      
+      keys.forEach(function(key) {
+        var item = cart[key];
+        count += item.qty;
+        subtotal += item.price * item.qty;
+        
+        var row = document.createElement('div');
+        row.className = 'cart-item';
+        row.innerHTML = `
+          <div class="cart-item-info">
+            <h4>${item.name}</h4>
+            <span>${fRp(item.price)} x ${item.qty}</span>
+          </div>
+          <div class="cart-item-qty">
+            <button class="qty-btn" onclick="changeQty('${key}', -1)">-</button>
+            <span class="qty-val">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty('${key}', 1)">+</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+      
+      document.getElementById('cart-count').textContent = count;
+      document.getElementById('cart-subtotal').textContent = fRp(subtotal);
+      document.getElementById('cart-total').textContent = fRp(subtotal);
+      
+      var badge = document.getElementById('bottom-cart-badge');
+      if (badge) {
+        badge.textContent = count;
+        badge.style.display = 'block';
+      }
+      
+      document.getElementById('btn-checkout').disabled = subtotal > S.revenue || subtotal === 0;
+    }
+
+    // Perform Checkout
+    function openCheckout() {
+      var keys = Object.keys(cart);
+      if (keys.length === 0) return;
+      
+      var total = 0;
+      keys.forEach(function(key) {
+        total += cart[key].price * cart[key].qty;
+      });
+      
+      if (total > S.revenue) {
+        alert('Saldo tidak mencukupi!');
+        return;
+      }
+      
+      // Deduct balance and stocks
+      S.revenue -= total;
+      keys.forEach(function(key) {
+        if (key === 'maggot') S.maggotStock -= cart[key].qty;
+        if (key === 'fertilizer') S.compostStock -= cart[key].qty;
+        if (key === 'cng') S.biocngStock -= cart[key].qty;
+      });
+      
+      localStorage.setItem('zero_waste_shop_app_state', JSON.stringify(S));
+      
+      // Save transaction
+      var txId = '#EDU-' + Math.floor(10000 + Math.random() * 90000);
+      document.getElementById('order-id-label').textContent = 'ORDER-ID: ' + txId;
+      
+      var d = new Date();
+      var dateStr = d.toLocaleDateString('id') + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+      var txDetails = keys.map(k => `${cart[k].name} (${cart[k].qty}x)`).join(', ');
+      
+      transactions.unshift({
+        id: txId,
+        date: dateStr,
+        details: txDetails,
+        total: total
+      });
+      
+      localStorage.setItem('zero_waste_shop_app_transactions', JSON.stringify(transactions));
+      renderTransactions();
+      
+      cart = {};
+      renderCart();
+      loadState();
+      
+      document.getElementById('checkout-modal').classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('checkout-modal').classList.remove('show');
+    }
+
+    function openEdu() {
+      document.getElementById('edu-sheet-overlay').classList.add('show');
+    }
+    function closeEdu() {
+      document.getElementById('edu-sheet-overlay').classList.remove('show');
+    }
+
+    function renderTransactions() {
+      var saved = localStorage.getItem('zero_waste_shop_app_transactions');
+      if (saved) {
+        transactions = JSON.parse(saved);
+      }
+      
+      var container = document.getElementById('transaction-list');
+      container.innerHTML = '';
+      
+      if (transactions.length === 0) {
+        container.innerHTML = '<div style="font-size:0.75rem; color:var(--muted); text-align:center; padding:10px;">Belum ada riwayat pembelian.</div>';
+        return;
+      }
+      
+      transactions.forEach(function(tx) {
+        var row = document.createElement('div');
+        row.className = 'transaction-row';
+        row.innerHTML = `
+          <div>
+            <div class="tx-item">${tx.details}</div>
+            <div class="tx-date">${tx.date} • ID: ${tx.id}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-weight:700; color:var(--green); margin-bottom:3px;">-${fRp(tx.total)}</div>
+            <span class="tx-status success">Sukses</span>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function fRp(val) {
+      return 'Rp ' + Number(val).toLocaleString('id');
+    }
+    var pad = n => n < 10 ? '0' + n : n;
+
+    // Mobile/Desktop tabs switcher (Shopee Style + Desktop Toggle)
+    function switchMobileTab(tabId) {
+      // Manage active classes on header links (desktop)
+      document.querySelectorAll('.edu-link-tab').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      var activeHeadBtn = document.getElementById('header-item-' + tabId);
+      if (activeHeadBtn) activeHeadBtn.classList.add('active');
+
+      // Manage active classes on bottom nav (mobile)
+      document.querySelectorAll('.bottom-nav-item').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      var activeBtn = document.getElementById('nav-item-' + tabId);
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      var storeContainer = document.querySelector('.store-container');
+      var productsGrid = document.querySelector('.products-grid');
+      var cartPanel = document.querySelector('.cart-panel');
+      var transactions = document.querySelector('.transactions');
+      var gamePanel = document.getElementById('game-panel');
+      
+      // Stop active game if switching away from the game tab
+      if (tabId !== 'game' && isPlaying) {
+        isPlaying = false;
+        clearInterval(gameInterval);
+      }
+
+      // Hide everything first
+      productsGrid.classList.remove('active-tab');
+      cartPanel.classList.remove('active-tab');
+      transactions.classList.remove('active-tab');
+      gamePanel.classList.remove('active-tab');
+      
+      storeContainer.style.display = 'none';
+      transactions.style.display = 'none';
+      gamePanel.style.display = 'none';
+      
+      if (tabId === 'toko') {
+        storeContainer.style.display = 'grid';
+        productsGrid.classList.add('active-tab');
+        if (window.innerWidth <= 768) {
+          cartPanel.classList.remove('active-tab');
+        } else {
+          cartPanel.classList.add('active-tab');
+        }
+      } else if (tabId === 'keranjang') {
+        storeContainer.style.display = 'block';
+        cartPanel.classList.add('active-tab');
+      } else if (tabId === 'transaksi') {
+        transactions.style.display = 'block';
+        transactions.classList.add('active-tab');
+      } else if (tabId === 'game') {
+        gamePanel.style.display = 'flex';
+        gamePanel.classList.add('active-tab');
+        
+        // Reposition spawner item to center
+        resetDragItemPosition();
+      }
+    }
+
+    window.addEventListener('resize', function() {
+      var storeContainer = document.querySelector('.store-container');
+      var productsGrid = document.querySelector('.products-grid');
+      var cartPanel = document.querySelector('.cart-panel');
+      var transactions = document.querySelector('.transactions');
+
+      if (window.innerWidth > 768) {
+        storeContainer.style.display = 'grid';
+        productsGrid.classList.remove('active-tab');
+        cartPanel.classList.remove('active-tab');
+        transactions.classList.remove('active-tab');
+      } else {
+        var activeTab = 'toko';
+        var activeBtn = document.querySelector('.bottom-nav-item.active');
+        if (!activeBtn) activeBtn = document.querySelector('.edu-link-tab.active');
+        
+        if (activeBtn) {
+          activeTab = activeBtn.id.replace('nav-item-', '').replace('header-item-', '');
+        }
+        switchMobileTab(activeTab);
+      }
+    });
+
+    // ===== DRAG AND DROP GAME MECHANICS =====
+    var gameItemsList = [
+      { char: '🍎', name: 'Sisa Apel', target: 'maggot', okText: 'Sisa apel disukai Larva BSF karena manis dan lunak!' },
+      { char: '🥩', name: 'Sisa Daging', target: 'maggot', okText: 'Limbah protein tinggi seperti daging mempercepat pertumbuhan larva BSF!' },
+      { char: '🍚', name: 'Nasi Basi', target: 'maggot', okText: 'Nasi basi terurai dengan cepat di bio-pond Maggot BSF!' },
+      { char: '🦴', name: 'Tulang Rawan', target: 'maggot', okText: 'Larva BSF mengonsumsi residu daging pada tulang rawan dengan cepat!' },
+      { char: '🍉', name: 'Kulit Semangka', target: 'maggot', okText: 'Residu buah berair seperti kulit semangka memberi kelembaban bagi maggot!' },
+      
+      { char: '💩', name: 'Kohe Ternak', target: 'biocng', okText: 'Kotoran hewan (kohe) mengandung bakteri metanogenik aktif untuk biogas!' },
+      { char: '🥬', name: 'Sisa Sayur', target: 'biocng', okText: 'Serat hijau sisa sayur mudah dicerna dalam tangki anaerob digester!' },
+      { char: '🌾', name: 'Rumput / Jerami', target: 'biocng', okText: 'Rumput adalah biomassa kaya selulosa pembentuk gas metana!' },
+      { char: '🍌', name: 'Kulit Pisang', target: 'biocng', okText: 'Kulit pisang kaya zat organik penunjang fermentasi biogas BioCNG!' },
+      { char: '🧫', name: 'Lumpur Aktif', target: 'biocng', okText: 'Lumpur aktif memicu percepatan laju hidrolisis biomassa di reaktor!' },
+
+      { char: '🧴', name: 'Botol Plastik', target: 'bank', okText: 'Botol plastik disetor ke Bank Sampah untuk didaur ulang menjadi biji plastik!' },
+      { char: '📦', name: 'Kardus Bekas', target: 'bank', okText: 'Kardus bekas didaur ulang kembali menjadi bubur kertas (pulp) berkualitas!' },
+      { char: '🥫', name: 'Kaleng Minuman', target: 'bank', okText: 'Aluminium pada kaleng minuman dilebur kembali dengan nilai ekonomi tinggi!' },
+      { char: '📰', name: 'Kertas Koran', target: 'bank', okText: 'Kertas koran dipilah untuk memperpanjang siklus hidup serat selulosa kertas!' },
+      { char: '🥛', name: 'Gelas Kaca', target: 'bank', okText: 'Kaca bekas dilebur 100% tanpa menurunkan kualitas materialnya!' }
+    ];
+
+    var score = 0;
+    var co2 = 0; // Represents accumulated bonus cash in rupiah for this unified shop context!
+    var timeLeft = 60;
+    var gameInterval = null;
+    var currentItem = null;
+    var isPlaying = false;
+
+    var activeEl = document.getElementById('drag-item');
+    var isDragging = false;
+    var startX, startY;
+
+    // Attach drag events to the spawned item
+    activeEl.addEventListener('mousedown', dragStart);
+    activeEl.addEventListener('touchstart', dragStart, { passive: false });
+
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('touchmove', dragMove, { passive: false });
+
+    document.addEventListener('mouseup', dragEnd);
+    document.addEventListener('touchend', dragEnd);
+
+    function dragStart(e) {
+      if (!isPlaying) return;
+      isDragging = true;
+      activeEl.style.transition = 'none';
+
+      var pageX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
+      var pageY = e.type === 'touchstart' ? e.touches[0].pageY : e.pageY;
+
+      var rect = activeEl.getBoundingClientRect();
+      startX = pageX - (rect.left + window.scrollX);
+      startY = pageY - (rect.top + window.scrollY);
+
+      e.preventDefault();
+    }
+
+    function dragMove(e) {
+      if (!isDragging) return;
+
+      var pageX = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
+      var pageY = e.type === 'touchmove' ? e.touches[0].pageY : e.pageY;
+
+      // Adjust element relative to the wrapper offset of game-panel
+      var panelRect = document.getElementById('game-panel').getBoundingClientRect();
+      
+      // Calculate coordinates relative to game-panel container
+      var x = pageX - startX - panelRect.left - window.scrollX;
+      var y = pageY - startY - panelRect.top - window.scrollY;
+
+      activeEl.style.left = x + 'px';
+      activeEl.style.top = y + 'px';
+
+      checkDropzonesOverlap();
+    }
+
+    function dragEnd(e) {
+      if (!isDragging) return;
+      isDragging = false;
+
+      var itemRect = activeEl.getBoundingClientRect();
+      var itemCenterX = itemRect.left + itemRect.width / 2;
+      var itemCenterY = itemRect.top + itemRect.height / 2;
+
+      var matchedZone = null;
+      var zones = ['maggot', 'biocng', 'bank'];
+
+      for (var i = 0; i < zones.length; i++) {
+        var zoneEl = document.getElementById('dz-' + zones[i]);
+        var zRect = zoneEl.getBoundingClientRect();
+        if (itemCenterX >= zRect.left && itemCenterX <= zRect.right &&
+            itemCenterY >= zRect.top && itemCenterY <= zRect.bottom) {
+          matchedZone = zones[i];
+          break;
+        }
+      }
+
+      document.querySelectorAll('.dropzone').forEach(function(dz) {
+        dz.classList.remove('drag-over-maggot', 'drag-over-cng', 'drag-over-bank');
+      });
+
+      if (matchedZone) {
+        evaluateDrop(matchedZone, itemCenterX, itemCenterY);
+      } else {
+        resetDragItemPosition();
+      }
+    }
+
+    function checkDropzonesOverlap() {
+      var itemRect = activeEl.getBoundingClientRect();
+      var itemCenterX = itemRect.left + itemRect.width / 2;
+      var itemCenterY = itemRect.top + itemRect.height / 2;
+
+      var zones = ['maggot', 'biocng', 'bank'];
+      var glowClasses = ['drag-over-maggot', 'drag-over-cng', 'drag-over-bank'];
+
+      zones.forEach(function(zone, idx) {
+        var zoneEl = document.getElementById('dz-' + zone);
+        var zRect = zoneEl.getBoundingClientRect();
+        if (itemCenterX >= zRect.left && itemCenterX <= zRect.right &&
+            itemCenterY >= zRect.top && itemCenterY <= zRect.bottom) {
+          zoneEl.classList.add(glowClasses[idx]);
+        } else {
+          zoneEl.classList.remove(glowClasses[idx]);
+        }
+      });
+    }
+
+    function resetDragItemPosition() {
+      activeEl.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      activeEl.style.left = 'calc(50% - 45px)';
+      activeEl.style.top = 'calc(50% - 45px)';
+    }
+
+    function spawnItem() {
+      var unusedItems = gameItemsList.filter(x => x !== currentItem);
+      var rand = unusedItems[Math.floor(Math.random() * unusedItems.length)];
+      currentItem = rand;
+
+      activeEl.innerHTML = currentItem.char + `<span class="item-name">${currentItem.name}</span>`;
+      
+      activeEl.style.transform = 'scale(0)';
+      resetDragItemPosition();
+      setTimeout(function() {
+        activeEl.style.transform = 'scale(1)';
+      }, 50);
+    }
+
+    function evaluateDrop(zone, x, y) {
+      var panelRect = document.getElementById('game-panel').getBoundingClientRect();
+      var localX = x - panelRect.left;
+      var localY = y - panelRect.top;
+
+      if (currentItem.target === zone) {
+        score += 10;
+        co2 += 1000; // Earn Rp 1.000 per correct item!
+        
+        showFeedback(true, currentItem.okText);
+        spawnExplosion(localX, localY, '#10b981');
+      } else {
+        score = Math.max(0, score - 5);
+        
+        var penaltyText = `Salah! ${currentItem.name} seharusnya masuk ke `;
+        if (currentItem.target === 'maggot') penaltyText += '🐛 Larva BSF.';
+        if (currentItem.target === 'biocng') penaltyText += '🔥 Reaktor CNG.';
+        if (currentItem.target === 'bank') penaltyText += '🏦 Bank Sampah.';
+        
+        showFeedback(false, penaltyText);
+        spawnExplosion(localX, localY, '#ef4444');
+      }
+
+      document.getElementById('game-score').textContent = score;
+      document.getElementById('game-co2').textContent = fRp(co2);
+
+      activeEl.style.transform = 'scale(0)';
+      setTimeout(spawnItem, 250);
+    }
+
+    var toastTimeout = null;
+    function showFeedback(isCorrect, text) {
+      var toast = document.getElementById('feedback-toast');
+      toast.className = 'feedback-toast ' + (isCorrect ? 'correct' : 'incorrect') + ' show';
+      toast.textContent = text;
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(function() {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function spawnExplosion(x, y, color) {
+      var parent = document.getElementById('game-panel');
+      for (var i = 0; i < 12; i++) {
+        var p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.backgroundColor = color;
+
+        var angle = Math.random() * Math.PI * 2;
+        var velocity = 30 + Math.random() * 50;
+        var dx = Math.cos(angle) * velocity;
+        var dy = Math.sin(angle) * velocity;
+
+        p.style.setProperty('--dx', dx + 'px');
+        p.style.setProperty('--dy', dy + 'px');
+
+        parent.appendChild(p);
+
+        (function(el) {
+          setTimeout(function() {
+            if (el.parentNode) el.parentNode.removeChild(el);
+          }, 600);
+        })(p);
+      }
+    }
+
+    function startGame() {
+      document.getElementById('start-overlay').classList.remove('show');
+      document.getElementById('gameover-overlay').classList.remove('show');
+
+      score = 0;
+      co2 = 0;
+      timeLeft = 60;
+      isPlaying = true;
+
+      document.getElementById('game-score').textContent = score;
+      document.getElementById('game-co2').textContent = 'Rp 0';
+      document.getElementById('game-timer').textContent = timeLeft;
+
+      spawnItem();
+
+      if (gameInterval) clearInterval(gameInterval);
+      gameInterval = setInterval(function() {
+        timeLeft--;
+        document.getElementById('game-timer').textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      isPlaying = false;
+      clearInterval(gameInterval);
+      
+      // Inject bonus earnings to wallet balance!
+      S.revenue += co2;
+      localStorage.setItem('zero_waste_shop_app_state', JSON.stringify(S));
+      loadState(); // Refresh header HUD balance
+
+      document.getElementById('final-score').textContent = score;
+      document.getElementById('final-co2').textContent = fRp(co2);
+
+      var title = document.getElementById('gameover-title');
+      var desc = document.getElementById('gameover-desc');
+      var icon = document.getElementById('gameover-icon');
+
+      if (score >= 120) {
+        title.textContent = 'Juara Sirkular! 👑';
+        desc.textContent = `Hebat! Bonus Belanja ${fRp(co2)} ditambahkan ke saldo Anda!`;
+        icon.textContent = '👑';
+      } else if (score >= 60) {
+        title.textContent = 'Pegiat Hijau! 🌱';
+        desc.textContent = `Bagus! Bonus Belanja ${fRp(co2)} ditambahkan ke saldo Anda!`;
+        icon.textContent = '🌱';
+      } else {
+        title.textContent = 'Belajar Lagi! 📚';
+        desc.textContent = `Bonus Belanja ${fRp(co2)} ditambahkan ke saldo Anda!`;
+        icon.textContent = '📚';
+      }
+
+      document.getElementById('gameover-overlay').classList.add('show');
+    }
+
+    // Init
+    window.addEventListener('load', function() {
+      loadState();
+      renderTransactions();
+      
+      if (window.innerWidth <= 768) {
+        switchMobileTab('toko');
+      }
+    });
+  </script>
+
+  <!-- GAME MARKUP -->
+  <div id="game-panel" style="display:none;">
+    <div class="game-stats">
+      <span>Waktu: <span id="game-timer">60</span>s</span>
+      <span>Skor: <span id="game-score">0</span></span>
+      <span>Bonus: <span id="game-co2">Rp 0</span></span>
+    </div>
+    <div class="dropzones">
+      <div class="dropzone" id="dz-maggot">🐛<span>Maggot</span></div>
+      <div class="dropzone" id="dz-biocng">🔥<span>BioCNG</span></div>
+      <div class="dropzone" id="dz-bank">🏦<span>Bank</span></div>
+    </div>
+    <div id="drag-item">🍎</div>
+    <div id="feedback-toast" class="feedback-toast"></div>
+    <div id="start-overlay" class="overlay show">
+      <h2>Sortir Sampah!</h2>
+      <p>Pilah sampah ke tempat yang benar dalam 60 detik!</p>
+      <button onclick="startGame()" style="padding:10px 30px; background:var(--green); color:white; border:none; border-radius:10px; cursor:pointer;">Mulai!</button>
+    </div>
+    <div id="gameover-overlay" class="overlay">
+      <div id="gameover-icon" style="font-size:3rem;"></div>
+      <h2 id="gameover-title">Selesai!</h2>
+      <p id="gameover-desc"></p>
+      <p>Skor Akhir: <strong id="final-score">0</strong></p>
+      <button onclick="startGame()" style="padding:10px 30px; background:var(--green); color:white; border:none; border-radius:10px; cursor:pointer;">Main Lagi</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION (MOBILE ONLY) -->
+  <div class="bottom-nav">
+    <button class="bottom-nav-item active" id="nav-item-toko" onclick="switchMobileTab('toko')">
+      <i class="ph-bold ph-storefront bottom-nav-icon"></i>
+      <span>Toko</span>
+    </button>
+    <button class="bottom-nav-item" id="nav-item-game" onclick="switchMobileTab('game')">
+      <i class="ph-bold ph-game-controller bottom-nav-icon"></i>
+      <span>Game</span>
+    </button>
+    <button class="bottom-nav-item" id="nav-item-keranjang" onclick="switchMobileTab('keranjang')">
+      <i class="ph-bold ph-shopping-cart bottom-nav-icon"></i>
+      <span class="bottom-nav-badge" id="bottom-cart-badge" style="display:none;">0</span>
+      <span>Keranjang</span>
+    </button>
+    <button class="bottom-nav-item" id="nav-item-transaksi" onclick="switchMobileTab('transaksi')">
+      <i class="ph-bold ph-receipt bottom-nav-icon"></i>
+      <span>Transaksi</span>
+    </button>
+  </div>
+</body>
+</html>

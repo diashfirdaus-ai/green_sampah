@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Living Lab GreenSampah — RW 01 Sukup Lama, Cigending, Ujungberung, Bandung | Proposal Hibah Green Jobs 2026</title>
+  <meta name="description" content="Proposal Hibah Living Lab: Platform ekonomi sirkular pangan (Maggot BSF) & energi (BioCNG) berbasis komunitas di RW 01 Sukup Lama, Ujungberung, Bandung. Dana Rp 50 juta untuk prototype nyata.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-deep:#0a4d2e; --green-mid:#16a34a; --green-bright:#22c55e;
+      --green-light:#bbf7d0; --green-pale:#f0fdf4;
+      --gold:#d4af37; --gold-light:#fef3c7;
+      --navy:#0f172a; --slate:#334155; --muted:#64748b;
+      --white:#ffffff; --off-white:#f8fafc;
+      --bandung:#1d4ed8; --bandung-pale:#eff6ff;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;color:var(--navy);background:var(--white);overflow-x:hidden;}
+
+    /* ─── NAVBAR ─── */
+    .navbar{
+      position:fixed;top:0;left:0;right:0;z-index:1000;
+      background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(22,163,74,0.15);
+      height:66px;display:flex;align-items:center;
+      padding:0 5%;justify-content:space-between;
+    }
+    .nav-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1rem;color:var(--green-deep);}
+    .nav-logo-badge{
+      background:linear-gradient(135deg,var(--green-mid),var(--green-bright));
+      color:white;padding:5px 12px;border-radius:8px;
+      font-size:0.78rem;font-weight:700;
+    }
+    .nav-loc{
+      font-size:0.75rem;color:var(--muted);font-weight:500;
+      background:var(--bandung-pale);border:1px solid rgba(29,78,216,0.15);
+      border-radius:100px;padding:3px 12px;
+    }
+    .nav-links{display:flex;gap:24px;list-style:none;}
+    .nav-links a{text-decoration:none;color:var(--slate);font-size:0.82rem;font-weight:500;transition:color 0.2s;}
+    .nav-links a:hover{color:var(--green-mid);}
+    .nav-cta{
+      background:linear-gradient(135deg,var(--green-mid),var(--green-deep));
+      color:white;border:none;padding:9px 20px;border-radius:10px;
+      font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;
+      cursor:pointer;text-decoration:none;transition:all 0.25s;
+      display:flex;align-items:center;gap:6px;
+    }
+    .nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(22,163,74,0.35);}
+    @media(max-width:720px){.nav-links{display:none;}.nav-loc{display:none;}}
+
+    /* ─── TICKER ─── */
+    .ticker-wrap{background:var(--green-mid);padding:9px 0;overflow:hidden;}
+    .ticker{display:flex;gap:0;white-space:nowrap;animation:ticker-scroll 28s linear infinite;}
+    .ticker-item{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:0.76rem;font-weight:600;color:white;
+      padding:0 24px;border-right:1px solid rgba(255,255,255,0.3);flex-shrink:0;
+    }
+    @keyframes ticker-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+    /* ─── HERO ─── */
+    .hero{
+      min-height:100vh;
+      background:linear-gradient(155deg,#0a4d2e 0%,#064e3b 40%,#0c4a6e 100%);
+      position:relative;overflow:hidden;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:100px 5% 80px;text-align:center;
+    }
+    .hero::before{
+      content:'';position:absolute;inset:0;
+      background-image:
+        radial-gradient(circle at 15% 50%,rgba(34,197,94,0.18) 0%,transparent 50%),
+        radial-gradient(circle at 85% 20%,rgba(14,165,233,0.12) 0%,transparent 40%),
+        radial-gradient(circle at 55% 85%,rgba(212,175,55,0.1) 0%,transparent 40%);
+      pointer-events:none;
+    }
+    .hero-grid{
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+      background-size:50px 50px;pointer-events:none;
+    }
+
+    /* Living Lab badge strip */
+    .hero-loc-strip{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(29,78,216,0.2);
+      border:1px solid rgba(96,165,250,0.4);
+      border-radius:100px;padding:7px 20px;
+      font-size:0.8rem;font-weight:700;color:#93c5fd;
+      margin-bottom:1.25rem;position:relative;z-index:1;
+      letter-spacing:0.03em;
+    }
+    .loc-dot{width:8px;height:8px;border-radius:50%;background:#60a5fa;animation:loc-pulse 1.5s infinite;}
+    @keyframes loc-pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.3);}}
+
+    .hero-badges{
+      display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+      margin-bottom:1.5rem;position:relative;z-index:1;
+    }
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,0.09);
+      border:1px solid rgba(255,255,255,0.18);
+      backdrop-filter:blur(8px);border-radius:100px;padding:5px 14px;
+      font-size:0.7rem;font-weight:600;color:rgba(255,255,255,0.88);
+      letter-spacing:0.04em;text-transform:uppercase;
+    }
+    .hero-badge.gold{background:rgba(212,175,55,0.15);border-color:rgba(212,175,55,0.4);color:#fde68a;}
+    .hero-badge.living{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.4);color:#86efac;}
+
+    .hero h1{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2rem,4.5vw,3.8rem);font-weight:900;
+      color:white;line-height:1.1;margin-bottom:1.2rem;
+      position:relative;z-index:1;max-width:860px;
+    }
+    .hero h1 .highlight{
+      background:linear-gradient(135deg,#22c55e,#86efac);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero h1 .highlight-gold{
+      background:linear-gradient(135deg,#fde68a,#f59e0b);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .hero-sub{
+      font-size:clamp(0.9rem,1.8vw,1.1rem);color:rgba(255,255,255,0.72);
+      max-width:620px;line-height:1.75;margin-bottom:2.5rem;position:relative;z-index:1;
+    }
+    .hero-actions{
+      display:flex;gap:12px;flex-wrap:wrap;justify-content:center;
+      position:relative;z-index:1;margin-bottom:3rem;
+    }
+    .btn-hero-primary{
+      background:linear-gradient(135deg,#22c55e,#16a34a);color:white;border:none;
+      padding:15px 32px;border-radius:14px;font-family:'Inter',sans-serif;
+      font-size:0.95rem;font-weight:700;cursor:pointer;text-decoration:none;
+      transition:all 0.3s;display:inline-flex;align-items:center;gap:8px;
+      box-shadow:0 8px 28px rgba(34,197,94,0.35);
+    }
+    .btn-hero-primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(34,197,94,0.5);}
+    .btn-hero-outline{
+      background:rgba(255,255,255,0.08);color:white;border:1px solid rgba(255,255,255,0.3);
+      padding:15px 32px;border-radius:14px;font-family:'Inter',sans-serif;
+      font-size:0.95rem;font-weight:600;cursor:pointer;text-decoration:none;
+      transition:all 0.3s;display:inline-flex;align-items:center;gap:8px;backdrop-filter:blur(8px);
+    }
+    .btn-hero-outline:hover{background:rgba(255,255,255,0.15);transform:translateY(-2px);}
+
+    /* Living Lab highlight box */
+    .living-lab-box{
+      background:rgba(212,175,55,0.1);
+      border:1px solid rgba(212,175,55,0.35);
+      border-radius:20px;padding:20px 28px;
+      position:relative;z-index:1;margin-bottom:2.5rem;
+      display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;
+    }
+    .lab-pill{
+      background:rgba(212,175,55,0.2);border:1px solid rgba(212,175,55,0.4);
+      border-radius:100px;padding:6px 16px;
+      font-size:0.78rem;font-weight:700;color:#fde68a;
+    }
+    .lab-text{font-size:0.88rem;color:rgba(255,255,255,0.8);line-height:1.5;}
+    .lab-budget{
+      font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;
+      color:#fde68a;white-space:nowrap;
+    }
+
+    .hero-stats{
+      display:flex;gap:0;
+      background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);
+      border-radius:20px;backdrop-filter:blur(12px);position:relative;z-index:1;overflow:hidden;
+    }
+    .hero-stat{
+      padding:18px 28px;border-right:1px solid rgba(255,255,255,0.1);
+      text-align:center;flex:1;
+    }
+    .hero-stat:last-child{border-right:none;}
+    .hero-stat-num{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:800;color:var(--green-bright);display:block;line-height:1;}
+    .hero-stat-label{font-size:0.68rem;color:rgba(255,255,255,0.55);font-weight:500;margin-top:4px;display:block;}
+
+    /* ─── SECTIONS ─── */
+    .section{padding:80px 5%;}
+    .section-label{
+      display:inline-flex;align-items:center;gap:6px;
+      background:var(--green-pale);border:1px solid rgba(22,163,74,0.2);
+      border-radius:100px;padding:4px 14px;
+      font-size:0.7rem;font-weight:700;color:var(--green-mid);
+      letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.85rem;
+    }
+    .section-title{
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.7rem,3.2vw,2.6rem);font-weight:800;
+      color:var(--navy);line-height:1.2;margin-bottom:0.85rem;
+    }
+    .section-sub{color:var(--muted);font-size:0.95rem;max-width:660px;line-height:1.7;}
+    .section-header{margin-bottom:3rem;}
+
+    /* ─── LOCATION CARD ─── */
+    .location-section{background:var(--bandung-pale);}
+    .location-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+    @media(max-width:768px){.location-grid{grid-template-columns:1fr;}}
+    .location-card{
+      background:white;border-radius:24px;overflow:hidden;
+      box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid rgba(29,78,216,0.1);
+    }
+    .loc-map-placeholder{
+      height:180px;
+      background:linear-gradient(135deg,#dbeafe,#bfdbfe);
+      display:flex;align-items:center;justify-content:center;
+      font-size:3rem;position:relative;overflow:hidden;
+    }
+    .loc-map-placeholder::after{
+      content:'📍 RW 01 Sukup Lama';
+      position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+      background:white;border-radius:100px;padding:4px 14px;
+      font-size:0.72rem;font-weight:700;color:var(--bandung);
+      white-space:nowrap;
+    }
+    .loc-info{padding:24px;}
+    .loc-info h3{font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:12px;}
+    .loc-row{display:flex;gap:8px;align-items:flex-start;font-size:0.85rem;color:var(--slate);margin-bottom:8px;}
+    .loc-icon{flex-shrink:0;font-size:1rem;}
+    .loc-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+    .loc-stat{
+      background:var(--green-pale);border:1px solid rgba(22,163,74,0.15);
+      border-radius:12px;padding:12px;text-align:center;
+    }
+    .loc-stat-num{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:800;color:var(--green-mid);}
+    .loc-stat-label{font-size:0.68rem;color:var(--muted);font-weight:500;margin-top:2px;}
+
+    .living-lab-concept{
+      background:white;border-radius:24px;padding:28px;
+      border:2px solid rgba(212,175,55,0.3);
+      box-shadow:0 4px 20px rgba(212,175,55,0.08);
+    }
+    .living-lab-concept h3{font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:12px;}
+    .concept-list{display:flex;flex-direction:column;gap:10px;}
+    .concept-item{
+      display:flex;gap:12px;align-items:flex-start;
+      background:var(--off-white);border-radius:12px;padding:12px 16px;
+    }
+    .concept-icon{font-size:1.4rem;flex-shrink:0;}
+    .concept-item h4{font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:2px;}
+    .concept-item p{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+
+    /* ─── PROBLEM ─── */
+    .problem-section{background:var(--navy);color:white;}
+    .problem-section .section-title{color:white;}
+    .problem-section .section-sub{color:rgba(255,255,255,0.6);}
+    .problem-section .section-label{background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.3);color:#fca5a5;}
+    .problem-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
+    .problem-card{
+      background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+      border-radius:18px;padding:24px;transition:all 0.3s;
+    }
+    .problem-card:hover{background:rgba(255,255,255,0.07);transform:translateY(-4px);}
+    .problem-icon{font-size:2.2rem;margin-bottom:12px;display:block;}
+    .problem-stat{font-family:'Playfair Display',serif;font-size:2rem;font-weight:800;color:#f87171;display:block;margin-bottom:5px;}
+    .problem-card h3{font-size:0.95rem;font-weight:700;color:white;margin-bottom:7px;}
+    .problem-card p{font-size:0.8rem;color:rgba(255,255,255,0.52);line-height:1.6;}
+
+    /* ─── THEMES ─── */
+    .themes-section{background:var(--green-pale);}
+    .themes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    @media(max-width:800px){.themes-grid{grid-template-columns:1fr;}}
+    .theme-card{
+      background:white;border-radius:22px;overflow:hidden;
+      box-shadow:0 4px 20px rgba(0,0,0,0.05);transition:all 0.3s;
+    }
+    .theme-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,0.1);}
+    .theme-card-header{padding:24px 24px 18px;}
+    .theme-number{
+      width:48px;height:48px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;
+      color:white;margin-bottom:14px;
+    }
+    .theme-card h3{font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.4;}
+    .theme-card p{font-size:0.8rem;color:var(--muted);line-height:1.55;}
+    .theme-card-footer{padding:16px 24px;border-top:1px solid #f1f5f9;background:#fafafa;}
+    .fit-badge{
+      display:inline-flex;align-items:center;gap:4px;
+      background:var(--green-pale);color:var(--green-mid);
+      border:1px solid rgba(22,163,74,0.2);
+      padding:3px 9px;border-radius:100px;
+      font-size:0.65rem;font-weight:700;margin:3px 3px 0 0;
+    }
+
+    /* ─── SOLUTION ─── */
+    .solution-section{background:white;}
+    .e2e-flow{
+      display:flex;align-items:flex-start;gap:0;flex-wrap:wrap;
+      justify-content:center;margin:2.5rem 0;
+    }
+    .flow-step{
+      display:flex;flex-direction:column;align-items:center;text-align:center;
+      flex:1;min-width:120px;max-width:155px;
+    }
+    .flow-step-icon{
+      width:64px;height:64px;border-radius:20px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.8rem;margin-bottom:12px;position:relative;
+      transition:transform 0.3s;
+    }
+    .flow-step:hover .flow-step-icon{transform:scale(1.1);}
+    .flow-step-num{
+      position:absolute;top:-8px;right:-8px;
+      width:20px;height:20px;border-radius:50%;
+      background:var(--green-mid);color:white;
+      font-size:0.6rem;font-weight:800;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .flow-step h4{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:4px;}
+    .flow-step p{font-size:0.68rem;color:var(--muted);line-height:1.5;}
+    .flow-connector{
+      flex-shrink:0;width:36px;display:flex;align-items:center;
+      justify-content:center;padding-top:26px;
+    }
+    .flow-connector-line{
+      width:100%;height:2px;
+      background:linear-gradient(90deg,var(--green-mid),var(--green-bright));
+      position:relative;
+    }
+    .flow-connector-dot{
+      position:absolute;right:-5px;top:-3px;
+      width:8px;height:8px;border-radius:50%;background:var(--green-bright);
+    }
+    .circular-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:2.5rem;}
+    @media(max-width:960px){.circular-grid{grid-template-columns:1fr;}}
+    .circular-card{
+      border-radius:22px;padding:28px;position:relative;overflow:hidden;
+      transition:all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);z-index:1;
+    }
+    .circular-card:hover{
+      transform:translateY(-8px) scale(1.02);
+      box-shadow:0 20px 40px rgba(0,0,0,0.1);
+    }
+    .circular-card.banksampah{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:2px solid rgba(29,78,216,0.15);}
+    .circular-card.banksampah:hover{border-color:rgba(59,130,246,0.5);box-shadow:0 20px 40px rgba(59,130,246,0.12);}
+    
+    .circular-card.maggot{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid rgba(34,197,94,0.15);}
+    .circular-card.maggot:hover{border-color:rgba(34,197,94,0.5);box-shadow:0 20px 40px rgba(34,197,94,0.12);}
+    
+    .circular-card.biocng{background:linear-gradient(135deg,#fff7ed,#fed7aa);border:2px solid rgba(249,115,22,0.15);}
+    .circular-card.biocng:hover{border-color:rgba(249,115,22,0.5);box-shadow:0 20px 40px rgba(249,115,22,0.12);}
+    
+    .circular-icon-wrapper {
+      position:relative;width:64px;height:64px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+      background:rgba(255,255,255,0.7);box-shadow:0 4px 10px rgba(0,0,0,0.03);
+      z-index:2;transition:all 0.3s ease;
+    }
+    .circular-card:hover .circular-icon-wrapper{transform:scale(1.08);}
+    .circular-icon-wrapper::before{
+      content:'';position:absolute;inset:-6px;border-radius:50%;
+      border:1.5px dashed rgba(0,0,0,0.12);transition:all 0.3s ease;
+    }
+    .circular-card.banksampah .circular-icon-wrapper::before{border-color:rgba(59,130,246,0.35);color:#3b82f6;}
+    .circular-card.maggot .circular-icon-wrapper::before{border-color:rgba(34,197,94,0.35);color:#22c55e;}
+    .circular-card.biocng .circular-icon-wrapper::before{border-color:rgba(249,115,22,0.35);color:#f97316;}
+    
+    .circular-card:hover .circular-icon-wrapper::before{
+      animation:rotateDashed 8s linear infinite;inset:-9px;border-width:1.8px;
+    }
+    @keyframes rotateDashed {
+      0%{transform:rotate(0deg);}
+      100%{transform:rotate(360deg);}
+    }
+    
+    .circular-card-icon{font-size:2.2rem;display:block;transition:all 0.3s ease;}
+    .circular-card.banksampah:hover .circular-card-icon{animation:bounceIcon 0.8s ease infinite alternate;}
+    .circular-card.maggot:hover .circular-card-icon{animation:wiggleIcon 0.6s ease-in-out infinite alternate;}
+    .circular-card.biocng:hover .circular-card-icon{animation:pulseIcon 0.8s ease infinite alternate;}
+    
+    @keyframes bounceIcon{0%{transform:translateY(0);}100%{transform:translateY(-6px);}}
+    @keyframes wiggleIcon{0%{transform:rotate(-10deg) scale(1.15);}100%{transform:rotate(10deg) scale(1.15);}}
+    @keyframes pulseIcon{0%{transform:scale(1);}100%{transform:scale(1.22);filter:drop-shadow(0 0 6px rgba(249,115,22,0.5));}}
+    
+    .card-particles{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:0;transition:opacity 0.4s ease;}
+    .circular-card:hover .card-particles{opacity:1;}
+    .card-particles span{
+      position:absolute;width:6px;height:6px;border-radius:50%;background:currentColor;
+      bottom:-10px;animation:floatUp 2.5s ease-in infinite;
+    }
+    .circular-card.banksampah .card-particles span{color:rgba(59,130,246,0.3);}
+    .circular-card.maggot .card-particles span{color:rgba(34,197,94,0.35);}
+    .circular-card.biocng .card-particles span{color:rgba(249,115,22,0.3);}
+    
+    .card-particles .p1{left:15%;animation-delay:0s;animation-duration:2.1s;}
+    .card-particles .p2{left:55%;animation-delay:0.5s;animation-duration:2.6s;}
+    .card-particles .p3{left:85%;animation-delay:1.1s;animation-duration:1.9s;}
+    
+    @keyframes floatUp{
+      0%{transform:translateY(0) scale(1);opacity:0;}
+      10%{opacity:0.8;}
+      90%{opacity:0.4;}
+      100%{transform:translateY(-180px) scale(0.3);opacity:0;}
+    }
+
+    .circular-card h3{font-size:1.2rem;font-weight:800;color:var(--navy);margin-bottom:8px;position:relative;z-index:2;}
+    .circular-card p{font-size:0.84rem;color:var(--slate);line-height:1.6;margin-bottom:14px;position:relative;z-index:2;}
+    .output-row{display:flex;align-items:center;gap:8px;font-size:0.8rem;font-weight:500;color:var(--navy);margin-bottom:6px;position:relative;z-index:2;}
+    .output-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+
+    /* ─── GREEN JOBS ─── */
+    .jobs-section{background:linear-gradient(160deg,#0a4d2e,#064e3b);color:white;}
+    .jobs-section .section-title{color:white;}
+    .jobs-section .section-sub{color:rgba(255,255,255,0.62);}
+    .jobs-section .section-label{background:rgba(34,197,94,0.15);border-color:rgba(34,197,94,0.3);color:#86efac;}
+    .jobs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+    .job-card{
+      background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+      border-radius:18px;padding:22px;transition:all 0.3s;
+    }
+    .job-card:hover{background:rgba(255,255,255,0.1);transform:translateY(-4px);}
+    .job-icon{font-size:2rem;margin-bottom:10px;display:block;}
+    .job-title{font-size:0.9rem;font-weight:700;color:white;margin-bottom:5px;}
+    .job-desc{font-size:0.77rem;color:rgba(255,255,255,0.58);line-height:1.5;margin-bottom:10px;}
+    .job-salary{font-size:0.82rem;font-weight:700;color:var(--green-bright);}
+    .job-tag{
+      display:inline-flex;align-items:center;gap:4px;
+      background:rgba(34,197,94,0.15);color:#86efac;
+      border:1px solid rgba(34,197,94,0.2);
+      padding:2px 8px;border-radius:100px;font-size:0.62rem;font-weight:700;margin-top:5px;
+    }
+    .jobs-total{
+      background:rgba(212,175,55,0.12);border:1px solid rgba(212,175,55,0.3);
+      border-radius:18px;padding:24px 28px;margin-top:20px;
+      display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+    }
+    .jobs-total-num{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:#fde68a;line-height:1;}
+
+    /* ─── TECH ─── */
+    .tech-section{background:var(--off-white);}
+    .tech-arch{background:white;border-radius:22px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.05);}
+    .tech-arch-header{background:linear-gradient(135deg,var(--navy),#1e293b);padding:22px 28px;display:flex;align-items:center;gap:10px;}
+    .tech-arch-header h3{color:white;font-size:0.95rem;font-weight:700;}
+    .arch-dot{width:11px;height:11px;border-radius:50%;}
+    .arch-layers{display:grid;grid-template-columns:repeat(3,1fr);}
+    @media(max-width:700px){.arch-layers{grid-template-columns:1fr;}}
+    .arch-layer{padding:24px;border-right:1px solid #f1f5f9;}
+    .arch-layer:last-child{border-right:none;}
+    .arch-layer-tag{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;padding:3px 9px;border-radius:6px;display:inline-block;}
+    .arch-layer h4{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:9px;}
+    .tech-item{display:flex;align-items:center;gap:7px;font-size:0.78rem;color:var(--slate);padding:4px 0;border-bottom:1px solid #f8fafc;}
+    .tech-item:last-child{border-bottom:none;}
+    .tech-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+
+    /* ─── IMPACT ─── */
+    .impact-section{background:white;}
+    .impact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:2.5rem;}
+    .impact-card{border-radius:18px;padding:24px;text-align:center;}
+    .impact-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;line-height:1;margin-bottom:5px;display:block;}
+    .impact-label{font-size:0.8rem;font-weight:600;color:var(--slate);}
+    .impact-desc{font-size:0.7rem;color:var(--muted);margin-top:3px;}
+
+    /* ─── ROADMAP ─── */
+    .roadmap-section{background:var(--green-pale);}
+    .roadmap{position:relative;padding-left:38px;}
+    .roadmap::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--green-bright),var(--green-deep));}
+    .roadmap-item{position:relative;margin-bottom:32px;}
+    .roadmap-dot{position:absolute;left:-30px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--green-mid);border:3px solid white;box-shadow:0 0 0 3px var(--green-bright);}
+    .roadmap-dot.gold{background:var(--gold);box-shadow:0 0 0 3px rgba(212,175,55,0.4);}
+    .roadmap-phase{display:inline-block;background:var(--green-pale);color:var(--green-mid);border:1px solid rgba(22,163,74,0.25);border-radius:100px;padding:2px 10px;font-size:0.68rem;font-weight:700;margin-bottom:6px;}
+    .roadmap-phase.phase-now{background:rgba(212,175,55,0.15);color:var(--gold);border-color:rgba(212,175,55,0.35);}
+    .roadmap-item h4{font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:5px;}
+    .roadmap-item p{font-size:0.82rem;color:var(--muted);line-height:1.6;}
+    .roadmap-outputs{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+    .roadmap-tag{background:white;border:1px solid #e2e8f0;border-radius:7px;padding:3px 9px;font-size:0.68rem;font-weight:600;color:var(--slate);}
+
+    /* ─── BUDGET ─── */
+    .budget-section{background:white;}
+    .budget-hero{
+      background:linear-gradient(135deg,#0a4d2e,#064e3b);
+      border-radius:24px;padding:36px;margin-bottom:28px;
+      display:flex;align-items:center;gap:28px;flex-wrap:wrap;
+    }
+    .budget-big-num{
+      font-family:'Playfair Display',serif;
+      font-size:3.5rem;font-weight:900;color:#fde68a;line-height:1;flex-shrink:0;
+    }
+    .budget-big-label h3{font-size:1.2rem;font-weight:700;color:white;margin-bottom:6px;}
+    .budget-big-label p{font-size:0.85rem;color:rgba(255,255,255,0.6);line-height:1.5;}
+    .budget-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+    .budget-pill{
+      background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+      border-radius:100px;padding:4px 12px;font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.8);
+    }
+    .budget-table{width:100%;border-collapse:collapse;border-radius:16px;overflow:hidden;}
+    .budget-table th{background:var(--navy);color:white;padding:13px 18px;text-align:left;font-size:0.8rem;font-weight:600;letter-spacing:0.02em;}
+    .budget-table td{padding:13px 18px;border-bottom:1px solid #f1f5f9;font-size:0.83rem;color:var(--slate);}
+    .budget-table tr:last-child td{border-bottom:none;background:var(--green-pale);font-weight:700;color:var(--navy);}
+    .budget-table tr:hover td{background:#fafafa;}
+    .budget-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green-mid),var(--green-bright));margin-top:3px;}
+    .budget-pct{font-size:0.68rem;color:var(--muted);}
+
+    /* ─── PARTNERS ─── */
+    .partners-section{background:linear-gradient(135deg,#0a4d2e,#064e3b);padding:56px 5%;text-align:center;}
+    .partners-section h2{color:white;font-size:1.4rem;font-weight:700;margin-bottom:6px;}
+    .partners-section p{color:rgba(255,255,255,0.6);font-size:0.88rem;margin-bottom:2rem;}
+    .partners-row{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;}
+    .partner-badge{
+      background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);
+      border-radius:12px;padding:12px 20px;color:rgba(255,255,255,0.82);
+      font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:8px;
+    }
+
+    /* ─── CTA ─── */
+    .cta-section{background:white;text-align:center;padding:80px 5%;}
+    .cta-box{
+      max-width:720px;margin:0 auto;
+      background:linear-gradient(135deg,#0a4d2e,#134e4a);
+      border-radius:28px;padding:52px 40px;position:relative;overflow:hidden;
+    }
+    .cta-box::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:rgba(34,197,94,0.1);pointer-events:none;}
+    .cta-box h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.3rem);font-weight:900;color:white;margin-bottom:0.9rem;line-height:1.2;position:relative;z-index:1;}
+    .cta-box p{color:rgba(255,255,255,0.7);font-size:0.95rem;line-height:1.7;margin-bottom:2rem;position:relative;z-index:1;}
+    .cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+
+    /* ─── FOOTER ─── */
+    footer{background:var(--navy);color:rgba(255,255,255,0.5);text-align:center;padding:28px 5%;font-size:0.8rem;}
+    footer strong{color:var(--green-bright);}
+
+    /* ─── ANIMATIONS ─── */
+    .fade-up{opacity:0;transform:translateY(28px);transition:all 0.65s ease;}
+    .fade-up.visible{opacity:1;transform:translateY(0);}
+
+    /* SDG tag */
+    .sdg-row{display:flex;flex-wrap:wrap;gap:10px;}
+    .sdg-badge{
+      background:white;border:1px solid #e2e8f0;border-radius:10px;
+      padding:10px 14px;display:flex;align-items:center;gap:8px;
+    }
+    .sdg-badge .num{font-size:0.68rem;font-weight:700;color:var(--green-mid);}
+    .sdg-badge .txt{font-size:0.77rem;color:var(--slate);}
+  </style>
+</head>
+<body>
+
+<!-- ──────────────── NAVBAR ──────────────── -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="nav-logo-badge">♻️ GreenSampah</span>
+    <span class="nav-loc">📍 RW 01 Sukup Lama, Ujungberung, Bandung</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#lokasi">Lokasi</a></li>
+    <li><a href="#solusi">Solusi</a></li>
+    <li><a href="#greenjobs">Green Jobs</a></li>
+    <li><a href="#anggaran">Anggaran</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="dashboard.html" style="color:#22c55e; font-weight:700;">🖥️ Dashboard</a></li>
+    <li><a href="shop.html" style="color:#3b82f6; font-weight:700;">🛒 Toko Komunitas</a></li>
+    <li><a href="game.html" style="color:#f59e0b; font-weight:700;">🎮 Game Sirkular</a></li>
+  </ul>
+  <a href="simulator.html" class="nav-cta">🧪 Demo Live →</a>
+</nav>
+
+<!-- ──────────────── TICKER ──────────────── -->
+<div class="ticker-wrap" style="margin-top:66px;">
+  <div class="ticker">
+    <span class="ticker-item">📍 RW 01 Sukup Lama, Cigending, Ujungberung, Bandung</span>
+    <span class="ticker-item">🏡 Living Lab — 42 KK Komunitas Nyata</span>
+    <span class="ticker-item">💰 Dana Awal Rp 50 Juta — Prototype Terukur</span>
+    <span class="ticker-item">🐛 Sirkular Pangan — Maggot BSF</span>
+    <span class="ticker-item">🔥 Sirkular Energi — BioCNG</span>
+    <span class="ticker-item">💼 7 Green Jobs Baru di Komunitas</span>
+    <span class="ticker-item">🏆 Indonesia Green Jobs Conference 2026</span>
+    <span class="ticker-item">📍 RW 01 Sukup Lama, Cigending, Ujungberung, Bandung</span>
+    <span class="ticker-item">🏡 Living Lab — 42 KK Komunitas Nyata</span>
+    <span class="ticker-item">💰 Dana Awal Rp 50 Juta — Prototype Terukur</span>
+    <span class="ticker-item">🐛 Sirkular Pangan — Maggot BSF</span>
+    <span class="ticker-item">🔥 Sirkular Energi — BioCNG</span>
+    <span class="ticker-item">💼 7 Green Jobs Baru di Komunitas</span>
+    <span class="ticker-item">🏆 Indonesia Green Jobs Conference 2026</span>
+  </div>
+</div>
+
+<!-- ──────────────── HERO ──────────────── -->
+<section class="hero">
+  <div class="hero-grid"></div>
+
+  <div class="hero-loc-strip">
+    <span class="loc-dot"></span>
+    LIVE PILOT — RW 01 Sukup Lama, Kel. Cigending, Kec. Ujungberung, Kota Bandung
+  </div>
+
+  <div class="hero-badges">
+    <span class="hero-badge living">🧪 Living Lab Prototype</span>
+    <span class="hero-badge gold">🏆 Proposal Hibah — Indonesia Green Jobs Conference 2026</span>
+    <span class="hero-badge">🤝 BAPPENAS × GIZ × Green Welfare ID</span>
+  </div>
+
+  <h1>
+    <span class="highlight">Living Lab</span> Ekonomi Sirkular<br>
+    di Jantung Komunitas<br>
+    <span class="highlight-gold">Ujungberung, Bandung</span>
+  </h1>
+
+  <p class="hero-sub">
+    Bukan proposal di atas kertas. Ini adalah <strong style="color:#86efac;">prototype nyata</strong> yang sudah berjalan — mengubah sampah organik 42 KK RW 01 Sukup Lama menjadi pakan ternak, pupuk organik, dan energi biogas, sekaligus menciptakan <strong style="color:#86efac;">7 green jobs</strong> permanen di komunitas.
+  </p>
+
+  <!-- Living Lab Budget Box -->
+  <div class="living-lab-box">
+    <div class="lab-pill">💰 Dana Living Lab</div>
+    <div class="lab-budget">Rp 50 Juta</div>
+    <div class="lab-text">
+      Cukup untuk membangun prototype penuh:<br>
+      2 bio-pond BSF + 1 reaktor biogas mini + IoT dashboard + pelatihan 7 green workers
+    </div>
+  </div>
+
+  <div class="hero-actions">
+    <a href="#solusi" class="btn-hero-primary">🚀 Lihat Solusi Lengkap</a>
+    <a href="dashboard.html" class="btn-hero-outline" style="background:rgba(59,130,246,0.15); border-color:rgba(59,130,246,0.4); color:#93c5fd;">🖥️ Buka Dashboard</a>
+    <a href="simulator.html" class="btn-hero-outline">🧪 Coba Simulator Live</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-num">42 KK</span>
+      <span class="hero-stat-label">Warga RW 01<br>Terdampak Langsung</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">~200 kg</span>
+      <span class="hero-stat-label">Sampah Organik<br>Diproses / Minggu</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">7</span>
+      <span class="hero-stat-label">Green Jobs Baru<br>di Komunitas</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">Rp 4,2 jt</span>
+      <span class="hero-stat-label">Pendapatan Komunitas<br>per Bulan (Proyeksi)</span>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── LOCATION ──────────────── -->
+<section class="section location-section" id="lokasi">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-header">
+      <div class="section-label" style="background:var(--bandung-pale);border-color:rgba(29,78,216,0.2);color:var(--bandung);">📍 Lokasi Pilot</div>
+      <h2 class="section-title">RW 01 Sukup Lama — Laboratorium Hidup Pertama</h2>
+      <p class="section-sub">Dipilih bukan secara acak — RW 01 Sukup Lama memiliki karakteristik ideal sebagai Living Lab yang dapat direplikasi ke seluruh Indonesia.</p>
+    </div>
+
+    <div class="location-grid fade-up">
+
+      <div class="location-card">
+        <div style="position:relative; width:100%; height:220px; overflow:hidden;">
+          <img src="green_environment_center.png" alt="Rumah Zero Waste RW 01 Sukup Lama" style="width:100%; height:100%; object-fit:cover;">
+          <div style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); background:white; border-radius:100px; padding:6px 14px; font-size:0.72rem; font-weight:750; color:var(--green-deep); box-shadow:0 4px 12px rgba(0,0,0,0.15); display:flex; align-items:center; gap:6px; white-space:nowrap; border:1px solid rgba(22,163,74,0.25);">
+            <span class="loc-dot" style="background:var(--green-mid);"></span>
+            📍 RW 01 Sukup Lama, Bandung
+          </div>
+        </div>
+        <div class="loc-info">
+          <h3>📍 Profil Lokasi Pilot</h3>
+          <div class="loc-row"><span class="loc-icon">🏘️</span><span><strong>RW 01 Sukup Lama</strong>, Kelurahan Cigending, Kecamatan Ujungberung, Kota Bandung, Jawa Barat</span></div>
+          <div class="loc-row"><span class="loc-icon">👨‍👩‍👧‍👦</span><span><strong>42 Kepala Keluarga</strong> — ~168 jiwa warga aktif</span></div>
+          <div class="loc-row"><span class="loc-icon">🗑️</span><span>Timbulan sampah organik: <strong>~28–35 kg/hari</strong> (estimasi 0,5 kg/orang/hari)</span></div>
+          <div class="loc-row"><span class="loc-icon">🌱</span><span>Potensi lahan kosong komunal untuk bio-pond dan reaktor: <strong>~60 m²</strong></span></div>
+          <div class="loc-row"><span class="loc-icon">💧</span><span>Akses air bersih tersedia, jaringan listrik PLN aktif</span></div>
+          <div class="loc-stat-grid">
+            <div class="loc-stat">
+              <div class="loc-stat-num">42</div>
+              <div class="loc-stat-label">KK Peserta</div>
+            </div>
+            <div class="loc-stat">
+              <div class="loc-stat-num">~35 kg</div>
+              <div class="loc-stat-label">Sampah / Hari</div>
+            </div>
+            <div class="loc-stat">
+              <div class="loc-stat-num">60 m²</div>
+              <div class="loc-stat-label">Lahan Komunal</div>
+            </div>
+            <div class="loc-stat">
+              <div class="loc-stat-num">12 bln</div>
+              <div class="loc-stat-label">Durasi Pilot</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="living-lab-concept">
+        <h3>🔬 Mengapa "Living Lab"?</h3>
+        <p style="font-size:0.84rem;color:var(--muted);line-height:1.6;margin-bottom:16px;">
+          Living Lab berbeda dari pilot biasa. Ini adalah ekosistem penelitian nyata di mana komunitas menjadi <strong>subyek sekaligus peneliti</strong> — belajar, bereksperimen, dan menghasilkan nilai secara bersamaan. Inilah yang membuat proposal ini unggul dari sekadar rencana.
+        </p>
+        <div class="concept-list">
+          <div class="concept-item">
+            <span class="concept-icon">🏡</span>
+            <div>
+              <h4>Komunitas sebagai Aktor Utama</h4>
+              <p>Warga RW 01 bukan penerima manfaat pasif — mereka adalah operator, teknisi, analis data, dan agen distribusi dari sistem yang mereka bangun sendiri.</p>
+            </div>
+          </div>
+          <div class="concept-item">
+            <span class="concept-icon">📊</span>
+            <div>
+              <h4>Data Real-Time, Bukan Asumsi</h4>
+              <p>Sensor IoT mencatat setiap data: berat sampah, suhu pond, produksi gas, berat maggot — semua transparan di dashboard yang bisa diakses juri hibah kapan saja.</p>
+            </div>
+          </div>
+          <div class="concept-item">
+            <span class="concept-icon">📋</span>
+            <div>
+              <h4>Blueprint untuk Replikasi Nasional</h4>
+              <p>Setiap proses, SOP, dan formula ekonomi yang berhasil di Sukup Lama akan didokumentasikan sebagai template yang bisa direplikasi ke 514 kabupaten/kota.</p>
+            </div>
+          </div>
+          <div class="concept-item">
+            <span class="concept-icon">🌱</span>
+            <div>
+              <h4>Mulai Kecil, Dampak Besar</h4>
+              <p>Rp 50 juta untuk membuktikan model — jauh lebih berisiko rendah dan lebih meyakinkan bagi donor daripada proposal besar tanpa bukti lapangan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── PROBLEM ──────────────── -->
+<section class="section problem-section" id="masalah">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-header">
+      <div class="section-label" style="background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.3);color:#fca5a5;">⚠️ Urgensi Masalah</div>
+      <h2 class="section-title">Masalah Nyata di Sukup Lama<br>yang Butuh Solusi Sekarang</h2>
+      <p class="section-sub">Kondisi yang kami dokumentasikan langsung dari lapangan — bukan data sekunder semata.</p>
+    </div>
+    <div class="problem-grid fade-up">
+      <div class="problem-card">
+        <span class="problem-icon">🗑️</span>
+        <span class="problem-stat">100%</span>
+        <h3>Sampah Masih ke TPA</h3>
+        <p>Seluruh ~35 kg sampah organik/hari dari 42 KK Sukup Lama masih berakhir di TPA Sarimukti — tanpa pemilahan, tanpa nilai tambah.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">💼</span>
+        <span class="problem-stat">0</span>
+        <h3>Lapangan Kerja Hijau</h3>
+        <p>Belum ada satu pun green job formal di komunitas ini. Potensi tenaga kerja produktif (usia 18–45 tahun) belum terserap di sektor ekonomi hijau.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">🔥</span>
+        <span class="problem-stat">Rp 800rb</span>
+        <h3>Pengeluaran Energi/Bulan</h3>
+        <p>Rata-rata warga menghabiskan Rp 800 ribu/bulan untuk LPG & listrik. BioCNG komunal dapat memangkas biaya ini hingga 40%.</p>
+      </div>
+      <div class="problem-card">
+        <span class="problem-icon">📚</span>
+        <span class="problem-stat">Gap</span>
+        <h3>Kesenjangan Kompetensi Hijau</h3>
+        <p>Warga produktif tidak memiliki akses pelatihan green economy. Tidak ada platform digital yang menyesuaikan dengan kondisi komunitas urban-pinggiran.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── THEMES ──────────────── -->
+<section class="section themes-section" id="tema">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-header" style="text-align:center;">
+      <div class="section-label" style="margin:0 auto 0.85rem;">🎯 Kesesuaian Tema Hibah</div>
+      <h2 class="section-title">Menjawab Ketiga Tema Green Jobs 2026</h2>
+      <p class="section-sub" style="margin:0 auto;">Living Lab RW 01 Sukup Lama secara langsung dan spesifik menjawab seluruh tema yang ditetapkan BAPPENAS & GIZ.</p>
+    </div>
+    <div class="themes-grid fade-up">
+      <div class="theme-card">
+        <div class="theme-card-header">
+          <div class="theme-number" style="background:linear-gradient(135deg,#2563eb,#3b82f6);">1</div>
+          <h3>Pengembangan Kompetensi Tenaga Kerja & Ekosistem Ketenagakerjaan Hijau</h3>
+          <p>Living Lab menjadi pusat pelatihan berbasis praktik langsung. Warga Sukup Lama dilatih mengoperasikan bio-pond, membaca sensor IoT, dan mengelola keuangan sirkular melalui simulator digital kami.</p>
+        </div>
+        <div class="theme-card-footer">
+          <div class="fit-badge">✓ Modul pelatihan BSF & BioCNG</div>
+          <div class="fit-badge">✓ Simulator interaktif berbasis web</div>
+          <div class="fit-badge">✓ 7 warga tersertifikasi green worker</div>
+        </div>
+      </div>
+      <div class="theme-card">
+        <div class="theme-card-header">
+          <div class="theme-number" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">2</div>
+          <h3>Transformasi Pasar Kerja Hijau & Dinamika Ketenagakerjaan Masa Depan</h3>
+          <p>Sukup Lama menjadi proof-of-concept bahwa pasar kerja hijau bisa lahir di tingkat RW. Produk (pakan, pupuk, CNG) menciptakan rantai pasok lokal yang menghubungkan petani, peternak, dan rumah tangga.</p>
+        </div>
+        <div class="theme-card-footer">
+          <div class="fit-badge">✓ 7 kategori green job baru</div>
+          <div class="fit-badge">✓ Marketplace produk hijau lokal</div>
+          <div class="fit-badge">✓ Model ekonomi komunal terukur</div>
+        </div>
+      </div>
+      <div class="theme-card" style="border:2px solid rgba(22,163,74,0.3);">
+        <div class="theme-card-header" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);">
+          <div class="theme-number" style="background:linear-gradient(135deg,#16a34a,#22c55e);">3</div>
+          <h3 style="color:var(--green-deep);">Inovasi Sektoral, Implementasi Lokal, dan Praktik Pekerjaan Hijau</h3>
+          <p style="color:var(--slate);">Inilah keunggulan utama kami: bukan teori, tapi implementasi nyata di lokasi spesifik — RW 01 Sukup Lama. Dengan IoT real-time, simulator bisa dicoba langsung, dan data lapangan tersedia untuk dievaluasi juri.</p>
+        </div>
+        <div class="theme-card-footer">
+          <div class="fit-badge" style="background:var(--green-pale);color:var(--green-mid);border-color:rgba(22,163,74,0.3);">⭐ Implementasi nyata — bukan konsep</div>
+          <div class="fit-badge">✓ Data IoT terverifikasi real-time</div>
+          <div class="fit-badge">✓ Lokasi spesifik, terukur, replicable</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── SOLUTION E2E ──────────────── -->
+<section class="section solution-section" id="solusi">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-header">
+      <div class="section-label">🔧 Solusi End-to-End</div>
+      <h2 class="section-title">Dari Dapur Warga Sukup Lama<br>menjadi Pangan, Energi & Pendapatan</h2>
+      <p class="section-sub">Satu platform mengintegrasikan seluruh rantai nilai — dari saat warga membuang sampah hingga rupiah masuk ke kas komunitas.</p>
+    </div>
+
+    <div class="e2e-flow fade-up">
+      <div class="flow-step">
+        <div class="flow-step-icon" style="background:linear-gradient(135deg,#f1f5f9,#e2e8f0);">🏘️<span class="flow-step-num">1</span></div>
+        <h4>Pilah Sampah</h4>
+        <p>Warga scan QR → berat tercatat → poin digital</p>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line"><div class="flow-connector-dot"></div></div></div>
+      <div class="flow-step">
+        <div class="flow-step-icon" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5);">📡<span class="flow-step-num">2</span></div>
+        <h4>IoT Monitor</h4>
+        <p>Sensor pantau suhu, gas, berat real-time</p>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line"><div class="flow-connector-dot"></div></div></div>
+      <div class="flow-step">
+        <div class="flow-step-icon" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0);">🐛<span class="flow-step-num">3</span></div>
+        <h4>Bio-Pond BSF</h4>
+        <p>Maggot konsumsi sampah, panen hari ke-10</p>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line"><div class="flow-connector-dot"></div></div></div>
+      <div class="flow-step">
+        <div class="flow-step-icon" style="background:linear-gradient(135deg,#fff7ed,#fed7aa);">⚗️<span class="flow-step-num">4</span></div>
+        <h4>Reaktor BioCNG</h4>
+        <p>Sisa organik → biogas → tabung CNG</p>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line"><div class="flow-connector-dot"></div></div></div>
+      <div class="flow-step">
+        <div class="flow-step-icon" style="background:linear-gradient(135deg,#fefce8,#fef08a);">🛒<span class="flow-step-num">5</span></div>
+        <h4>Jual Produk</h4>
+        <p>Pakan, pupuk & CNG dijual ke komunitas</p>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line"><div class="flow-connector-dot"></div></div></div>
+      <div class="flow-step">
+        <div class="flow-step-icon" style="background:linear-gradient(135deg,#fdf4ff,#e9d5ff);">💰<span class="flow-step-num">6</span></div>
+        <h4>Bagi Hasil</h4>
+        <p>Revenue ke warga, operator & kas RW</p>
+      </div>
+    </div>
+
+    <div class="circular-grid fade-up">
+      
+      <!-- Bank Sampah Card -->
+      <div class="circular-card banksampah">
+        <div class="card-particles"><span class="p1"></span><span class="p2"></span><span class="p3"></span></div>
+        <div class="circular-icon-wrapper"><span class="circular-card-icon">📦</span></div>
+        <h3>Sirkular Material — Bank Sampah</h3>
+        <p>Mengintegrasikan pemilahan sampah anorganik (plastik, kertas, botol kaca, kaleng aluminium) ke dalam platform digital ZeroWaste. Warga mendapatkan poin reward langsung berdasarkan berat timbangan terverifikasi.</p>
+        <div class="output-row"><span class="output-dot" style="background:#3b82f6;"></span>Target pengumpulan: 15–20 kg anorganik / minggu</div>
+        <div class="output-row"><span class="output-dot" style="background:#60a5fa;"></span>Poin reward setara Rp 1.500–5.000 / kg (tergantung jenis material)</div>
+        <div class="output-row"><span class="output-dot" style="background:#2563eb;"></span>Mitra penyalur: Asosiasi Daur Ulang Plastik Indonesia (ADUPI)</div>
+        <div class="output-row"><span class="output-dot" style="background:#1d4ed8;"></span>Peningkatan pemilahan sampah di RW 01 Sukup Lama hingga 90%</div>
+      </div>
+
+      <!-- Maggot BSF Card -->
+      <div class="circular-card maggot">
+        <div class="card-particles"><span class="p1"></span><span class="p2"></span><span class="p3"></span></div>
+        <div class="circular-icon-wrapper"><span class="circular-card-icon">🐛</span></div>
+        <h3>Sirkular Pangan — Maggot BSF</h3>
+        <p>2 unit bio-pond berkapasitas total 30 kg sampah/hari. Maggot BSF mengonsumsi sisa makanan, sayuran, dan limbah dapur warga. Larva panen setiap 12–14 hari menjadi pakan ternak berprotein tinggi (42%).</p>
+        <div class="output-row"><span class="output-dot" style="background:#22c55e;"></span>Pakan maggot: 8–12 kg/siklus @Rp 8.000/kg = Rp 64–96rb</div>
+        <div class="output-row"><span class="output-dot" style="background:#92400e;"></span>Pupuk kasgot: 6–10 kg/siklus @Rp 2.500/kg = Rp 15–25rb</div>
+        <div class="output-row"><span class="output-dot" style="background:#16a34a;"></span>Sampah organik terproses: 25–30 kg/hari</div>
+        <div class="output-row"><span class="output-dot" style="background:#0f766e;"></span>CO₂ terhindar: ~8,75 kg/hari</div>
+      </div>
+
+      <!-- BioCNG Card -->
+      <div class="circular-card biocng">
+        <div class="card-particles"><span class="p1"></span><span class="p2"></span><span class="p3"></span></div>
+        <div class="circular-icon-wrapper"><span class="circular-card-icon">🔥</span></div>
+        <h3>Sirkular Energi — Reaktor BioCNG Mini</h3>
+        <p>1 unit reaktor anaerob 500L yang mengolah 5–8 kg biomassa/hari menjadi biogas rumahan. Gas dialirkan langsung ke kompor komunal dan disimpan dalam tabung kecil untuk distribusi ke 5–10 KK sekitar.</p>
+        <div class="output-row"><span class="output-dot" style="background:#f97316;"></span>Biogas: 2–3 m³/hari dari reaktor 500L</div>
+        <div class="output-row"><span class="output-dot" style="background:#d97706;"></span>Setara 1 tabung LPG 3kg/hari → hemat Rp 20rb/hari</div>
+        <div class="output-row"><span class="output-dot" style="background:#b45309;"></span>Listrik genset kecil: 1–2 kWh/hari untuk lampu komunal</div>
+        <div class="output-row"><span class="output-dot" style="background:#0f766e;"></span>Penghematan energi komunitas: Rp 600rb/bulan</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── GREEN JOBS ──────────────── -->
+<section class="section jobs-section" id="greenjobs">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-header">
+      <div class="section-label">💼 Green Jobs Komunitas</div>
+      <h2 class="section-title">7 Green Jobs Lahir<br>di RW 01 Sukup Lama</h2>
+      <p class="section-sub">Setiap jabatan diisi oleh warga setempat — bukan tenaga luar. Pelatihan dilakukan via simulator digital dan praktek langsung di bio-pond dan reaktor.</p>
+    </div>
+    <div class="jobs-grid fade-up">
+      <div class="job-card">
+        <span class="job-icon">🐛</span>
+        <div class="job-title">Teknisi Bio-Pond BSF</div>
+        <div class="job-desc">Mengelola 2 unit bio-pond, memantau siklus larva, memberi pakan, dan memanen maggot sesuai jadwal. Dilatih via simulator BSF kami.</div>
+        <div class="job-salary">Rp 800rb – 1,2 jt / bulan</div>
+        <div class="job-tag">⭐ 1 orang — Part-time</div>
+      </div>
+      <div class="job-card">
+        <span class="job-icon">⚗️</span>
+        <div class="job-title">Operator Reaktor Biogas</div>
+        <div class="job-desc">Mengoperasikan reaktor 500L, memasukkan biomassa harian, memeriksa tekanan, dan memastikan aliran gas aman ke kompor komunal.</div>
+        <div class="job-salary">Rp 700rb – 1 jt / bulan</div>
+        <div class="job-tag">⭐ 1 orang — Part-time</div>
+      </div>
+      <div class="job-card">
+        <span class="job-icon">📡</span>
+        <div class="job-title">Analis Data IoT</div>
+        <div class="job-desc">Memantau dashboard sensor harian, menginput data ke platform GreenSampah, dan membuat laporan mingguan untuk ketua RW dan mitra hibah.</div>
+        <div class="job-salary">Rp 500rb – 800rb / bulan</div>
+        <div class="job-tag">🌐 1 orang — Remote-capable</div>
+      </div>
+      <div class="job-card">
+        <span class="job-icon">📦</span>
+        <div class="job-title">Koordinator Sampah RW</div>
+        <div class="job-desc">Mengatur jadwal pengumpulan sampah organik dari 42 KK, menimbang, memvalidasi data via QR, dan mendistribusikan poin digital ke warga.</div>
+        <div class="job-salary">Rp 600rb – 900rb / bulan</div>
+        <div class="job-tag">⭐ 2 orang — Pagi hari</div>
+      </div>
+      <div class="job-card">
+        <span class="job-icon">🌾</span>
+        <div class="job-title">Agen Distribusi Produk</div>
+        <div class="job-desc">Menjual pakan maggot ke peternak lokal, pupuk kasgot ke petani, dan gas biogas ke KK sekitar. Komisi berbasis volume penjualan.</div>
+        <div class="job-salary">Rp 400rb + komisi 10%</div>
+        <div class="job-tag">🛒 1 orang — Fleksibel</div>
+      </div>
+      <div class="job-card">
+        <span class="job-icon">🎓</span>
+        <div class="job-title">Fasilitator Komunitas</div>
+        <div class="job-desc">Mendampingi warga baru, menjalankan sosialisasi, dan mendokumentasikan best practice Sukup Lama untuk disebarkan ke RW lain di Bandung.</div>
+        <div class="job-salary">Rp 500rb – 700rb / bulan</div>
+        <div class="job-tag">🌐 1 orang — Hybrid</div>
+      </div>
+    </div>
+
+    <div class="jobs-total fade-up">
+      <div class="jobs-total-num">7</div>
+      <div>
+        <h4 style="font-size:1rem;font-weight:700;color:white;margin-bottom:4px;">Green Jobs Permanen di Sukup Lama</h4>
+        <p style="font-size:0.82rem;color:rgba(255,255,255,0.6);">Total insentif komunitas: <strong style="color:#fde68a;">Rp 4–6 juta/bulan</strong> setelah sistem berjalan penuh. Jika direplikasi ke 500 RW di Bandung = <strong style="color:#fde68a;">3.500 green jobs</strong> baru di satu kota saja.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── TECH ──────────────── -->
+<section class="section tech-section" id="teknologi">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-header">
+      <div class="section-label">🖥️ Platform Digital</div>
+      <h2 class="section-title">Teknologi Nyata yang Sudah<br>Bisa Dicoba Sekarang</h2>
+      <p class="section-sub">Platform GreenSampah sudah berjalan. Simulator BSF & BioCNG live dan bisa diakses — bukan mockup, tapi sistem kerja yang siap dikoneksikan ke hardware lapangan.</p>
+    </div>
+    <div class="tech-arch fade-up">
+      <div class="tech-arch-header">
+        <span class="arch-dot" style="background:#ef4444;"></span>
+        <span class="arch-dot" style="background:#f59e0b;"></span>
+        <span class="arch-dot" style="background:#22c55e;"></span>
+        <h3 style="margin-left:8px;">GreenSampah — Platform Living Lab RW 01 Sukup Lama</h3>
+      </div>
+      <div class="arch-layers">
+        <div class="arch-layer">
+          <div class="arch-layer-tag" style="background:#ecfdf5;color:#16a34a;">📱 Lapangan (Hardware)</div>
+          <h4>IoT di Bio-Pond & Reaktor</h4>
+          <div class="tech-item"><span class="tech-dot" style="background:#22c55e;"></span>Sensor suhu & kelembaban (DHT22)</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#22c55e;"></span>Sensor gas CH₄, H₂S (MQ-4, MQ-136)</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#22c55e;"></span>Load cell timbangan digital</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#22c55e;"></span>QR scanner untuk warga 42 KK</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#22c55e;"></span>ESP32 gateway → WiFi → cloud</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#22c55e;"></span>Kamera pond (opsional fase 2)</div>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-layer-tag" style="background:#f0f9ff;color:#0284c7;">☁️ Platform (Software)</div>
+          <h4>Dashboard & Simulator</h4>
+          <div class="tech-item"><span class="tech-dot" style="background:#3b82f6;"></span>Dashboard real-time (sudah live ✓)</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#3b82f6;"></span>Simulator BSF interaktif (sudah live ✓)</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#3b82f6;"></span>Simulator BioCNG interaktif (sudah live ✓)</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#3b82f6;"></span>Sistem QR & poin warga</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#3b82f6;"></span>WhatsApp notifikasi otomatis</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#3b82f6;"></span>Laporan ESG & CO₂ otomatis</div>
+        </div>
+        <div class="arch-layer">
+          <div class="arch-layer-tag" style="background:#fdf4ff;color:#7c3aed;">📊 Analitik & Dampak</div>
+          <h4>Monitoring & Evaluasi</h4>
+          <div class="tech-item"><span class="tech-dot" style="background:#a855f7;"></span>KPI tracker harian (sampah, produksi)</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#a855f7;"></span>Laporan bulanan untuk mitra hibah</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#a855f7;"></span>Carbon accounting terstandar GHG</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#a855f7;"></span>Proyeksi pendapatan komunitas</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#a855f7;"></span>Analisis produktivitas green worker</div>
+          <div class="tech-item"><span class="tech-dot" style="background:#a855f7;"></span>Blueprint replikasi terstandar</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── IMPACT ──────────────── -->
+<section class="section impact-section" id="dampak">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="section-header" style="text-align:center;">
+      <div class="section-label" style="margin:0 auto 0.85rem;">📊 Proyeksi Dampak</div>
+      <h2 class="section-title">Dampak Terukur dalam 12 Bulan Living Lab</h2>
+      <p class="section-sub" style="margin:0 auto;">Proyeksi berbasis kapasitas nyata: 42 KK, 35 kg sampah/hari, 2 bio-pond, 1 reaktor 500L.</p>
+    </div>
+    <div class="impact-grid fade-up">
+      <div class="impact-card" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid rgba(34,197,94,0.2);">
+        <span class="impact-num" style="color:var(--green-mid);">~10 ton</span>
+        <div class="impact-label">Sampah Organik Diolah</div>
+        <div class="impact-desc">Dalam 12 bulan operasi penuh</div>
+      </div>
+      <div class="impact-card" style="background:linear-gradient(135deg,#fff7ed,#fed7aa);border:1px solid rgba(249,115,22,0.2);">
+        <span class="impact-num" style="color:#ea580c;">7</span>
+        <div class="impact-label">Green Jobs Aktif</div>
+        <div class="impact-desc">Warga Sukup Lama tersertifikasi</div>
+      </div>
+      <div class="impact-card" style="background:linear-gradient(135deg,#f0f9ff,#bfdbfe);border:1px solid rgba(59,130,246,0.2);">
+        <span class="impact-num" style="color:#2563eb;">2,5 ton</span>
+        <div class="impact-label">CO₂e Terhindar</div>
+        <div class="impact-desc">Kontribusi nyata NDC Indonesia</div>
+      </div>
+      <div class="impact-card" style="background:linear-gradient(135deg,#fefce8,#fef08a);border:1px solid rgba(245,158,11,0.2);">
+        <span class="impact-num" style="color:#d97706;">Rp 50 jt</span>
+        <div class="impact-label">Nilai Produk Dihasilkan</div>
+        <div class="impact-desc">Pakan + pupuk + energi biogas</div>
+      </div>
+      <div class="impact-card" style="background:linear-gradient(135deg,#fdf4ff,#e9d5ff);border:1px solid rgba(168,85,247,0.2);">
+        <span class="impact-num" style="color:#7c3aed;">42 KK</span>
+        <div class="impact-label">Warga Terdampak</div>
+        <div class="impact-desc">Komunitas aktif pilot Sukup Lama</div>
+      </div>
+      <div class="impact-card" style="background:linear-gradient(135deg,#f0fdfa,#ccfbf1);border:1px solid rgba(20,184,166,0.2);">
+        <span class="impact-num" style="color:#0d9488;">1</span>
+        <div class="impact-label">Blueprint Replicable</div>
+        <div class="impact-desc">Siap diadopsi 500 RW di Bandung</div>
+      </div>
+    </div>
+
+    <div style="background:var(--off-white);border-radius:22px;padding:32px;margin-top:2rem;" class="fade-up">
+      <h3 style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:14px;">🌍 Kontribusi SDGs & NDC Indonesia</h3>
+      <div class="sdg-row">
+        <div class="sdg-badge"><span style="font-size:1.3rem;">🍃</span><div><div class="num">SDG 8</div><div class="txt">Pekerjaan Layak & Pertumbuhan</div></div></div>
+        <div class="sdg-badge"><span style="font-size:1.3rem;">⚡</span><div><div class="num">SDG 7</div><div class="txt">Energi Bersih Terjangkau</div></div></div>
+        <div class="sdg-badge"><span style="font-size:1.3rem;">♻️</span><div><div class="num">SDG 12</div><div class="txt">Konsumsi Bertanggung Jawab</div></div></div>
+        <div class="sdg-badge"><span style="font-size:1.3rem;">🌡️</span><div><div class="num">SDG 13</div><div class="txt">Aksi Iklim (NDC 2030)</div></div></div>
+        <div class="sdg-badge"><span style="font-size:1.3rem;">🏘️</span><div><div class="num">SDG 11</div><div class="txt">Kota Berkelanjutan</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── ROADMAP ──────────────── -->
+<section class="section roadmap-section" id="roadmap">
+  <div style="max-width:860px;margin:0 auto;">
+    <div class="section-header">
+      <div class="section-label">🗓️ Roadmap Implementasi</div>
+      <h2 class="section-title">12 Bulan Living Lab<br>RW 01 Sukup Lama</h2>
+      <p class="section-sub">Setiap tahap memiliki deliverable konkret yang dapat dievaluasi oleh BAPPENAS, GIZ, dan Green Welfare ID.</p>
+    </div>
+    <div class="roadmap fade-up">
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot gold"></div>
+        <div class="roadmap-phase phase-now">⚡ Fase 0 — Bulan 1–2 (SEGERA)</div>
+        <h4>Persiapan & Instalasi Hardware</h4>
+        <p>Pemasangan 2 unit bio-pond BSF (kapasitas 15 kg/hari masing-masing) dan 1 reaktor biogas 500L di lahan komunal RW 01. Instalasi sensor IoT dasar (suhu, kelembaban, gas). Sosialisasi ke 42 KK dan rekrutmen 7 green worker perdana.</p>
+        <div class="roadmap-outputs">
+          <span class="roadmap-tag">🏗️ 2 Bio-Pond terpasang</span>
+          <span class="roadmap-tag">⚗️ 1 Reaktor 500L aktif</span>
+          <span class="roadmap-tag">📡 Sensor IoT terhubung</span>
+          <span class="roadmap-tag">👷 7 Green Worker direkrut</span>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-phase">Fase 1 — Bulan 3–5</div>
+        <h4>Operasi & Pelatihan Pertama</h4>
+        <p>Siklus BSF pertama berjalan (14 hari). Panen maggot perdana dari komunitas Sukup Lama. Pelatihan intensif 7 green worker menggunakan simulator digital. Pengumpulan data baseline produksi, emisi, dan pendapatan. Laporan progres ke mitra hibah.</p>
+        <div class="roadmap-outputs">
+          <span class="roadmap-tag">🐛 Panen maggot #1</span>
+          <span class="roadmap-tag">🔥 Gas biogas aktif</span>
+          <span class="roadmap-tag">🎓 7 warga terlatih</span>
+          <span class="roadmap-tag">📊 Laporan baseline</span>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-phase">Fase 2 — Bulan 6–9</div>
+        <h4>Optimasi & Monetisasi Produk</h4>
+        <p>Sistem berjalan penuh dengan 3 siklus maggot selesai. Pakan ternak dan pupuk kasgot mulai dijual ke peternak & petani lokal Ujungberung. Gas biogas didistribusikan ke 10 KK terdekat. Revenue pertama masuk ke kas komunitas RW 01.</p>
+        <div class="roadmap-outputs">
+          <span class="roadmap-tag">💰 Revenue pertama komunitas</span>
+          <span class="roadmap-tag">🛒 Produk terjual ke pasar lokal</span>
+          <span class="roadmap-tag">⚡ 10 KK terima biogas</span>
+          <span class="roadmap-tag">📈 KPI tercapai ≥80%</span>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="roadmap-dot"></div>
+        <div class="roadmap-phase">Fase 3 — Bulan 10–12</div>
+        <h4>Dokumentasi & Blueprint Replikasi</h4>
+        <p>Menyusun laporan dampak komprehensif (lingkungan, ekonomi, sosial). Mendokumentasikan seluruh SOP operasional sebagai blueprint replicable. Presentasi hasil di Indonesia Green Jobs Conference 2026. Persiapan ekspansi ke 10 RW berikutnya di Bandung.</p>
+        <div class="roadmap-outputs">
+          <span class="roadmap-tag">📄 Laporan Dampak Final</span>
+          <span class="roadmap-tag">📋 Blueprint 50+ halaman</span>
+          <span class="roadmap-tag">🏆 Presentasi di Konferensi</span>
+          <span class="roadmap-tag">🚀 Siap ekspansi 10 RW</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── BUDGET ──────────────── -->
+<section class="section budget-section" id="anggaran">
+  <div style="max-width:900px;margin:0 auto;">
+    <div class="section-header">
+      <div class="section-label">💰 Rencana Anggaran</div>
+      <h2 class="section-title">Rp 50 Juta — Efisien,<br>Terukur, Berdampak Nyata</h2>
+      <p class="section-sub">Anggaran dirancang dengan prinsip <em>do more with less</em>: setiap rupiah menghasilkan aset fisik, kompetensi manusia, dan data terverifikasi yang bisa diskalakan.</p>
+    </div>
+
+    <div class="budget-hero fade-up">
+      <div class="budget-big-num">Rp 50 Jt</div>
+      <div class="budget-big-label">
+        <h3>Dana Living Lab — Prototype RW 01 Sukup Lama</h3>
+        <p>Cukup untuk membangun infrastruktur penuh, melatih 7 green workers, mengoperasikan sistem 12 bulan, dan menghasilkan blueprint replikasi nasional.</p>
+        <div class="budget-pills">
+          <span class="budget-pill">✓ 2 Bio-Pond BSF</span>
+          <span class="budget-pill">✓ 1 Reaktor Biogas 500L</span>
+          <span class="budget-pill">✓ IoT Sensors + Gateway</span>
+          <span class="budget-pill">✓ Platform Digital (sudah ada)</span>
+          <span class="budget-pill">✓ Pelatihan 7 Green Workers</span>
+          <span class="budget-pill">✓ Operasional 12 Bulan</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fade-up" style="overflow-x:auto;">
+      <table class="budget-table">
+        <thead>
+          <tr>
+            <th>Komponen</th>
+            <th>Detail</th>
+            <th style="text-align:right;">Anggaran</th>
+            <th style="text-align:right;">%</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>🐛 Bio-Pond BSF (2 unit)</strong>
+              <div class="budget-bar" style="width:44%;"></div>
+              <div class="budget-pct">Bak fiber, net, pipa, aerasi, alat panen</div>
+            </td>
+            <td>Kapasitas 30 kg sampah/hari</td>
+            <td style="text-align:right;font-weight:700;">Rp 8.500.000</td>
+            <td style="text-align:right;">17%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>⚗️ Reaktor Biogas 500L</strong>
+              <div class="budget-bar" style="width:30%;background:linear-gradient(90deg,#f97316,#fb923c);"></div>
+              <div class="budget-pct">HDPE drum, pipa, katup, manometer, slang</div>
+            </td>
+            <td>Inkl. kompor & tabung penampung gas</td>
+            <td style="text-align:right;font-weight:700;">Rp 7.000.000</td>
+            <td style="text-align:right;">14%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>📡 Sensor IoT & Gateway</strong>
+              <div class="budget-bar" style="width:20%;background:linear-gradient(90deg,#3b82f6,#60a5fa);"></div>
+              <div class="budget-pct">DHT22, MQ-4, MQ-136, ESP32, load cell, power</div>
+            </td>
+            <td>Koneksi ke dashboard real-time</td>
+            <td style="text-align:right;font-weight:700;">Rp 5.500.000</td>
+            <td style="text-align:right;">11%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>🏗️ Konstruksi & Instalasi</strong>
+              <div class="budget-bar" style="width:16%;background:linear-gradient(90deg,#64748b,#94a3b8);"></div>
+              <div class="budget-pct">Atap greenhouse, rak, plumbing, listrik</div>
+            </td>
+            <td>Di lahan komunal RW 01</td>
+            <td style="text-align:right;font-weight:700;">Rp 6.000.000</td>
+            <td style="text-align:right;">12%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>🐛 Bibit Maggot BSF Perdana</strong>
+              <div class="budget-bar" style="width:6%;"></div>
+              <div class="budget-pct">Telur/larva BSF terseleksi + media starter</div>
+            </td>
+            <td>Cukup untuk 3 siklus perdana</td>
+            <td style="text-align:right;font-weight:700;">Rp 2.000.000</td>
+            <td style="text-align:right;">4%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>🎓 Pelatihan & Sertifikasi</strong>
+              <div class="budget-bar" style="width:20%;background:linear-gradient(90deg,#7c3aed,#a855f7);"></div>
+              <div class="budget-pct">Workshop 7 green workers, modul, sertifikat</div>
+            </td>
+            <td>3 sesi pelatihan intensif</td>
+            <td style="text-align:right;font-weight:700;">Rp 5.000.000</td>
+            <td style="text-align:right;">10%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>🔧 Operasional 12 Bulan</strong>
+              <div class="budget-bar" style="width:26%;background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div>
+              <div class="budget-pct">Insentif warga, transportasi, utilitas, ATK</div>
+            </td>
+            <td>~Rp 1,1 jt/bulan operasional</td>
+            <td style="text-align:right;font-weight:700;">Rp 13.000.000</td>
+            <td style="text-align:right;">26%</td>
+          </tr>
+          <tr>
+            <td>
+              <strong>📊 M&E & Pelaporan</strong>
+              <div class="budget-bar" style="width:6%;background:linear-gradient(90deg,#14b8a6,#2dd4bf);"></div>
+              <div class="budget-pct">Laporan dampak, dokumentasi, presentasi konferensi</div>
+            </td>
+            <td>Standar pelaporan GIZ/BAPPENAS</td>
+            <td style="text-align:right;font-weight:700;">Rp 3.000.000</td>
+            <td style="text-align:right;">6%</td>
+          </tr>
+          <tr>
+            <td colspan="2"><strong>TOTAL PENGAJUAN HIBAH LIVING LAB</strong></td>
+            <td style="text-align:right;"><strong>Rp 50.000.000</strong></td>
+            <td style="text-align:right;"><strong>100%</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid rgba(22,163,74,0.2);border-radius:16px;padding:22px;margin-top:18px;" class="fade-up">
+      <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+        <div style="text-align:center;">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--green-mid);">5,8×</div>
+          <div style="font-size:0.74rem;color:var(--muted);font-weight:500;">SROI Proyeksi</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--green-mid);">Bulan 8</div>
+          <div style="font-size:0.74rem;color:var(--muted);font-weight:500;">Break-Even</div>
+        </div>
+        <div style="flex:1;min-width:180px;">
+          <div style="font-size:0.85rem;font-weight:600;color:var(--navy);margin-bottom:3px;">Leverage Mandiri</div>
+          <div style="font-size:0.8rem;color:var(--muted);">Mulai bulan ke-8, revenue produk (pakan + pupuk + CNG) membiayai operasional mandiri tanpa tambahan hibah. Dana Rp 50 juta bukan "habis" — tapi menghasilkan aset produktif permanen senilai 5× lipat dalam 2 tahun.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── PARTNERS ──────────────── -->
+<div class="partners-section">
+  <h2>Ekosistem Kemitraan Living Lab</h2>
+  <p>Kolaborasi multi-pihak untuk memastikan keberhasilan dan keberlanjutan RW 01 Sukup Lama</p>
+  <div class="partners-row">
+    <div class="partner-badge">🏛️ BAPPENAS — Kerangka Kebijakan</div>
+    <div class="partner-badge">🇩🇪 GIZ — Pendanaan & Metodologi</div>
+    <div class="partner-badge">🌿 Green Welfare ID — Jaringan Komunitas</div>
+    <div class="partner-badge">🏙️ Pemkot Bandung — Izin & Dukungan</div>
+    <div class="partner-badge">🏘️ RW 01 Sukup Lama — Komunitas Pilot</div>
+    <div class="partner-badge">🐄 Peternak Lokal Ujungberung — Offtaker Pakan</div>
+    <div class="partner-badge">🌾 Petani Cigending — Pembeli Kasgot</div>
+  </div>
+</div>
+
+<!-- ──────────────── CTA ──────────────── -->
+<section class="cta-section">
+  <div class="cta-box fade-up">
+    <h2>Rp 50 Juta untuk Menyalakan<br>Revolusi Hijau di Sukup Lama</h2>
+    <p>
+      Dengan dana ini, RW 01 Sukup Lama akan menjadi <strong style="color:#86efac;">Living Lab pertama di Indonesia</strong> yang membuktikan bahwa ekonomi sirkular berbasis komunitas bisa mandiri secara finansial, terukur secara lingkungan, dan menciptakan pekerjaan hijau yang bermartabat — dimulai dari 42 KK, menjadi cetak biru nasional.
+    </p>
+    <div class="cta-btns">
+      <a href="simulator.html" class="btn-hero-primary" style="text-decoration:none;">
+        🧪 Coba Simulator Living Lab
+      </a>
+      <a href="index.html" class="btn-hero-outline" style="text-decoration:none;">
+        📊 Dashboard Operasional
+      </a>
+    </div>
+    <div style="margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.1);">
+      <p style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:0;">
+        Living Lab <strong style="color:#86efac;">RW 01 Sukup Lama, Cigending, Ujungberung, Bandung</strong><br>
+        Proposal Hibah — <strong style="color:#fde68a;">Indonesia Green Jobs Conference 2026</strong> | BAPPENAS × GIZ × Green Welfare ID
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── FOOTER ──────────────── -->
+<footer>
+  <p><strong>GreenSampah Living Lab</strong> — RW 01 Sukup Lama, Cigending, Ujungberung, Kota Bandung</p>
+  <p style="margin-top:5px;">Proposal Hibah Green Jobs 2026 | BAPPENAS × GIZ × Green Welfare ID | Platform: <strong>ZeroWaste SuperApp v3.0</strong></p>
+</footer>
+
+<script>
+  // Scroll animations
+  var fadeEls = document.querySelectorAll('.fade-up');
+  function checkFade(){
+    fadeEls.forEach(function(el){
+      var rect = el.getBoundingClientRect();
+      if(rect.top < window.innerHeight - 80) el.classList.add('visible');
+    });
+  }
+  window.addEventListener('scroll', checkFade, {passive:true});
+  checkFade();
+
+  // Navbar shadow on scroll
+  var navbar = document.querySelector('.navbar');
+  window.addEventListener('scroll', function(){
+    navbar.style.boxShadow = window.scrollY > 40 ? '0 4px 20px rgba(0,0,0,0.09)' : 'none';
+  }, {passive:true});
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var target = document.querySelector(this.getAttribute('href'));
+      if(target){ e.preventDefault(); target.scrollIntoView({behavior:'smooth',block:'start'}); }
+    });
+  });
+</script>
+</body>
+</html>

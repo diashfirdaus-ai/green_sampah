@@ -1,0 +1,2460 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulator Ekonomi Sirkular — ZeroWaste SuperApp</title>
+  <meta name="description" content="Simulator interaktif sirkular pangan maggot BSF dan sirkular energi BioCNG — rasakan langsung proses nyata pengolahan sampah menjadi nilai.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0f1e;
+      --bg-card: #111827;
+      --bg-card2: #1a2235;
+      --border: rgba(255,255,255,0.07);
+      --green: #22c55e;
+      --green-glow: rgba(34,197,94,0.25);
+      --emerald: #10b981;
+      --teal: #14b8a6;
+      --orange: #f97316;
+      --orange-glow: rgba(249,115,22,0.25);
+      --amber: #f59e0b;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --text: #e2e8f0;
+      --muted: #64748b;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(34,197,94,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,197,94,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,15,30,0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: white;
+    }
+    .nav-logo .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--green), var(--teal));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .nav-logo .green-txt { color: var(--green); }
+    .nav-badge {
+      background: linear-gradient(135deg, var(--green), var(--teal));
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: white; }
+
+    /* ===== HERO ===== */
+    .hero {
+      text-align: center;
+      padding: 3.5rem 2rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.25);
+      border-radius: 100px;
+      padding: 4px 16px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--green);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, #fff 30%, var(--green) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 580px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.6;
+    }
+
+    /* ===== TABS ===== */
+    .sim-tabs {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 1;
+      padding: 0 1rem;
+      flex-wrap: wrap;
+    }
+    .sim-tab {
+      padding: 10px 24px;
+      border-radius: 100px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Outfit', sans-serif;
+    }
+    .sim-tab.active-maggot {
+      background: linear-gradient(135deg, #16a34a, #059669);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 0 30px rgba(22,163,74,0.4);
+    }
+    .sim-tab.active-biocng {
+      background: linear-gradient(135deg, #ea580c, #d97706);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 0 30px rgba(234,88,12,0.4);
+    }
+
+    /* ===== PANELS ===== */
+    .simulator-panel {
+      display: none;
+      position: relative;
+      z-index: 1;
+      padding: 0 1.5rem 4rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .simulator-panel.active { display: block; }
+
+    /* ===== STATUS BAR ===== */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+    .status-bar.running {
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.3);
+      color: var(--green);
+    }
+    .status-bar.stopped {
+      background: rgba(100,116,139,0.12);
+      border: 1px solid rgba(100,116,139,0.2);
+      color: var(--muted);
+    }
+    .status-dot { width:8px; height:8px; border-radius:50%; background:currentColor; }
+    .status-dot.pulse { animation: pulse-dot 1.5s infinite; }
+    @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ===== GRID ===== */
+    .sim-grid {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      gap: 1.5rem;
+    }
+    @media (max-width: 1100px) {
+      .sim-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== MACHINE CANVAS ===== */
+    .machine-canvas {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 1.75rem;
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+    }
+    .machine-canvas::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: -80px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: var(--glow-color, var(--green-glow));
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ===== LIFECYCLE BAR ===== */
+    .lifecycle-bar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+    .lc-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .lc-icon {
+      width: 50px; height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      border: 1px solid var(--border);
+      background: var(--bg-card2);
+      transition: all 0.3s;
+    }
+    .lc-icon.active-stage {
+      border-color: var(--green);
+      box-shadow: 0 0 20px rgba(34,197,94,0.35);
+      animation: stage-pulse 1.5s ease infinite;
+    }
+    .lc-icon.done-stage {
+      border-color: rgba(34,197,94,0.3);
+      background: rgba(34,197,94,0.08);
+    }
+    @keyframes stage-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+    .lc-dot { width:6px; height:6px; border-radius:50%; background:var(--green); opacity:0.25; }
+    .lc-dot.active { opacity:1; animation: lc-pulse 1s infinite; }
+    .lc-dot.done { opacity:0.5; }
+    @keyframes lc-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .lc-name { font-size:0.58rem; color:var(--muted); text-align:center; max-width:54px; line-height:1.3; }
+    .lc-arrow { font-size:0.9rem; color:rgba(255,255,255,0.15); align-self:flex-start; margin-top:14px; }
+
+    /* ===== FLOW DIAGRAM ===== */
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .flow-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .node-icon {
+      width: 64px; height: 64px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      transition: all 0.3s;
+    }
+    .node-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-align: center;
+      max-width: 72px;
+      line-height: 1.3;
+    }
+    .flow-arrow {
+      width: 44px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .arrow-line {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--ac, rgba(255,255,255,0.1)), transparent);
+      position: relative;
+    }
+    .arrow-dot {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--ac, rgba(255,255,255,0.2));
+      transform: translateY(-50%);
+      animation: flow-move 2s linear infinite;
+    }
+    @keyframes flow-move {
+      0% { left: 0; opacity:0; }
+      10% { opacity:1; }
+      90% { opacity:1; }
+      100% { left: calc(100% - 7px); opacity:0; }
+    }
+
+    /* ===== TANKS ===== */
+    .tanks-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+    .tank-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .tank-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .tank-body {
+      width: 60px;
+      height: 100px;
+      border: 2px solid;
+      border-radius: 6px 6px 10px 10px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: rgba(255,255,255,0.02);
+    }
+    .tank-fill {
+      transition: height 0.9s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+    }
+    .tank-fill::after {
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0;
+      height:3px;
+      background:rgba(255,255,255,0.25);
+    }
+    .tank-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* ===== HARVEST BANNER ===== */
+    .harvest-ready {
+      display: none;
+      background: linear-gradient(135deg, rgba(34,197,94,0.15), rgba(20,184,166,0.1));
+      border: 1px solid rgba(34,197,94,0.4);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--green);
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .harvest-ready.show { display:flex; animation: harvest-in 0.4s ease; }
+    @keyframes harvest-in { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+
+    /* ===== SENSORS ===== */
+    .sensor-section { position: relative; z-index: 1; margin-top: 1.25rem; }
+    .sensor-bar { display:flex; flex-direction:column; gap:9px; }
+    .sensor-row { display:flex; align-items:center; gap:10px; }
+    .sensor-label { font-size:0.7rem; font-weight:500; color:var(--muted); width:60px; flex-shrink:0; }
+    .sensor-track { flex:1; height:5px; background:rgba(255,255,255,0.06); border-radius:100px; overflow:hidden; }
+    .sensor-fill { height:100%; border-radius:100px; transition:width 0.8s ease; }
+    .sensor-val { font-family:'JetBrains Mono',monospace; font-size:0.67rem; width:52px; text-align:right; flex-shrink:0; }
+
+    /* ===== REACTOR VISUAL ===== */
+    .reactor-section {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .reactor-col { display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .reactor-col-label { font-size:0.65rem; color:var(--muted); font-weight:600; margin-bottom:2px; }
+    .reactor-tank {
+      width: 110px; height: 120px;
+      border: 3px solid var(--orange);
+      border-radius: 10px 10px 28px 28px;
+      position: relative;
+      overflow: hidden;
+      background: rgba(249,115,22,0.04);
+      transition: all 0.25s ease;
+    }
+    .reactor-inner {
+      position:absolute; bottom:0; left:0; right:0;
+      background: linear-gradient(0deg, rgba(249,115,22,0.65), rgba(249,115,22,0.3));
+      transition: height 1s ease;
+    }
+    .gas-visual {
+      width: 65px; height: 115px;
+      border: 2px dashed rgba(249,115,22,0.3);
+      border-radius: 8px;
+      background: rgba(249,115,22,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+    .gauge-wrap {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      border: 4px solid rgba(249,115,22,0.35);
+      background: var(--bg-card2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* ===== POWER OUTPUT ===== */
+    .power-output {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(249,115,22,0.08));
+      border: 1px solid rgba(245,158,11,0.2);
+      margin-top: 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+    .lightning { font-size:2rem; animation: flicker 0.8s ease-in-out infinite alternate; }
+    @keyframes flicker { 0%{opacity:0.7;transform:scale(0.95)} 100%{opacity:1;transform:scale(1.05)} }
+
+    /* ===== CONTROLS PANEL ===== */
+    .controls-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    /* ===== DAY COUNTER ===== */
+    .day-counter {
+      text-align: center;
+      background: var(--bg-card2);
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid var(--border);
+    }
+    .day-label { font-size:0.62rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; }
+    .day-num { font-family:'JetBrains Mono',monospace; font-size:2.4rem; font-weight:700; line-height:1; }
+    .day-progress { width:100%; height:4px; background:rgba(255,255,255,0.07); border-radius:2px; margin-top:8px; overflow:hidden; }
+    .day-progress-bar { height:100%; border-radius:2px; transition:width 0.5s ease; }
+
+    /* ===== SLIDERS ===== */
+    .control-row { display:flex; flex-direction:column; gap:6px; }
+    .control-label { display:flex; justify-content:space-between; font-size:0.8rem; font-weight:500; }
+    .ctrl-val { font-family:'JetBrains Mono',monospace; font-size:0.76rem; font-weight:600; }
+    .ctrl-val.green { color:var(--green); }
+    .ctrl-val.orange { color:var(--orange); }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 5px;
+      border-radius: 100px;
+      outline: none;
+      cursor: pointer;
+    }
+    input[type="range"].green-slider {
+      background: linear-gradient(to right, var(--green) var(--val,50%), rgba(255,255,255,0.1) var(--val,50%));
+    }
+    input[type="range"].orange-slider {
+      background: linear-gradient(to right, var(--orange) var(--val,50%), rgba(255,255,255,0.1) var(--val,50%));
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width:16px; height:16px;
+      border-radius:50%;
+      background:white;
+      box-shadow:0 2px 8px rgba(0,0,0,0.4);
+      cursor:pointer;
+      transition:transform 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform:scale(1.25); }
+
+    /* ===== SPEED BUTTONS ===== */
+    .speed-btns { display:flex; gap:6px; }
+    .speed-btn {
+      flex:1;
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .speed-btn.active { background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.25); color:white; }
+
+    /* ===== ACTION BUTTONS ===== */
+    .btn-primary {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-green {
+      background: linear-gradient(135deg, #16a34a, #059669);
+      color: white;
+      box-shadow: 0 4px 20px rgba(22,163,74,0.35);
+    }
+    .btn-green:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 28px rgba(22,163,74,0.5); }
+    .btn-green:active:not(:disabled) { transform:translateY(0); }
+    .btn-orange {
+      background: linear-gradient(135deg, #ea580c, #d97706);
+      color: white;
+      box-shadow: 0 4px 20px rgba(234,88,12,0.35);
+    }
+    .btn-orange:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 8px 28px rgba(234,88,12,0.5); }
+    .btn-orange:active:not(:disabled) { transform:translateY(0); }
+    .btn-harvest {
+      background: rgba(245,158,11,0.15);
+      color: var(--amber);
+      border: 1px solid rgba(245,158,11,0.3) !important;
+    }
+    .btn-harvest:hover:not(:disabled) { background:rgba(245,158,11,0.25); }
+    .btn-stop {
+      background: rgba(100,116,139,0.12);
+      color: var(--muted);
+      border: 1px solid var(--border) !important;
+    }
+    .btn-stop:hover:not(:disabled) { background:rgba(239,68,68,0.12); color:#ef4444; border-color:rgba(239,68,68,0.3) !important; }
+    button:disabled { opacity:0.45; cursor:not-allowed; }
+
+    /* ===== KPI GRID ===== */
+    .kpi-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .kpi-card {
+      background: var(--bg-card2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .kpi-label { font-size:0.62rem; color:var(--muted); font-weight:500; margin-bottom:3px; }
+    .kpi-value { font-family:'JetBrains Mono',monospace; font-size:1rem; font-weight:700; }
+    .kpi-unit { font-size:0.58rem; font-weight:400; color:var(--muted); margin-left:2px; }
+
+    /* ===== EVENT LOG ===== */
+    .event-log {
+      background: var(--bg-card2);
+      border-radius: 12px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      height: 150px;
+      overflow-y: auto;
+    }
+    .event-log::-webkit-scrollbar { width:3px; }
+    .event-log::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:2px; }
+    .log-line {
+      display:flex; gap:8px;
+      font-size:0.7rem;
+      padding:3px 0;
+      border-bottom:1px solid rgba(255,255,255,0.03);
+      animation: log-in 0.3s ease;
+    }
+    @keyframes log-in { from{opacity:0;transform:translateX(-6px)} to{opacity:1;transform:translateX(0)} }
+    .log-time { color:var(--muted); font-family:'JetBrains Mono',monospace; font-size:0.62rem; flex-shrink:0; }
+    .log-msg { color:var(--text); }
+    .log-msg.success { color:var(--green); }
+    .log-msg.warn { color:var(--amber); }
+    .log-msg.info { color:var(--blue); }
+
+    /* ===== TOAST ===== */
+    .toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      min-width: 270px;
+      max-width: 320px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+      animation: toast-in 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes toast-in { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+    .toast-icon { font-size:1.4rem; flex-shrink:0; }
+
+    /* ===== BUBBLE ANIMATION ===== */
+    @keyframes rise-up {
+      0% { transform:translateY(0) scale(1); opacity:0.7; }
+      100% { transform:translateY(-150px) scale(0.3); opacity:0; }
+    }
+
+    /* ===== DRAG AND DROP WASTES ===== */
+    .drag-bag:hover {
+      transform: translateY(-3.5px) scale(1.04);
+      box-shadow: 0 6px 14px rgba(34,197,94,0.18);
+      border-color: var(--green) !important;
+      background: rgba(34,197,94,0.06) !important;
+    }
+    .drag-bag:active {
+      cursor: grabbing;
+    }
+    .drag-over-active {
+      border-color: var(--green) !important;
+      box-shadow: 0 0 15px rgba(34,197,94,0.25) !important;
+      background: rgba(34,197,94,0.06) !important;
+      transform: scale(1.05);
+    }
+    
+    /* ===== DRAG AND DROP BIOMASS ===== */
+    .drag-biomass:hover {
+      transform: translateY(-3.5px) scale(1.04);
+      box-shadow: 0 6px 14px rgba(249,115,22,0.18);
+      border-color: var(--orange) !important;
+      background: rgba(249,115,22,0.06) !important;
+    }
+    .drag-biomass:active {
+      cursor: grabbing;
+    }
+    .cng-drag-over-active {
+      border-color: var(--orange) !important;
+      box-shadow: 0 0 20px rgba(249,115,22,0.35) !important;
+      transform: scale(1.04);
+      background: rgba(249,115,22,0.08) !important;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-icon">♻️</div>
+    <span>Zero<span class="green-txt">Waste</span></span>
+    <div class="nav-badge">Simulator</div>
+  </div>
+  <div style="display:flex; gap:16px; align-items:center;">
+    <a href="game.html" class="back-btn" style="color:var(--orange); font-weight:700;">🎮 Game Sirkular</a>
+    <a href="shop.html" class="back-btn" style="color:var(--blue); font-weight:700;">🛒 Toko Komunitas</a>
+    <a href="dashboard.html" class="back-btn">← Kembali ke Dashboard</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">🔬 Simulasi Real-Time Interaktif</div>
+  <h1>Simulator Ekonomi Sirkular</h1>
+  <p>Kendalikan alat secara langsung — atur parameter, jalankan proses, dan saksikan rantai nilai dari sampah menjadi pangan & energi.</p>
+</div>
+
+<!-- TABS -->
+<div class="sim-tabs">
+  <button class="sim-tab active-maggot" id="tab-maggot" onclick="switchSim('maggot')">
+    🐛 Sirkular Pangan — Maggot BSF
+  </button>
+  <button class="sim-tab" id="tab-biocng" onclick="switchSim('biocng')">
+    🔥 Sirkular Energi — BioCNG
+  </button>
+</div>
+
+<!-- ================================================================
+     PANEL 1: SIRKULAR PANGAN — MAGGOT BSF
+     ================================================================ -->
+<div class="simulator-panel active" id="panel-maggot">
+
+  <div class="status-bar stopped" id="maggot-status">
+    <div class="status-dot" id="maggot-status-dot"></div>
+    <span id="maggot-status-text">⏸ Simulator siap — Atur parameter lalu tekan Start</span>
+  </div>
+
+  <div class="sim-grid">
+
+    <!-- LEFT: VISUAL MACHINE -->
+    <div class="machine-canvas" style="--glow-color:var(--green-glow)">
+
+      <!-- Life Cycle -->
+      <p class="section-title">🔄 Siklus Hidup BSF (Black Soldier Fly)</p>
+      <div class="lifecycle-bar">
+        <div class="lc-stage">
+          <div class="lc-icon" id="lc-0">🥚</div>
+          <div class="lc-dot" id="lc-dot-0"></div>
+          <div class="lc-name">Telur BSF</div>
+        </div>
+        <div class="lc-arrow">›</div>
+        <div class="lc-stage">
+          <div class="lc-icon" id="lc-1">🐛</div>
+          <div class="lc-dot" id="lc-dot-1"></div>
+          <div class="lc-name">Larva / Maggot</div>
+        </div>
+        <div class="lc-arrow">›</div>
+        <div class="lc-stage">
+          <div class="lc-icon" id="lc-2">🔄</div>
+          <div class="lc-dot" id="lc-dot-2"></div>
+          <div class="lc-name">Prepupa</div>
+        </div>
+        <div class="lc-arrow">›</div>
+        <div class="lc-stage">
+          <div class="lc-icon" id="lc-3">🦋</div>
+          <div class="lc-dot" id="lc-dot-3"></div>
+          <div class="lc-name">Pupa → Lalat</div>
+        </div>
+        <div class="lc-arrow">›</div>
+        <div class="lc-stage">
+          <div class="lc-icon" id="lc-4">🌿</div>
+          <div class="lc-dot" id="lc-dot-4"></div>
+          <div class="lc-name">Panen + Kasgot</div>
+        </div>
+      </div>
+
+      <!-- Flow Diagram -->
+      <p class="section-title">⚙️ Alur Pengolahan Sirkular Pangan</p>
+      <div class="flow-diagram">
+        <div class="flow-node">
+          <div class="node-icon" style="background:rgba(100,116,139,0.18); color:#94a3b8;">🗑️</div>
+          <div class="node-label">Sampah Organik</div>
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-line" style="--ac:#94a3b8">
+            <div class="arrow-dot" style="--ac:#94a3b8"></div>
+          </div>
+        </div>
+        <div class="flow-node">
+          <div class="node-icon" style="background:rgba(59,130,246,0.15); color:#60a5fa;">⚙️</div>
+          <div class="node-label">Mesin Cacah</div>
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-line" style="--ac:#60a5fa">
+            <div class="arrow-dot" style="--ac:#60a5fa"></div>
+          </div>
+        </div>
+        <div class="flow-node">
+          <div class="node-icon" id="fn-pond" style="background:rgba(34,197,94,0.15); color:var(--green);">🐛</div>
+          <div class="node-label">Bio-Pond BSF</div>
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-line" style="--ac:#22c55e">
+            <div class="arrow-dot" style="--ac:#22c55e"></div>
+          </div>
+        </div>
+        <div class="flow-node">
+          <div class="node-icon" style="background:rgba(245,158,11,0.15); color:var(--amber);">🌾</div>
+          <div class="node-label">Panen & Sortir</div>
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-line" style="--ac:#f59e0b">
+            <div class="arrow-dot" style="--ac:#f59e0b"></div>
+          </div>
+        </div>
+        <div class="flow-node">
+          <div class="node-icon" style="background:rgba(168,85,247,0.15); color:#c084fc;">💰</div>
+          <div class="node-label">Pakan + Pupuk</div>
+        </div>
+      </div>
+
+      <!-- 2D/3D Toggle for Maggot -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; position:relative; z-index:10;">
+        <p class="section-title" style="margin:0;">📊 Visualisasi Sistem & Level</p>
+        <div style="display:flex; gap:6px;">
+          <button class="speed-btn active" id="btn-view-2d-maggot" onclick="toggleViewMode('maggot', '2d')">2D Telemetri</button>
+          <button class="speed-btn" id="btn-view-3d-maggot" onclick="toggleViewMode('maggot', '3d')">Digital Twin 3D 🔮</button>
+        </div>
+      </div>
+
+      <!-- 3D Canvas Container -->
+      <div id="container-3d-maggot" style="display:none; width:100%; height:260px; border-radius:16px; overflow:hidden; border:1px solid var(--border); background:#0c111d; position:relative; margin-bottom:1.25rem;">
+        <div style="position:absolute; top:8px; left:8px; font-size:0.6rem; color:var(--muted); font-weight:700; text-transform:uppercase; z-index:5;">Digital Twin BSF Bio-Pond</div>
+      </div>
+
+      <!-- Tank Visuals (2D) -->
+      <div class="tanks-row" id="tanks-row-maggot">
+        <div class="tank-wrap" id="dropzone-sampah" ondragover="allowDropWaste(event)" ondrop="dropWaste(event)" style="border-radius:12px; padding:4px; border:1px dashed transparent; transition:all 0.25s;">
+          <div class="tank-label">Sampah<br>Input</div>
+          <div class="tank-body" style="border-color:#475569;">
+            <div id="tank-sampah" class="tank-fill" style="height:0%; background:linear-gradient(0deg,#334155,#64748b);"></div>
+          </div>
+          <div class="tank-value" style="color:#94a3b8"><span id="val-tank-sampah">0</span> kg</div>
+        </div>
+        <div class="tank-wrap">
+          <div class="tank-label">Kelembaban<br>Pond</div>
+          <div class="tank-body" style="border-color:#3b82f6;">
+            <div id="tank-kelembaban" class="tank-fill" style="height:0%; background:linear-gradient(0deg,#1d4ed8,#60a5fa);"></div>
+          </div>
+          <div class="tank-value" style="color:#60a5fa"><span id="val-kelembaban">0</span>%</div>
+        </div>
+        <div class="tank-wrap">
+          <div class="tank-label">Maggot<br>Pond A</div>
+          <div class="tank-body" style="border-color:#22c55e;">
+            <div id="tank-maggot" class="tank-fill" style="height:0%; background:linear-gradient(0deg,#14532d,#22c55e);"></div>
+          </div>
+          <div class="tank-value" style="color:#22c55e"><span id="val-tank-maggot">0</span> kg</div>
+        </div>
+        <div class="tank-wrap">
+          <div class="tank-label">Kasgot<br>(Pupuk)</div>
+          <div class="tank-body" style="border-color:#92400e;">
+            <div id="tank-kasgot" class="tank-fill" style="height:0%; background:linear-gradient(0deg,#431407,#92400e);"></div>
+          </div>
+          <div class="tank-value" style="color:#d97706"><span id="val-kasgot">0</span> kg</div>
+        </div>
+        <div class="tank-wrap">
+          <div class="tank-label">Pakan<br>Ternak</div>
+          <div class="tank-body" style="border-color:#7c3aed;">
+            <div id="tank-pakan" class="tank-fill" style="height:0%; background:linear-gradient(0deg,#3b0764,#a78bfa);"></div>
+          </div>
+          <div class="tank-value" style="color:#a78bfa"><span id="val-pakan">0</span> kg</div>
+        </div>
+      </div>
+
+      <!-- Harvest Banner -->
+      <div class="harvest-ready" id="harvest-ready-banner">
+        🎉 Maggot Siap Panen! Berat optimum tercapai. Klik tombol Panen.
+      </div>
+
+      <!-- IoT Sensors -->
+      <div class="sensor-section">
+        <p class="section-title">🌡️ Sensor IoT Lingkungan Pond</p>
+        <div class="sensor-bar">
+          <div class="sensor-row">
+            <span class="sensor-label">Suhu</span>
+            <div class="sensor-track"><div class="sensor-fill" id="sensor-suhu" style="width:0%;background:linear-gradient(90deg,#3b82f6,#22c55e);"></div></div>
+            <span class="sensor-val" style="color:#22c55e" id="val-suhu">0°C</span>
+          </div>
+          <div class="sensor-row">
+            <span class="sensor-label">Kelembaban</span>
+            <div class="sensor-track"><div class="sensor-fill" id="sensor-lembab" style="width:0%;background:linear-gradient(90deg,#1d4ed8,#60a5fa);"></div></div>
+            <span class="sensor-val" style="color:#60a5fa" id="val-lembab">0%</span>
+          </div>
+          <div class="sensor-row">
+            <span class="sensor-label">Ammonia</span>
+            <div class="sensor-track"><div class="sensor-fill" id="sensor-ammonia" style="width:0%;background:linear-gradient(90deg,#22c55e,#f59e0b);"></div></div>
+            <span class="sensor-val" style="color:#f59e0b" id="val-ammonia">0 ppm</span>
+          </div>
+          <div class="sensor-row">
+            <span class="sensor-label">Densitas</span>
+            <div class="sensor-track"><div class="sensor-fill" id="sensor-densitas" style="width:0%;background:linear-gradient(90deg,#22c55e,#a78bfa);"></div></div>
+            <span class="sensor-val" style="color:#a78bfa" id="val-densitas">0 g/L</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: CONTROLS -->
+    <div class="controls-panel">
+
+      <!-- Day Counter -->
+      <div class="day-counter">
+        <div class="day-label">Hari Simulasi</div>
+        <div class="day-num" id="maggot-day" style="color:var(--green)">0</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">dari <span id="maggot-total-days">14</span> hari siklus BSF</div>
+        <div class="day-progress">
+          <div class="day-progress-bar" id="maggot-day-bar" style="width:0%;background:linear-gradient(90deg,var(--green),var(--teal));"></div>
+        </div>
+      </div>
+
+      <!-- Drag and Drop Panel -->
+      <div class="drag-feed-panel" style="background:var(--bg-card2); border:1px dashed rgba(34,197,94,0.3); border-radius:16px; padding:16px; margin-bottom:20px; text-align:center; position:relative; box-shadow:inset 0 0 12px rgba(0,0,0,0.2);">
+        <div style="font-size:0.8rem; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>🧺 Wadah Sampah Organik Warga</span>
+        </div>
+        <p style="font-size:0.7rem; color:var(--muted); margin-bottom:12px; line-height:1.4;">Seret kantong sampah di bawah dan drop ke tangki <strong>"Sampah Input"</strong> sebelah kiri!</p>
+        
+        <div style="display:flex; justify-content:center; gap:12px;">
+          <!-- Draggable Bag 1 (10 kg) -->
+          <div class="drag-bag" draggable="true" id="bag-10" ondragstart="dragWaste(event)" style="cursor:grab; display:flex; flex-direction:column; align-items:center; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:10px 8px; width:75px; transition:all 0.2s;">
+            <span style="font-size:1.8rem; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));">🍏</span>
+            <span style="font-size:0.75rem; font-weight:750; color:var(--green); margin-top:4px;">+10 kg</span>
+            <span style="font-size:0.58rem; color:var(--muted); text-align:center;">Sisa Dapur</span>
+          </div>
+          <!-- Draggable Bag 2 (25 kg) -->
+          <div class="drag-bag" draggable="true" id="bag-25" ondragstart="dragWaste(event)" style="cursor:grab; display:flex; flex-direction:column; align-items:center; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:10px 8px; width:75px; transition:all 0.2s;">
+            <span style="font-size:1.8rem; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));">🥩</span>
+            <span style="font-size:0.75rem; font-weight:750; color:var(--green); margin-top:4px;">+25 kg</span>
+            <span style="font-size:0.58rem; color:var(--muted); text-align:center;">Sisa Makanan</span>
+          </div>
+          <!-- Draggable Bag 3 (50 kg) -->
+          <div class="drag-bag" draggable="true" id="bag-50" ondragstart="dragWaste(event)" style="cursor:grab; display:flex; flex-direction:column; align-items:center; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:10px 8px; width:75px; transition:all 0.2s;">
+            <span style="font-size:1.8rem; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));">📦</span>
+            <span style="font-size:0.75rem; font-weight:750; color:var(--green); margin-top:4px;">+50 kg</span>
+            <span style="font-size:0.58rem; color:var(--muted); text-align:center;">Batch Besar</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parameters -->
+      <div>
+        <p class="section-title">⚙️ Parameter Operasional</p>
+        <div style="display:flex;flex-direction:column;gap:13px;">
+          <div class="control-row">
+            <div class="control-label">
+              <span>🗑️ Input Sampah Organik</span>
+              <span class="ctrl-val green" id="label-sampah-input">50 kg/hari</span>
+            </div>
+            <input type="range" class="green-slider" id="slider-sampah" min="10" max="200" value="50"
+              oninput="updateSlider(this,'label-sampah-input','kg/hari')">
+          </div>
+          <div class="control-row">
+            <div class="control-label">
+              <span>🐛 Populasi Awal Maggot</span>
+              <span class="ctrl-val green" id="label-populasi">5.000 ekor</span>
+            </div>
+            <input type="range" class="green-slider" id="slider-populasi" min="1000" max="20000" step="500" value="5000"
+              oninput="updateSliderNum(this,'label-populasi',' ekor')">
+          </div>
+          <div class="control-row">
+            <div class="control-label">
+              <span>🌡️ Target Suhu Pond</span>
+              <span class="ctrl-val green" id="label-suhu">28°C</span>
+            </div>
+            <input type="range" class="green-slider" id="slider-suhu" min="22" max="36" value="28"
+              oninput="updateSlider(this,'label-suhu','°C')">
+          </div>
+          <div class="control-row">
+            <div class="control-label">
+              <span>💧 Kelembaban Target</span>
+              <span class="ctrl-val green" id="label-kelembaban">70%</span>
+            </div>
+            <input type="range" class="green-slider" id="slider-kelembaban" min="50" max="90" value="70"
+              oninput="updateSlider(this,'label-kelembaban','%')">
+          </div>
+        </div>
+      </div>
+
+      <!-- Speed -->
+      <div>
+        <p class="section-title">⏱️ Kecepatan Simulasi</p>
+        <div class="speed-btns" id="maggot-speed-btns">
+          <button class="speed-btn active" onclick="setSpeed('maggot',1,this)">1×</button>
+          <button class="speed-btn" onclick="setSpeed('maggot',4,this)">4×</button>
+          <button class="speed-btn" onclick="setSpeed('maggot',10,this)">10×</button>
+          <button class="speed-btn" onclick="setSpeed('maggot',30,this)">30×</button>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <button class="btn-primary btn-green" id="maggot-start-btn" onclick="startMaggot()">▶ Mulai Simulasi Maggot</button>
+        <button class="btn-primary btn-harvest" id="maggot-harvest-btn" onclick="harvestMaggot()" disabled>🌾 Panen Maggot</button>
+        <button class="btn-primary btn-stop" id="maggot-stop-btn" onclick="stopMaggot()" disabled>⏹ Stop & Reset</button>
+      </div>
+
+      <!-- KPIs -->
+      <div>
+        <p class="section-title">📈 Output & Ekonomi Sirkular</p>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Maggot Dipanen</div>
+            <div class="kpi-value" style="color:var(--green)" id="kpi-maggot-panen">0<span class="kpi-unit">kg</span></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pupuk Kasgot</div>
+            <div class="kpi-value" style="color:#d97706" id="kpi-kasgot">0<span class="kpi-unit">kg</span></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Sampah Diolah</div>
+            <div class="kpi-value" style="color:#94a3b8" id="kpi-sampah-olah">0<span class="kpi-unit">kg</span></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pendapatan</div>
+            <div class="kpi-value" style="color:var(--amber)" id="kpi-revenue-maggot">Rp 0</div>
+          </div>
+          <div class="kpi-card" style="grid-column:span 2;">
+            <div class="kpi-label">CO₂ Terhindar (Siklus ini)</div>
+            <div class="kpi-value" style="color:var(--teal)" id="kpi-co2-maggot">0<span class="kpi-unit">kg CO₂e</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Log -->
+      <div>
+        <p class="section-title">📋 Log Aktivitas Pond</p>
+        <div class="event-log" id="maggot-log">
+          <div class="log-line">
+            <span class="log-time">--:--</span>
+            <span class="log-msg info">Sistem siap. Atur parameter & tekan Start.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PANEL 2: SIRKULAR ENERGI — BioCNG
+     ================================================================ -->
+<div class="simulator-panel" id="panel-biocng">
+
+  <div class="status-bar stopped" id="biocng-status">
+    <div class="status-dot" id="biocng-status-dot"></div>
+    <span id="biocng-status-text">⏸ Reaktor standby — Atur parameter lalu tekan Start</span>
+  </div>
+
+  <div class="sim-grid">
+
+    <!-- LEFT: VISUAL REACTOR -->
+    <div class="machine-canvas" style="--glow-color:var(--orange-glow)">
+
+      <!-- Flow Diagram -->
+      <p class="section-title">⚙️ Alur Pengolahan BioCNG</p>
+      <div class="flow-diagram">
+        <div class="flow-node">
+          <div class="node-icon" style="background:rgba(100,116,139,0.18);color:#94a3b8;">🗑️</div>
+          <div class="node-label">Sampah / Biomassa</div>
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-line" style="--ac:#f97316"><div class="arrow-dot" style="--ac:#f97316"></div></div>
+        </div>
+        <div class="flow-node">
+          <div class="node-icon" style="background:rgba(249,115,22,0.15);color:var(--orange);">⚗️</div>
+          <div class="node-label">Reaktor Anaerob</div>
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-line" style="--ac:#f59e0b"><div class="arrow-dot" style="--ac:#f59e0b"></div></div>
+        </div>
+        <div class="flow-node">
+          <div class="node-icon" style="background:rgba(59,130,246,0.15);color:#60a5fa;">🔬</div>
+          <div class="node-label">Scrubber H₂S/CO₂</div>
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-line" style="--ac:#22c55e"><div class="arrow-dot" style="--ac:#22c55e"></div></div>
+        </div>
+        <div class="flow-node">
+          <div class="node-icon" style="background:rgba(168,85,247,0.15);color:#c084fc;">🏭</div>
+          <div class="node-label">Kompresor CNG</div>
+        </div>
+        <div class="flow-arrow">
+          <div class="arrow-line" style="--ac:#a855f7"><div class="arrow-dot" style="--ac:#a855f7"></div></div>
+        </div>
+        <div class="flow-node">
+          <div class="node-icon" style="background:rgba(245,158,11,0.15);color:var(--amber);">⚡</div>
+          <div class="node-label">Tabung + Genset</div>
+        </div>
+      </div>
+
+      <!-- 2D/3D Toggle for BioCNG -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; position:relative; z-index:10;">
+        <p class="section-title" style="margin:0;">🏭 Visualisasi Reaktor & Produksi Gas</p>
+        <div style="display:flex; gap:6px;">
+          <button class="speed-btn active" id="btn-view-2d-biocng" onclick="toggleViewMode('biocng', '2d')">2D Telemetri</button>
+          <button class="speed-btn" id="btn-view-3d-biocng" onclick="toggleViewMode('biocng', '3d')">Digital Twin 3D 🔮</button>
+        </div>
+      </div>
+
+      <!-- 3D Canvas Container -->
+      <div id="container-3d-biocng" style="display:none; width:100%; height:260px; border-radius:16px; overflow:hidden; border:1px solid var(--border); background:#0c111d; position:relative; margin-bottom:1.5rem;">
+        <div style="position:absolute; top:8px; left:8px; font-size:0.6rem; color:var(--muted); font-weight:700; text-transform:uppercase; z-index:5;">Digital Twin Digester Anaerob</div>
+      </div>
+
+      <!-- Reactor Visual (2D) -->
+      <div class="reactor-section" id="reactor-section-biocng">
+        <!-- Digester -->
+        <div class="reactor-col">
+          <div class="reactor-col-label">Digester Anaerob</div>
+          <div style="position:relative;">
+            <div class="reactor-tank" id="reactor-tank" ondragover="allowDropBiomass(event)" ondrop="dropBiomass(event)">
+              <div id="reactor-fill" class="reactor-inner" style="height:0%;"></div>
+              <div id="bubble-container" style="position:absolute;inset:0;overflow:hidden;pointer-events:none;"></div>
+            </div>
+            <div style="width:3px;height:16px;background:var(--orange);margin:0 auto;"></div>
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--orange);">
+            Slurry: <span id="val-slurry">0</span>%
+          </div>
+        </div>
+
+        <!-- Gas Production -->
+        <div class="reactor-col">
+          <div class="reactor-col-label">Produksi Biogas</div>
+          <div class="gas-visual" id="gas-visual">
+            <!-- particles spawned by JS -->
+          </div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--amber);">
+            <span id="val-biogas-rate">0.00</span> m³/h
+          </div>
+        </div>
+
+        <!-- Pressure Gauge -->
+        <div class="reactor-col">
+          <div class="reactor-col-label">Tekanan CNG</div>
+          <div class="gauge-wrap">
+            <canvas id="gauge-canvas" width="88" height="88"></canvas>
+            <div style="position:absolute;text-align:center;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:700;color:var(--orange)" id="gauge-val">0</div>
+              <div style="font-size:0.52rem;color:var(--muted);">bar</div>
+            </div>
+          </div>
+          <div style="font-size:0.62rem;color:var(--muted);">Maks 200 bar</div>
+        </div>
+
+        <!-- CNG Cylinders -->
+        <div class="reactor-col">
+          <div class="reactor-col-label">Tabung CNG</div>
+          <div style="display:flex;gap:5px;align-items:flex-end;min-height:60px;" id="cng-cylinders"></div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--amber);">
+            <span id="val-cng-tanks">0</span> terisi
+          </div>
+        </div>
+      </div>
+
+      <!-- IoT Sensors -->
+      <div class="sensor-section">
+        <p class="section-title">🌡️ Sensor SCADA Reaktor</p>
+        <div class="sensor-bar">
+          <div class="sensor-row">
+            <span class="sensor-label">pH Slurry</span>
+            <div class="sensor-track"><div class="sensor-fill" id="cng-sensor-ph" style="width:0%;background:linear-gradient(90deg,#ef4444,#22c55e);"></div></div>
+            <span class="sensor-val" style="color:#22c55e" id="cng-val-ph">0.0</span>
+          </div>
+          <div class="sensor-row">
+            <span class="sensor-label">Suhu</span>
+            <div class="sensor-track"><div class="sensor-fill" id="cng-sensor-suhu" style="width:0%;background:linear-gradient(90deg,#3b82f6,#f97316);"></div></div>
+            <span class="sensor-val" style="color:#f97316" id="cng-val-suhu">0°C</span>
+          </div>
+          <div class="sensor-row">
+            <span class="sensor-label">CH₄ %</span>
+            <div class="sensor-track"><div class="sensor-fill" id="cng-sensor-ch4" style="width:0%;background:linear-gradient(90deg,#f97316,#f59e0b);"></div></div>
+            <span class="sensor-val" style="color:#f59e0b" id="cng-val-ch4">0%</span>
+          </div>
+          <div class="sensor-row">
+            <span class="sensor-label">H₂S</span>
+            <div class="sensor-track"><div class="sensor-fill" id="cng-sensor-h2s" style="width:0%;background:linear-gradient(90deg,#22c55e,#ef4444);"></div></div>
+            <span class="sensor-val" id="cng-val-h2s">0 ppm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Power Output -->
+      <div class="power-output">
+        <div class="lightning">⚡</div>
+        <div>
+          <div style="font-size:0.68rem;color:var(--muted);">Output Listrik (Genset)</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--amber);">
+            <span id="val-listrik">0</span> <span style="font-size:0.68rem;color:var(--muted);">kWh</span>
+          </div>
+        </div>
+        <div style="margin-left:auto;text-align:right;">
+          <div style="font-size:0.68rem;color:var(--muted);">Rumah Terlayani</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:1.3rem;font-weight:700;color:white;">
+            <span id="val-rumah">0</span> KK
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: CONTROLS -->
+    <div class="controls-panel">
+
+      <!-- Hour Counter -->
+      <div class="day-counter">
+        <div class="day-label">Jam Operasi Reaktor</div>
+        <div class="day-num" id="biocng-hour" style="color:var(--orange)">0</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">dari <span id="biocng-total-hours">720</span> jam (30 hari siklus)</div>
+        <div class="day-progress">
+          <div class="day-progress-bar" id="biocng-hour-bar" style="width:0%;background:linear-gradient(90deg,var(--orange),var(--amber));"></div>
+        </div>
+      </div>
+
+      <!-- Drag and Drop Biomass Panel -->
+      <div class="drag-feed-panel" style="background:var(--bg-card2); border:1px dashed rgba(249,115,22,0.3); border-radius:16px; padding:16px; margin-bottom:20px; text-align:center; position:relative; box-shadow:inset 0 0 12px rgba(0,0,0,0.2);">
+        <div style="font-size:0.8rem; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span>🧺 Wadah Biomassa Organik</span>
+        </div>
+        <p style="font-size:0.7rem; color:var(--muted); margin-bottom:12px; line-height:1.4;">Seret biomassa di bawah dan drop ke tangki <strong>"Digester Anaerob"</strong> sebelah kiri!</p>
+        
+        <div style="display:flex; justify-content:center; gap:12px;">
+          <!-- Draggable Biomass 1 (20 kg) -->
+          <div class="drag-biomass" draggable="true" id="biom-20" ondragstart="dragBiomass(event)" style="cursor:grab; display:flex; flex-direction:column; align-items:center; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:10px 8px; width:75px; transition:all 0.2s;">
+            <span style="font-size:1.8rem; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));">🥬</span>
+            <span style="font-size:0.75rem; font-weight:750; color:var(--orange); margin-top:4px;">+20 kg</span>
+            <span style="font-size:0.58rem; color:var(--muted); text-align:center;">Sayur/Buah</span>
+          </div>
+          <!-- Draggable Biomass 2 (50 kg) -->
+          <div class="drag-biomass" draggable="true" id="biom-50" ondragstart="dragBiomass(event)" style="cursor:grab; display:flex; flex-direction:column; align-items:center; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:10px 8px; width:75px; transition:all 0.2s;">
+            <span style="font-size:1.8rem; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));">🌾</span>
+            <span style="font-size:0.75rem; font-weight:750; color:var(--orange); margin-top:4px;">+50 kg</span>
+            <span style="font-size:0.58rem; color:var(--muted); text-align:center;">Serat/Jerami</span>
+          </div>
+          <!-- Draggable Biomass 3 (100 kg) -->
+          <div class="drag-biomass" draggable="true" id="biom-100" ondragstart="dragBiomass(event)" style="cursor:grab; display:flex; flex-direction:column; align-items:center; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:10px 8px; width:75px; transition:all 0.2s;">
+            <span style="font-size:1.8rem; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3));">💩</span>
+            <span style="font-size:0.75rem; font-weight:750; color:var(--orange); margin-top:4px;">+100 kg</span>
+            <span style="font-size:0.58rem; color:var(--muted); text-align:center;">Kohe Ternak</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parameters -->
+      <div>
+        <p class="section-title">⚙️ Parameter Reaktor Anaerob</p>
+        <div style="display:flex;flex-direction:column;gap:13px;">
+          <div class="control-row">
+            <div class="control-label">
+              <span>🗑️ Input Biomassa</span>
+              <span class="ctrl-val orange" id="cng-label-biomassa">100 kg/hari</span>
+            </div>
+            <input type="range" class="orange-slider" id="cng-slider-biomassa" min="20" max="500" value="100"
+              oninput="updateSlider(this,'cng-label-biomassa','kg/hari')">
+          </div>
+          <div class="control-row">
+            <div class="control-label">
+              <span>🌡️ Suhu Digester</span>
+              <span class="ctrl-val orange" id="cng-label-suhu">35°C</span>
+            </div>
+            <input type="range" class="orange-slider" id="cng-slider-suhu" min="25" max="55" value="35"
+              oninput="updateSlider(this,'cng-label-suhu','°C')">
+          </div>
+          <div class="control-row">
+            <div class="control-label">
+              <span>⏰ HRT (Retention Time)</span>
+              <span class="ctrl-val orange" id="cng-label-hrt">20 hari</span>
+            </div>
+            <input type="range" class="orange-slider" id="cng-slider-hrt" min="10" max="40" value="20"
+              oninput="updateSlider(this,'cng-label-hrt','hari')">
+          </div>
+          <div class="control-row">
+            <div class="control-label">
+              <span>📦 Kapasitas Kompresor</span>
+              <span class="ctrl-val orange" id="cng-label-kompressor">50 m³/h</span>
+            </div>
+            <input type="range" class="orange-slider" id="cng-slider-kompressor" min="10" max="200" value="50"
+              oninput="updateSlider(this,'cng-label-kompressor','m³/h')">
+          </div>
+        </div>
+      </div>
+
+      <!-- Speed -->
+      <div>
+        <p class="section-title">⏱️ Kecepatan Simulasi</p>
+        <div class="speed-btns" id="biocng-speed-btns">
+          <button class="speed-btn active" onclick="setSpeed('biocng',1,this)">1×</button>
+          <button class="speed-btn" onclick="setSpeed('biocng',4,this)">4×</button>
+          <button class="speed-btn" onclick="setSpeed('biocng',24,this)">24×</button>
+          <button class="speed-btn" onclick="setSpeed('biocng',100,this)">100×</button>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <button class="btn-primary btn-orange" id="biocng-start-btn" onclick="startBioCNG()">▶ Mulai Simulasi BioCNG</button>
+        <button class="btn-primary btn-harvest" id="biocng-distribute-btn" onclick="distributeCNG()" disabled>🚛 Distribusikan Tabung CNG</button>
+        <button class="btn-primary btn-stop" id="biocng-stop-btn" onclick="stopBioCNG()" disabled>⏹ Stop & Reset</button>
+      </div>
+
+      <!-- KPIs -->
+      <div>
+        <p class="section-title">📈 Output & Ekonomi Energi</p>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Biogas Dihasilkan</div>
+            <div class="kpi-value" style="color:var(--orange)" id="kpi-biogas">0<span class="kpi-unit">m³</span></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">CNG Dipadatkan</div>
+            <div class="kpi-value" style="color:var(--amber)" id="kpi-cng">0<span class="kpi-unit">m³</span></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Listrik Generated</div>
+            <div class="kpi-value" style="color:#fbbf24" id="kpi-kwh">0<span class="kpi-unit">kWh</span></div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Hemat BBM</div>
+            <div class="kpi-value" style="color:var(--amber)" id="kpi-bbm">Rp 0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Pendapatan CNG</div>
+            <div class="kpi-value" style="color:var(--green)" id="kpi-revenue-cng">Rp 0</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">CO₂ Terhindar</div>
+            <div class="kpi-value" style="color:var(--teal)" id="kpi-co2-cng">0<span class="kpi-unit">ton</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Log -->
+      <div>
+        <p class="section-title">📋 Log Reaktor SCADA</p>
+        <div class="event-log" id="biocng-log">
+          <div class="log-line">
+            <span class="log-time">--:--</span>
+            <span class="log-msg info">Reaktor standby. Atur parameter & tekan Start.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ================================================================
+//  STATE
+// ================================================================
+var M = {
+  running:false, timer:null, day:0, totalDays:14, speed:1,
+  sampahInput:50, populasi:5000, targetSuhu:28, targetKelembaban:70,
+  sampahStock:0, maggotKg:0, kasgotKg:0, pakanKg:0,
+  totalSampahOlah:0, totalMaggotPanen:0, totalKasgot:0,
+  totalRevenue:0, co2Saved:0, harvestReady:false, harvested:false, stage:0
+};
+
+var C = {
+  running:false, timer:null, hour:0, totalHours:720, speed:1,
+  biomassaInput:100, suhuDigester:35, hrt:20, kompressorCap:50,
+  slurryLevel:20, biogasCumulative:0, cngCumulative:0,
+  pressure:0, tanksFilled:0, kwhTotal:0, revenue:0,
+  bbmSaved:0, co2Saved:0, ch4Pct:0, h2sPpm:0
+};
+
+// ================================================================
+//  TAB
+// ================================================================
+function switchSim(sim) {
+  ['maggot','biocng'].forEach(function(s){
+    document.getElementById('panel-'+s).classList.remove('active');
+    document.getElementById('tab-'+s).className='sim-tab';
+  });
+  document.getElementById('panel-'+sim).classList.add('active');
+  document.getElementById('tab-'+sim).classList.add(sim==='maggot'?'active-maggot':'active-biocng');
+}
+
+// ================================================================
+//  SLIDERS
+// ================================================================
+function updateSlider(el, labelId, unit) {
+  var pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--val', pct + '%');
+  document.getElementById(labelId).textContent = el.value + ' ' + unit;
+}
+function updateSliderNum(el, labelId, unit) {
+  var pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--val', pct + '%');
+  document.getElementById(labelId).textContent = Number(el.value).toLocaleString('id') + unit;
+}
+window.addEventListener('load', function(){
+  document.querySelectorAll('input[type="range"]').forEach(function(el){
+    var pct = ((el.value - el.min) / (el.max - el.min)) * 100;
+    el.style.setProperty('--val', pct + '%');
+    el.addEventListener('input', function(){
+      var p = ((this.value - this.min) / (this.max - this.min)) * 100;
+      this.style.setProperty('--val', p + '%');
+      if (this.id === 'slider-sampah') {
+        M.sampahInput = +this.value;
+        var sFill = Math.min(90, (M.sampahInput / 200) * 100);
+        document.getElementById('tank-sampah').style.height = sFill + '%';
+        document.getElementById('val-tank-sampah').textContent = M.sampahInput.toFixed(1);
+      } else if (this.id === 'cng-slider-biomassa') {
+        C.biomassaInput = +this.value;
+        if (!C.running) {
+          var fillPct = Math.min(85, 20 + (C.biomassaInput / 500) * 65);
+          document.getElementById('reactor-fill').style.height = fillPct + '%';
+          document.getElementById('val-slurry').textContent = fillPct.toFixed(0);
+        }
+      }
+    });
+  });
+
+  // Set initial tank values on load
+  var initialSampah = +document.getElementById('slider-sampah').value;
+  var sFillInit = Math.min(90, (initialSampah / 200) * 100);
+  document.getElementById('tank-sampah').style.height = sFillInit + '%';
+  document.getElementById('val-tank-sampah').textContent = initialSampah.toFixed(0);
+
+  var cngInit = +document.getElementById('cng-slider-biomassa').value;
+  var fillPctInit = Math.min(85, 20 + (cngInit / 500) * 65);
+  document.getElementById('reactor-fill').style.height = fillPctInit + '%';
+  document.getElementById('val-slurry').textContent = fillPctInit.toFixed(0);
+
+  renderCNGCylinders(0);
+  drawGauge(0);
+});
+
+// ================================================================
+//  SPEED
+// ================================================================
+function setSpeed(sim, mult, btn) {
+  document.getElementById(sim+'-speed-btns').querySelectorAll('.speed-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  if(sim==='maggot') M.speed = mult; else C.speed = mult;
+}
+
+// ================================================================
+//  LOG
+// ================================================================
+function addLog(logId, msg, type) {
+  var log = document.getElementById(logId);
+  var d = new Date();
+  var t = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+  var line = document.createElement('div');
+  line.className = 'log-line';
+  line.innerHTML = '<span class="log-time">'+t+'</span><span class="log-msg '+(type||'')+'">'+msg+'</span>';
+  log.insertBefore(line, log.firstChild);
+  while(log.children.length > 50) log.removeChild(log.lastChild);
+}
+function pad(n){ return n<10?'0'+n:n; }
+
+// ================================================================
+//  TOAST
+// ================================================================
+function showToast(icon, msg, dur) {
+  var c = document.getElementById('toastContainer');
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = '<span class="toast-icon">'+icon+'</span><span>'+msg+'</span>';
+  c.appendChild(t);
+  setTimeout(function(){
+    t.style.transition='opacity 0.4s,transform 0.4s';
+    t.style.opacity='0'; t.style.transform='translateX(30px)';
+    setTimeout(function(){ if(t.parentNode) c.removeChild(t); }, 400);
+  }, dur||3500);
+}
+
+// ================================================================
+//  FORMAT
+// ================================================================
+function fRp(n) {
+  if(n>=1000000) return 'Rp '+(n/1000000).toFixed(2)+' jt';
+  if(n>=1000) return 'Rp '+Math.round(n/1000)+'rb';
+  return 'Rp '+Math.round(n);
+}
+
+// ================================================================
+//  MAGGOT SIMULATOR
+// ================================================================
+function startMaggot() {
+  if(M.running) return;
+  M.sampahInput  = +document.getElementById('slider-sampah').value;
+  M.populasi     = +document.getElementById('slider-populasi').value;
+  M.targetSuhu   = +document.getElementById('slider-suhu').value;
+  M.targetKelembaban = +document.getElementById('slider-kelembaban').value;
+  M.totalDays = 14;
+  document.getElementById('maggot-total-days').textContent = M.totalDays;
+
+  Object.assign(M, {
+    day:0, sampahStock: M.sampahInput,
+    maggotKg: 0.3 * (M.populasi/10000),
+    kasgotKg:0, pakanKg:0,
+    totalSampahOlah:0, totalMaggotPanen:0, totalKasgot:0,
+    totalRevenue:0, co2Saved:0,
+    harvestReady:false, harvested:false, stage:0, running:true
+  });
+
+  document.getElementById('maggot-start-btn').disabled = true;
+  document.getElementById('maggot-stop-btn').disabled = false;
+  document.getElementById('maggot-harvest-btn').disabled = true;
+  setStatus('maggot', true);
+  addLog('maggot-log','🚀 Simulasi dimulai: '+M.sampahInput+'kg/hari sampah, '+M.populasi.toLocaleString('id')+' maggot awal','success');
+  showToast('🐛','Simulasi Maggot BSF dimulai! Siklus 14 hari.',3500);
+  tickMaggot();
+}
+
+function tickMaggot() {
+  if(!M.running) return;
+  var interval = Math.max(150, 1400/M.speed);
+  M.timer = setTimeout(function(){
+    if(!M.running) return;
+
+    // Advance 1 sim-day per tick at 1x
+    var dDay = 1;
+    M.day = Math.min(M.totalDays, M.day + dDay);
+
+    // Biomass growth and consumption: maggots consume more waste as they grow
+    var gf = M.day<3?0.04 : M.day<7?0.17 : M.day<11?0.33 : M.day<13?0.12 : 0.04;
+    var eff = Math.min(1, (M.targetSuhu-22)/14*0.8+0.2);
+    
+    // Bell curve consumption factors for Day 1 to 14 representing single batch depletion
+    var consumptionFactors = [0, 0.02, 0.02, 0.04, 0.05, 0.06, 0.08, 0.10, 0.12, 0.14, 0.12, 0.10, 0.08, 0.05, 0.02];
+    var eatenFactor = consumptionFactors[Math.min(14, Math.floor(M.day))] || 0.05;
+    var eaten = M.sampahInput * eatenFactor * eff;
+    
+    M.sampahStock = Math.max(0, M.sampahStock - eaten);
+
+    M.maggotKg  += eaten * gf * 1.5;
+    M.kasgotKg  += eaten * 0.45;
+    M.totalSampahOlah += eaten;
+    M.co2Saved  += eaten * 0.25;
+
+    // Life stage
+    M.stage = M.day<2?0 : M.day<9?1 : M.day<12?2 : M.day<14?3 : 4;
+
+    // Harvest trigger
+    if(M.day>=10 && !M.harvested && !M.harvestReady){
+      M.harvestReady = true;
+      document.getElementById('maggot-harvest-btn').disabled = false;
+      document.getElementById('harvest-ready-banner').classList.add('show');
+      addLog('maggot-log','🌾 Maggot siap panen! Berat optimum tercapai.','success');
+      showToast('🌾','Maggot siap panen! ≈'+M.maggotKg.toFixed(1)+' kg',4500);
+    }
+
+    // Sensor simulation
+    var suhu  = M.targetSuhu + (Math.random()-0.5)*3;
+    var lembab = M.targetKelembaban + (Math.random()-0.5)*8;
+    var ammonia = M.day>5 ? 14+M.day*3+Math.random()*5 : Math.random()*7;
+    var densitas = 40 + M.maggotKg*4;
+
+    updateMaggotUI(suhu, lembab, ammonia, densitas);
+    updateLifecycle(M.stage);
+
+    // Random events (only fire occasionally, reduce by speed)
+    if(Math.random() < 0.06 / Math.max(1,M.speed-1)) {
+      var evts = [
+        ['warn','⚠️ Kelembaban pond perlu penyesuaian.'],
+        ['info','📡 IoT sensor melaporkan data ke server.'],
+        ['success','✅ Tingkat konversi maggot optimal.'],
+        ['warn','🌡️ Suhu sedikit tinggi — kipas ventilasi aktif.'],
+        ['info','🔬 Lab check: tidak ada kontaminan terdeteksi.']
+      ];
+      var e = evts[Math.floor(Math.random()*evts.length)];
+      addLog('maggot-log', e[1], e[0]);
+    }
+
+    if(M.day >= M.totalDays){
+      M.running = false;
+      M.stage = 4; updateLifecycle(4);
+      if(!M.harvested) finalizeMaggotHarvest();
+      addLog('maggot-log','🏁 Siklus selesai! '+M.totalMaggotPanen.toFixed(1)+'kg maggot, '+M.totalKasgot.toFixed(1)+'kg kasgot','success');
+      showToast('🏆','Siklus 14 hari selesai! Pendapatan: '+fRp(M.totalRevenue),5000);
+      setStatus('maggot',false,'✅ Siklus 14 Hari Selesai');
+      document.getElementById('maggot-start-btn').disabled=false;
+      document.getElementById('maggot-stop-btn').disabled=true;
+      return;
+    }
+    tickMaggot();
+  }, interval);
+}
+
+function updateMaggotUI(suhu, lembab, ammonia, densitas){
+  var day = Math.min(M.totalDays, M.day);
+  document.getElementById('maggot-day').textContent = Math.floor(day);
+  document.getElementById('maggot-day-bar').style.width = (day/M.totalDays*100)+'%';
+
+  // Tanks
+  var mFill = Math.min(90, M.maggotKg / Math.max(0.1, M.sampahInput*0.4)*100);
+  var kFill = Math.min(90, M.kasgotKg / Math.max(0.1, M.sampahInput*0.3)*100);
+  
+  var currentFeed = (M.day > 0) ? M.sampahStock : M.sampahInput;
+  if (M.harvested) {
+    currentFeed = 0;
+  }
+  var sFill = Math.min(90, (currentFeed / 200) * 100);
+  var pFill = Math.min(90, M.pakanKg / Math.max(0.1, M.sampahInput*0.35)*100);
+
+  setTank('tank-sampah','val-tank-sampah', sFill, currentFeed.toFixed(1));
+  setTank('tank-kelembaban','val-kelembaban', Math.min(90,lembab), lembab.toFixed(0));
+  setTank('tank-maggot','val-tank-maggot', mFill, M.maggotKg.toFixed(2));
+  setTank('tank-kasgot','val-kasgot', kFill, M.kasgotKg.toFixed(2));
+  setTank('tank-pakan','val-pakan', pFill, M.pakanKg.toFixed(2));
+
+  // Sensors
+  setSensor('sensor-suhu','val-suhu', Math.min(100,(suhu-20)/20*100), suhu.toFixed(1)+'°C');
+  setSensor('sensor-lembab','val-lembab', Math.min(100,lembab), lembab.toFixed(0)+'%');
+  setSensor('sensor-ammonia','val-ammonia', Math.min(100,ammonia/100*100), ammonia.toFixed(0)+' ppm');
+  setSensor('sensor-densitas','val-densitas', Math.min(100,densitas/200*100), densitas.toFixed(0)+' g/L');
+
+  // KPIs
+  document.getElementById('kpi-maggot-panen').innerHTML = M.totalMaggotPanen.toFixed(1)+'<span class="kpi-unit">kg</span>';
+  document.getElementById('kpi-kasgot').innerHTML = M.totalKasgot.toFixed(1)+'<span class="kpi-unit">kg</span>';
+  document.getElementById('kpi-sampah-olah').innerHTML = M.totalSampahOlah.toFixed(0)+'<span class="kpi-unit">kg</span>';
+  document.getElementById('kpi-revenue-maggot').textContent = fRp(M.totalRevenue);
+  document.getElementById('kpi-co2-maggot').innerHTML = M.co2Saved.toFixed(1)+'<span class="kpi-unit">kg CO₂e</span>';
+  syncToLocalStorage();
+}
+
+function setTank(fillId, valId, pct, txt){
+  document.getElementById(fillId).style.height = pct+'%';
+  document.getElementById(valId).textContent = txt;
+}
+function setSensor(fillId, valId, pct, txt){
+  document.getElementById(fillId).style.width = pct+'%';
+  document.getElementById(valId).textContent = txt;
+}
+
+function updateLifecycle(stage){
+  for(var i=0;i<5;i++){
+    var icon = document.getElementById('lc-'+i);
+    var dot  = document.getElementById('lc-dot-'+i);
+    if(!icon) continue;
+    if(i===stage){
+      icon.className='lc-icon active-stage';
+      dot.className='lc-dot active';
+    } else if(i<stage){
+      icon.className='lc-icon done-stage';
+      dot.className='lc-dot done';
+    } else {
+      icon.className='lc-icon';
+      dot.className='lc-dot';
+    }
+  }
+}
+
+function harvestMaggot(){
+  if(!M.harvestReady||M.harvested) return;
+  finalizeMaggotHarvest();
+  document.getElementById('maggot-harvest-btn').disabled=true;
+  document.getElementById('harvest-ready-banner').classList.remove('show');
+  showToast('🌾','Panen sukses! '+M.pakanKg.toFixed(1)+'kg pakan ternak + '+M.totalKasgot.toFixed(1)+'kg pupuk!',5000);
+}
+
+function finalizeMaggotHarvest(){
+  var panen = M.maggotKg * 0.85;
+  var kasgot = M.kasgotKg;
+  M.pakanKg += panen;
+  M.totalMaggotPanen += panen;
+  M.totalKasgot += kasgot;
+  var rev = panen*8000 + kasgot*2000;
+  M.totalRevenue += rev;
+  M.maggotKg=0; M.kasgotKg=0; M.sampahStock=0; M.harvested=true;
+  addLog('maggot-log','✅ Panen: '+panen.toFixed(1)+'kg pakan + '+kasgot.toFixed(1)+'kg kasgot → '+fRp(rev),'success');
+}
+
+function stopMaggot(){
+  M.running=false; clearTimeout(M.timer);
+  M.day = 0; M.harvested = false;
+  setStatus('maggot',false,'⏹ Dihentikan oleh operator');
+  document.getElementById('maggot-start-btn').disabled=false;
+  document.getElementById('maggot-stop-btn').disabled=true;
+  document.getElementById('maggot-harvest-btn').disabled=true;
+  document.getElementById('harvest-ready-banner').classList.remove('show');
+  ['tank-kelembaban','tank-maggot','tank-kasgot','tank-pakan'].forEach(function(id){
+    document.getElementById(id).style.height='0%';
+  });
+  var sFill = Math.min(90, (M.sampahInput / 200) * 100);
+  document.getElementById('tank-sampah').style.height = sFill + '%';
+  document.getElementById('val-tank-sampah').textContent = M.sampahInput.toFixed(1);
+  updateLifecycle(-1);
+  addLog('maggot-log','⏹ Simulasi dihentikan.','warn');
+}
+
+// ================================================================
+//  BIOCNG SIMULATOR
+// ================================================================
+function startBioCNG(){
+  if(C.running) return;
+  C.biomassaInput  = +document.getElementById('cng-slider-biomassa').value;
+  C.suhuDigester   = +document.getElementById('cng-slider-suhu').value;
+  C.hrt            = +document.getElementById('cng-slider-hrt').value;
+  C.kompressorCap  = +document.getElementById('cng-slider-kompressor').value;
+  C.totalHours = 720;
+  document.getElementById('biocng-total-hours').textContent = C.totalHours;
+
+  Object.assign(C,{
+    hour:0, slurryLevel:20, biogasCumulative:0, cngCumulative:0,
+    pressure:0, tanksFilled:0, kwhTotal:0, revenue:0,
+    bbmSaved:0, co2Saved:0, ch4Pct:0, h2sPpm:0, running:true
+  });
+
+  document.getElementById('biocng-start-btn').disabled=true;
+  document.getElementById('biocng-stop-btn').disabled=false;
+  document.getElementById('biocng-distribute-btn').disabled=true;
+  setStatus('biocng',true);
+  spawnBubbles();
+  addLog('biocng-log','🚀 Reaktor dihidupkan: '+C.biomassaInput+'kg/hari, '+C.suhuDigester+'°C, HRT '+C.hrt+'d','success');
+  showToast('🔥','Reaktor BioCNG mulai beroperasi!',3500);
+  tickBioCNG();
+}
+
+function tickBioCNG(){
+  if(!C.running) return;
+  var interval = Math.max(120, 1200/C.speed);
+  C.timer = setTimeout(function(){
+    if(!C.running) return;
+
+    var hoursPerTick = Math.max(0.5, C.speed * 0.4);
+    C.hour = Math.min(C.totalHours, C.hour + hoursPerTick);
+
+    // Biogas rate
+    var suhuEff = C.suhuDigester>=35?1.0 : C.suhuDigester>=30?0.72:0.45;
+    var startFactor = Math.min(1, C.hour/(C.hrt*24*0.25));
+    var biogasRate = (C.biomassaInput/24)*0.45*suhuEff*startFactor + Math.random()*0.25;
+    C.biogasCumulative += biogasRate * hoursPerTick;
+    C.ch4Pct = 55 + Math.min(10, C.hour/100) + (Math.random()-0.5)*2.5;
+    C.h2sPpm = Math.max(0, 55 + Math.random()*25 - C.hour*0.025);
+
+    var cngRate = Math.min(C.kompressorCap, biogasRate*(C.ch4Pct/100)*0.83);
+    C.cngCumulative += cngRate * hoursPerTick;
+    C.pressure = Math.min(200, C.cngCumulative*0.13);
+
+    // Tanks
+    var newTanks = Math.floor(C.cngCumulative/50);
+    if(newTanks > C.tanksFilled){
+      C.tanksFilled = newTanks;
+      document.getElementById('biocng-distribute-btn').disabled=false;
+      addLog('biocng-log','⚡ Tabung CNG #'+C.tanksFilled+' terisi penuh (50 m³)!','success');
+      showToast('⚡','Tabung CNG #'+C.tanksFilled+' siap distribusi!',3500);
+    }
+
+    C.kwhTotal += biogasRate*0.3*2.0*hoursPerTick;
+    C.slurryLevel = Math.min(85, Math.max(20, 55 + 30*Math.sin(C.hour/90) + (Math.random()-0.5)*6));
+    C.revenue = C.cngCumulative*5000 + C.kwhTotal*1500;
+    C.bbmSaved = C.cngCumulative*4200;
+    C.co2Saved = C.biogasCumulative*0.0018;
+
+    updateBioCNGUI(biogasRate);
+
+    if(Math.random() < 0.05/Math.max(1,C.speed-1)){
+      var evts=[
+        ['warn','⚠️ H₂S meningkat — scrubber aktif otomatis.'],
+        ['info','📡 Data tekanan dikirim ke SCADA.'],
+        ['success','✅ CH₄ content stabil di '+C.ch4Pct.toFixed(0)+'%.'],
+        ['warn','🌡️ Suhu digester fluktuasi — heater aktif.'],
+        ['info','🔄 Sludge drain & slurry baru dimasukkan.']
+      ];
+      var e = evts[Math.floor(Math.random()*evts.length)];
+      addLog('biocng-log',e[1],e[0]);
+    }
+
+    if(C.hour >= C.totalHours){
+      C.running=false;
+      addLog('biocng-log','🏁 30 hari selesai! Biogas: '+C.biogasCumulative.toFixed(0)+'m³, CNG: '+C.cngCumulative.toFixed(0)+'m³','success');
+      showToast('🏆','Siklus 30 hari selesai! Revenue: '+fRp(C.revenue),5500);
+      setStatus('biocng',false,'✅ Siklus 30 Hari Selesai');
+      document.getElementById('biocng-start-btn').disabled=false;
+      document.getElementById('biocng-stop-btn').disabled=true;
+      return;
+    }
+    tickBioCNG();
+  }, interval);
+}
+
+function updateBioCNGUI(biogasRate){
+  document.getElementById('biocng-hour').textContent = Math.floor(C.hour);
+  document.getElementById('biocng-hour-bar').style.width = (C.hour/C.totalHours*100)+'%';
+  document.getElementById('reactor-fill').style.height = C.slurryLevel+'%';
+  document.getElementById('val-slurry').textContent = C.slurryLevel.toFixed(0);
+  document.getElementById('val-biogas-rate').textContent = biogasRate.toFixed(2);
+
+  drawGauge(C.pressure);
+  document.getElementById('gauge-val').textContent = C.pressure.toFixed(0);
+  renderCNGCylinders(C.tanksFilled);
+  document.getElementById('val-cng-tanks').textContent = C.tanksFilled;
+
+  // Sensors
+  var ph = 6.8 + Math.min(0.7,C.hour/500) + (Math.random()-0.5)*0.18;
+  setSensor('cng-sensor-ph','cng-val-ph', Math.min(100,(ph-5)/4*100), ph.toFixed(1));
+  var sT = C.suhuDigester + (Math.random()-0.5)*1.8;
+  setSensor('cng-sensor-suhu','cng-val-suhu', Math.min(100,(sT-20)/40*100), sT.toFixed(1)+'°C');
+  setSensor('cng-sensor-ch4','cng-val-ch4', Math.min(100,C.ch4Pct), C.ch4Pct.toFixed(1)+'%');
+  var h2sPct = Math.min(100, C.h2sPpm/200*100);
+  document.getElementById('cng-sensor-h2s').style.width = h2sPct+'%';
+  document.getElementById('cng-val-h2s').textContent = C.h2sPpm.toFixed(0)+' ppm';
+  document.getElementById('cng-val-h2s').style.color = C.h2sPpm>100?'#ef4444':'#22c55e';
+
+  document.getElementById('val-listrik').textContent = C.kwhTotal.toFixed(0);
+  document.getElementById('val-rumah').textContent = Math.floor(C.kwhTotal/12);
+
+  document.getElementById('kpi-biogas').innerHTML = C.biogasCumulative.toFixed(0)+'<span class="kpi-unit">m³</span>';
+  document.getElementById('kpi-cng').innerHTML = C.cngCumulative.toFixed(0)+'<span class="kpi-unit">m³</span>';
+  document.getElementById('kpi-kwh').innerHTML = C.kwhTotal.toFixed(0)+'<span class="kpi-unit">kWh</span>';
+  document.getElementById('kpi-bbm').textContent = fRp(C.bbmSaved);
+  document.getElementById('kpi-revenue-cng').textContent = fRp(C.revenue);
+  document.getElementById('kpi-co2-cng').innerHTML = C.co2Saved.toFixed(3)+'<span class="kpi-unit">ton</span>';
+  syncToLocalStorage();
+}
+
+function distributeCNG(){
+  if(C.tanksFilled===0) return;
+  var n = C.tanksFilled;
+  addLog('biocng-log','🚛 '+n+' tabung CNG didistribusikan ke '+(n*5)+' KK → '+fRp(n*50*5000),'success');
+  showToast('🚛',n+' tabung CNG berhasil didistribusikan!',4000);
+  document.getElementById('biocng-distribute-btn').disabled=true;
+  C.tanksFilled=0; C.cngCumulative=0;
+  renderCNGCylinders(0);
+  document.getElementById('val-cng-tanks').textContent='0';
+}
+
+function stopBioCNG(){
+  C.running=false; clearTimeout(C.timer);
+  setStatus('biocng',false,'⏹ Reaktor dipadamkan oleh operator');
+  document.getElementById('biocng-start-btn').disabled=false;
+  document.getElementById('biocng-stop-btn').disabled=true;
+  document.getElementById('biocng-distribute-btn').disabled=true;
+  document.getElementById('reactor-fill').style.height='0%';
+  renderCNGCylinders(0); drawGauge(0);
+  addLog('biocng-log','⏹ Reaktor dipadamkan.','warn');
+}
+
+// ================================================================
+//  GAUGE CANVAS
+// ================================================================
+function drawGauge(pressure){
+  var canvas = document.getElementById('gauge-canvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var cx=44, cy=44, r=32;
+  ctx.clearRect(0,0,88,88);
+
+  // Background arc
+  ctx.beginPath();
+  ctx.arc(cx,cy,r, Math.PI*0.75, Math.PI*2.25, false);
+  ctx.strokeStyle='rgba(255,255,255,0.07)';
+  ctx.lineWidth=6; ctx.lineCap='round'; ctx.stroke();
+
+  // Value arc
+  var pct = Math.min(1, pressure/200);
+  var endAngle = Math.PI*0.75 + pct*Math.PI*1.5;
+  var color = pressure<100?'#f97316': pressure<180?'#f59e0b':'#ef4444';
+  ctx.beginPath();
+  ctx.arc(cx,cy,r, Math.PI*0.75, endAngle, false);
+  ctx.strokeStyle=color; ctx.lineWidth=6; ctx.lineCap='round'; ctx.stroke();
+}
+
+// ================================================================
+//  CNG CYLINDERS
+// ================================================================
+function renderCNGCylinders(count){
+  var c = document.getElementById('cng-cylinders');
+  if(!c) return;
+  c.innerHTML='';
+  var max = Math.max(6, count+1);
+  for(var i=0; i<Math.min(8,max); i++){
+    var filled = i<count;
+    var el = document.createElement('div');
+    var h = 38+(i%2)*12;
+    el.style.cssText=[
+      'width:16px','height:'+h+'px',
+      'border-radius:8px 8px 4px 4px',
+      'border:2px solid '+(filled?'var(--orange)':'rgba(255,255,255,0.09)'),
+      'background:'+(filled?'linear-gradient(180deg,rgba(249,115,22,0.65),rgba(249,115,22,0.25))':'rgba(255,255,255,0.03)'),
+      'transition:all 0.5s',
+      'box-shadow:'+(filled?'0 0 10px rgba(249,115,22,0.35)':'none')
+    ].join(';');
+    c.appendChild(el);
+  }
+}
+
+// ================================================================
+//  BUBBLE SPAWNER
+// ================================================================
+function spawnBubbles(){
+  var reactor = document.getElementById('bubble-container');
+  var gas = document.getElementById('gas-visual');
+
+  function addBubble(){
+    if(!C.running) return;
+    // Reactor bubble
+    if(reactor){
+      var b = document.createElement('div');
+      var sz = 4+Math.random()*8;
+      b.style.cssText=[
+        'position:absolute','border-radius:50%',
+        'width:'+sz+'px','height:'+sz+'px',
+        'background:rgba(255,255,255,0.2)',
+        'left:'+(10+Math.random()*75)+'%',
+        'bottom:-'+sz+'px',
+        'animation:rise-up '+(1.5+Math.random()*2)+'s linear forwards'
+      ].join(';');
+      reactor.appendChild(b);
+      setTimeout(function(){ if(b.parentNode) b.parentNode.removeChild(b); },3800);
+    }
+    // Gas particle
+    if(gas){
+      var g = document.createElement('div');
+      var gs = 7+Math.random()*13;
+      g.style.cssText=[
+        'position:absolute','border-radius:50%',
+        'width:'+gs+'px','height:'+gs+'px',
+        'background:radial-gradient(circle,rgba(249,115,22,0.65),transparent)',
+        'left:'+(5+Math.random()*65)+'%',
+        'bottom:-'+gs+'px',
+        'animation:rise-up '+(0.9+Math.random()*1.4)+'s linear forwards'
+      ].join(';');
+      gas.appendChild(g);
+      setTimeout(function(){ if(g.parentNode) g.parentNode.removeChild(g); },2500);
+    }
+    setTimeout(addBubble, 280+Math.random()*370);
+  }
+  addBubble();
+}
+
+// ================================================================
+//  STATUS
+// ================================================================
+function setStatus(sim, running, msg){
+  var bar = document.getElementById(sim+'-status');
+  var dot = document.getElementById(sim+'-status-dot');
+  var txt = document.getElementById(sim+'-status-text');
+  if(running){
+    bar.className='status-bar running'; dot.classList.add('pulse');
+    txt.textContent='● LIVE — Simulasi Berjalan Real-Time...';
+  } else {
+    bar.className='status-bar stopped'; dot.classList.remove('pulse');
+    txt.textContent = msg||'⏸ Simulator standby';
+  }
+}
+
+// ================================================================
+//  3D VIEWPORT (THREE.JS)
+// ================================================================
+var currentViewMode = { maggot: '2d', biocng: '2d' };
+var t3D = {
+  maggot: {
+    initialized: false, renderer: null, scene: null, camera: null,
+    pondMesh: null, beddingMesh: null, maggots: [], feedParticles: [], animationId: null
+  },
+  biocng: {
+    initialized: false, renderer: null, scene: null, camera: null,
+    slurryMesh: null, cylinders: [], bubbles: [], animationId: null
+  }
+};
+
+function toggleViewMode(sim, mode) {
+  currentViewMode[sim] = mode;
+  var btn2D = document.getElementById('btn-view-2d-' + sim);
+  var btn3D = document.getElementById('btn-view-3d-' + sim);
+  var container3D = document.getElementById('container-3d-' + sim);
+  var layout2D = (sim === 'maggot') ? document.getElementById('tanks-row-maggot') : document.getElementById('reactor-section-biocng');
+
+  if (mode === '3d') {
+    btn2D.classList.remove('active');
+    btn3D.classList.add('active');
+    layout2D.style.display = 'none';
+    container3D.style.display = 'block';
+    
+    if (sim === 'maggot') {
+      initMaggot3D();
+    } else {
+      initBioCNG3D();
+    }
+  } else {
+    btn2D.classList.add('active');
+    btn3D.classList.remove('active');
+    layout2D.style.display = 'flex';
+    container3D.style.display = 'none';
+    
+    if (t3D[sim].animationId) {
+      cancelAnimationFrame(t3D[sim].animationId);
+      t3D[sim].animationId = null;
+    }
+  }
+}
+
+function initMaggot3D() {
+  if (t3D.maggot.initialized) {
+    animateMaggot3D();
+    return;
+  }
+  
+  var container = document.getElementById('container-3d-maggot');
+  var w = container.clientWidth;
+  var h = 260; // Fixed container height
+  
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0c111d);
+  
+  var camera = new THREE.PerspectiveCamera(45, w / h, 1, 100);
+  camera.position.set(9, 7, 12);
+  camera.lookAt(0, 0, 0);
+  
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(w, h);
+  container.appendChild(renderer.domElement);
+  
+  var ambient = new THREE.AmbientLight(0xffffff, 0.45);
+  scene.add(ambient);
+  var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(5, 12, 8);
+  scene.add(dirLight);
+  
+  var grid = new THREE.GridHelper(10, 10, 0x1e293b, 0x111827);
+  grid.position.y = -0.55;
+  scene.add(grid);
+  
+  var pondGeo = new THREE.BoxGeometry(5, 0.6, 3.5);
+  var frameMat = new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.85 });
+  var pondMesh = new THREE.Mesh(pondGeo, frameMat);
+  pondMesh.position.y = -0.2;
+  scene.add(pondMesh);
+  
+  var beddingGeo = new THREE.BoxGeometry(4.8, 0.4, 3.3);
+  var beddingMat = new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.95 });
+  var beddingMesh = new THREE.Mesh(beddingGeo, beddingMat);
+  beddingMesh.position.y = -0.05;
+  scene.add(beddingMesh);
+  
+  var feederGeo = new THREE.CylinderGeometry(0.15, 0.15, 2.5, 10);
+  var feederMat = new THREE.MeshStandardMaterial({ color: 0x64748b });
+  var feeder = new THREE.Mesh(feederGeo, feederMat);
+  feeder.rotation.z = Math.PI / 2;
+  feeder.position.set(-1.8, 2.2, 0);
+  scene.add(feeder);
+  
+  var maggots = [];
+  var maggotGeo = new THREE.BoxGeometry(0.12, 0.05, 0.05);
+  var maggotMat = new THREE.MeshStandardMaterial({ color: 0xfde047, roughness: 0.6 });
+  
+  for (var i = 0; i < 90; i++) {
+    var m = new THREE.Mesh(maggotGeo, maggotMat);
+    m.position.set(
+      (Math.random() - 0.5) * 4.4,
+      0.15,
+      (Math.random() - 0.5) * 3.0
+    );
+    scene.add(m);
+    maggots.push(m);
+  }
+  
+  var foodParticles = [];
+  var foodGeo = new THREE.SphereGeometry(0.05, 4, 4);
+  var foodMat = new THREE.MeshStandardMaterial({ color: 0xa16207 });
+  for (var j = 0; j < 10; j++) {
+    var f = new THREE.Mesh(foodGeo, foodMat);
+    f.position.set(-2 + Math.random()*1.0, 2.2, -0.8 + Math.random()*1.6);
+    f.visible = false;
+    scene.add(f);
+    foodParticles.push(f);
+  }
+
+  t3D.maggot = {
+    initialized: true,
+    renderer: renderer,
+    scene: scene,
+    camera: camera,
+    pondMesh: pondMesh,
+    beddingMesh: beddingMesh,
+    maggots: maggots,
+    feedParticles: foodParticles,
+    animationId: null
+  };
+  
+  window.addEventListener('resize', function() {
+    if (t3D.maggot.initialized) {
+      var w = container.clientWidth;
+      t3D.maggot.camera.aspect = w / h;
+      t3D.maggot.camera.updateProjectionMatrix();
+      t3D.maggot.renderer.setSize(w, h);
+    }
+  });
+  
+  animateMaggot3D();
+}
+
+function animateMaggot3D() {
+  if (currentViewMode.maggot !== '3d') return;
+  t3D.maggot.animationId = requestAnimationFrame(animateMaggot3D);
+  
+  var stateSpeed = M.running ? Math.max(0.5, M.speed * 0.4) : 0;
+  var time = Date.now() * 0.0003;
+  t3D.maggot.camera.position.x = 9 * Math.cos(time);
+  t3D.maggot.camera.position.z = 9 * Math.sin(time);
+  t3D.maggot.camera.lookAt(0, 0.4, 0);
+
+  var limit = Math.min(t3D.maggot.maggots.length, Math.floor(M.maggotKg * 22) + 8);
+  t3D.maggot.maggots.forEach(function(m, idx) {
+    if (idx < limit) {
+      m.visible = true;
+      if (M.running) {
+        m.position.x += (Math.random() - 0.5) * 0.03 * stateSpeed;
+        m.position.z += (Math.random() - 0.5) * 0.03 * stateSpeed;
+        m.position.y = 0.15 + Math.sin(time * 6 + idx) * 0.03;
+        m.rotation.y += (Math.random() - 0.5) * 0.2 * stateSpeed;
+        
+        if (Math.abs(m.position.x) > 2.2) m.position.x = (Math.random() - 0.5) * 4.2;
+        if (Math.abs(m.position.z) > 1.4) m.position.z = (Math.random() - 0.5) * 2.8;
+      }
+    } else {
+      m.visible = false;
+    }
+  });
+
+  t3D.maggot.feedParticles.forEach(function(f) {
+    if (M.running) {
+      f.visible = true;
+      f.position.y -= 0.06 * stateSpeed;
+      if (f.position.y < 0.15) {
+        f.position.y = 2.2;
+        f.position.x = -2.2 + Math.random() * 1.5;
+        f.position.z = -1 + Math.random() * 2;
+      }
+    } else {
+      f.visible = false;
+    }
+  });
+
+  t3D.maggot.renderer.render(t3D.maggot.scene, t3D.maggot.camera);
+}
+
+function initBioCNG3D() {
+  if (t3D.biocng.initialized) {
+    animateBioCNG3D();
+    return;
+  }
+  
+  var container = document.getElementById('container-3d-biocng');
+  var w = container.clientWidth;
+  var h = 260;
+  
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0c111d);
+  
+  var camera = new THREE.PerspectiveCamera(45, w / h, 1, 100);
+  camera.position.set(7, 6, 10);
+  camera.lookAt(0, 0, 0);
+  
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(w, h);
+  container.appendChild(renderer.domElement);
+  
+  var ambient = new THREE.AmbientLight(0xffffff, 0.45);
+  scene.add(ambient);
+  var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(5, 10, 5);
+  scene.add(dirLight);
+  
+  var grid = new THREE.GridHelper(10, 10, 0x1e293b, 0x111827);
+  grid.position.y = -1.6;
+  scene.add(grid);
+  
+  var digesterGeo = new THREE.CylinderGeometry(1.6, 1.6, 4, 18);
+  var digesterMat = new THREE.MeshStandardMaterial({
+    color: 0xea580c, roughness: 0.35, metalness: 0.1, transparent: true, opacity: 0.25, side: THREE.DoubleSide
+  });
+  var digesterMesh = new THREE.Mesh(digesterGeo, digesterMat);
+  scene.add(digesterMesh);
+  
+  var slurryGeo = new THREE.CylinderGeometry(1.55, 1.55, 1, 18);
+  var slurryMat = new THREE.MeshStandardMaterial({ color: 0x7c2d12, roughness: 0.9, transparent: true, opacity: 0.78 });
+  var slurryMesh = new THREE.Mesh(slurryGeo, slurryMat);
+  scene.add(slurryMesh);
+  
+  var pipeGeo = new THREE.CylinderGeometry(0.08, 0.08, 2, 8);
+  var pipeMat = new THREE.MeshStandardMaterial({ color: 0x475569 });
+  var pipe = new THREE.Mesh(pipeGeo, pipeMat);
+  pipe.position.y = 2.8;
+  scene.add(pipe);
+  
+  var pipeH = new THREE.Mesh(pipeGeo, pipeMat);
+  pipeH.rotation.z = Math.PI / 2;
+  pipeH.position.set(1, 3.7, 0);
+  scene.add(pipeH);
+  
+  var cngCylinderGeo = new THREE.CylinderGeometry(0.25, 0.25, 1.2, 10);
+  var cngCylinderMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
+  var cylinders = [];
+  for (var i = 0; i < 4; i++) {
+    var cng = new THREE.Mesh(cngCylinderGeo, cngCylinderMat);
+    cng.position.set(3.4, -1.0, -1.2 + i * 0.8);
+    scene.add(cng);
+    cylinders.push(cng);
+  }
+  
+  var bubbles = [];
+  var bubbleGeo = new THREE.SphereGeometry(0.06, 5, 5);
+  var bubbleMat = new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.5 });
+  
+  for (var j = 0; j < 25; j++) {
+    var b = new THREE.Mesh(bubbleGeo, bubbleMat);
+    b.position.set(
+      (Math.random() - 0.5) * 2.6,
+      -1.5 + Math.random() * 3,
+      (Math.random() - 0.5) * 2.6
+    );
+    scene.add(b);
+    bubbles.push(b);
+  }
+
+  t3D.biocng = {
+    initialized: true,
+    renderer: renderer,
+    scene: scene,
+    camera: camera,
+    slurryMesh: slurryMesh,
+    cylinders: cylinders,
+    bubbles: bubbles,
+    animationId: null
+  };
+  
+  window.addEventListener('resize', function() {
+    if (t3D.biocng.initialized) {
+      var w = container.clientWidth;
+      t3D.biocng.camera.aspect = w / h;
+      t3D.biocng.camera.updateProjectionMatrix();
+      t3D.biocng.renderer.setSize(w, h);
+    }
+  });
+  
+  animateBioCNG3D();
+}
+
+function animateBioCNG3D() {
+  if (currentViewMode.biocng !== '3d') return;
+  t3D.biocng.animationId = requestAnimationFrame(animateBioCNG3D);
+  
+  var stateSpeed = C.running ? Math.max(0.5, C.speed * 0.15) : 0;
+  var time = Date.now() * 0.0003;
+  t3D.biocng.camera.position.x = 8 * Math.cos(time);
+  t3D.biocng.camera.position.z = 8 * Math.sin(time);
+  t3D.biocng.camera.lookAt(0, 0.4, 0);
+
+  var rawLevel = C.slurryLevel / 100;
+  var scaleHeight = Math.max(0.1, rawLevel * 3.8);
+  t3D.biocng.slurryMesh.scale.y = scaleHeight;
+  t3D.biocng.slurryMesh.position.y = -2.0 + (scaleHeight / 2);
+
+  t3D.biocng.bubbles.forEach(function(b) {
+    if (C.running) {
+      b.visible = true;
+      b.position.y += 0.04 * Math.max(1, C.speed * 0.25);
+      var topBound = -2.0 + scaleHeight;
+      if (b.position.y > topBound) {
+        b.position.y = -1.9;
+        b.position.x = (Math.random() - 0.5) * 2.8;
+        b.position.z = (Math.random() - 0.5) * 2.8;
+      }
+    } else {
+      b.visible = false;
+    }
+  });
+
+  var activeCyl = Math.min(4, Math.floor(C.tanksFilled));
+  t3D.biocng.cylinders.forEach(function(c, idx) {
+    if (idx < activeCyl) {
+      c.material.color.setHex(0xea580c);
+    } else {
+      c.material.color.setHex(0x334155);
+    }
+  });
+
+  t3D.biocng.renderer.render(t3D.biocng.scene, t3D.biocng.camera);
+}
+
+function syncToLocalStorage() {
+  var syncState = {
+    maggotStock: 12.0 + M.pakanKg,
+    biocngStock: 8 + C.tanksFilled,
+    carbonSaved: 58.5 + M.co2Saved + (C.co2Saved * 1000),
+    revenue: 450000 + M.totalRevenue + C.revenue,
+    organicWasteOlah: 125.5 + M.totalSampahOlah + (C.biogasCumulative * 0.1)
+  };
+  
+  localStorage.setItem('zero_waste_sim_state', JSON.stringify(syncState));
+  
+  if (window.location.protocol.startsWith('http')) {
+    fetch('/api/stats', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(syncState)
+    }).catch(function(err){ /* fail silently if API not running */ });
+  }
+}
+function dragWaste(ev) {
+  ev.dataTransfer.setData("text/plain", ev.target.id);
+  var dropzone = document.getElementById('dropzone-sampah');
+  if(dropzone) {
+    dropzone.classList.add('drag-over-active');
+  }
+}
+
+function allowDropWaste(ev) {
+  ev.preventDefault();
+}
+
+function dropWaste(ev) {
+  ev.preventDefault();
+  
+  var dropzone = document.getElementById('dropzone-sampah');
+  if(dropzone) {
+    dropzone.classList.remove('drag-over-active');
+  }
+  
+  var id = ev.dataTransfer.getData("text/plain");
+  var weight = 10;
+  if (id === 'bag-25') weight = 25;
+  if (id === 'bag-50') weight = 50;
+  
+  var slider = document.getElementById('slider-sampah');
+  var newVal = Math.min(200, Math.max(10, +slider.value + weight));
+  slider.value = newVal;
+  
+  // Trigger updateSlider to sync text
+  updateSlider(slider, 'label-sampah-input', 'kg/hari');
+  M.sampahInput = newVal;
+  
+  if (!M.running) {
+    var sFill = Math.min(90, (M.sampahInput / 200) * 100);
+    document.getElementById('tank-sampah').style.height = sFill + '%';
+    document.getElementById('val-tank-sampah').textContent = M.sampahInput.toFixed(1);
+  } else {
+    // Drop live into running bio-pond
+    M.sampahStock = Math.min(200, M.sampahStock + weight);
+    var sFill = Math.min(90, (M.sampahStock / 200) * 100);
+    document.getElementById('tank-sampah').style.height = sFill + '%';
+    document.getElementById('val-tank-sampah').textContent = M.sampahStock.toFixed(1);
+    addLog('maggot-log', '📥 Warga membuang sampah tambahan: +' + weight + ' kg ke bio-pond!', 'success');
+  }
+  
+  showToast('🍏', 'Berhasil memasukkan +' + weight + ' kg sampah organik!', 2500);
+}
+
+// Global dragend listener to reset styling if dropped outside
+document.addEventListener('dragend', function() {
+  var dropzone = document.getElementById('dropzone-sampah');
+  if(dropzone) {
+    dropzone.classList.remove('drag-over-active');
+  }
+  var cngDropzone = document.getElementById('reactor-tank');
+  if(cngDropzone) {
+    cngDropzone.classList.remove('cng-drag-over-active');
+  }
+});
+
+/* ===== BIOCNG DRAG AND DROP HANDLERS ===== */
+function dragBiomass(ev) {
+  ev.dataTransfer.setData("text/plain", ev.target.id);
+  var dropzone = document.getElementById('reactor-tank');
+  if(dropzone) {
+    dropzone.classList.add('cng-drag-over-active');
+  }
+}
+
+function allowDropBiomass(ev) {
+  ev.preventDefault();
+}
+
+function dropBiomass(ev) {
+  ev.preventDefault();
+  
+  var dropzone = document.getElementById('reactor-tank');
+  if(dropzone) {
+    dropzone.classList.remove('cng-drag-over-active');
+  }
+  
+  var id = ev.dataTransfer.getData("text/plain");
+  var weight = 20;
+  if (id === 'biom-50') weight = 50;
+  if (id === 'biom-100') weight = 100;
+  
+  var slider = document.getElementById('cng-slider-biomassa');
+  var newVal = Math.min(500, Math.max(20, +slider.value + weight));
+  slider.value = newVal;
+  
+  updateSlider(slider, 'cng-label-biomassa', 'kg/hari');
+  
+  var pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+  slider.style.setProperty('--val', pct + '%');
+  
+  C.biomassaInput = newVal;
+  
+  if (!C.running) {
+    var fillPct = Math.min(85, 20 + (C.biomassaInput / 500) * 65);
+    document.getElementById('reactor-fill').style.height = fillPct + '%';
+    document.getElementById('val-slurry').textContent = fillPct.toFixed(0);
+  } else {
+    C.slurryLevel = Math.min(85, C.slurryLevel + (weight / 500) * 65);
+    document.getElementById('reactor-fill').style.height = C.slurryLevel + '%';
+    document.getElementById('val-slurry').textContent = C.slurryLevel.toFixed(0);
+    addLog('biocng-log', '📥 Operator memasukkan biomassa tambahan: +' + weight + ' kg ke digester!', 'success');
+  }
+  
+  showToast('🔥', 'Berhasil memasukkan +' + weight + ' kg biomassa!', 2500);
+}
+</script>
+</body>
+</html>
