@@ -22,31 +22,19 @@ Berikut adalah isi dari `vercel.json` yang sudah terkonfigurasi di proyek Anda:
 
 ```json
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/$1"
+      "source": "/api/(.*)",
+      "destination": "/server.js"
     }
   ]
 }
 ```
 
 ### Penjelasan Konfigurasi:
-* **`builds`**: Memberi tahu Vercel untuk memproses `server.js` menggunakan `@vercel/node` untuk menjadikannya Serverless Functions.
-* **`routes`**: 
-  * Semua permintaan ke endpoint `/api/...` akan diteruskan ke Serverless Function `server.js`.
-  * Semua permintaan lainnya (seperti file HTML, CSS, JS) akan disajikan langsung dari folder `/public`.
+* **Zero-Config Deployment**: Kita menghapus bagian `builds` legacy agar Vercel secara otomatis mendeteksi folder `public` di root proyek dan menyajikan semua aset statis (HTML, CSS, JS, Gambar) menggunakan CDN Vercel dengan performa maksimal.
+* **`rewrites`**: Mengarahkan semua request API (yang diawali dengan `/api/`) ke serverless function `server.js` di root, sehingga backend Node.js + Express Anda tetap dapat menghandle API request secara dinamis.
+
 
 ---
 
