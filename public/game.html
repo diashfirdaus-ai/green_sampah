@@ -9,12 +9,16 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
     :root {
-      --bg-dark: #070b19;
-      --bg-card: #0f172a;
-      --border: rgba(255,255,255,0.08);
+      --bg-dark: #071A0E;
+      --bg-card: #0D2818;
+      --bg-card2: #1B4332;
+      --border: rgba(52,211,153,0.1);
       --green: #10b981;
-      --blue: #3b82f6;
+      --green-glow: rgba(16,185,129,0.3);
+      --blue: #059669;
+      --blue-glow: rgba(5,150,105,0.3);
       --orange: #f97316;
+      --orange-glow: rgba(249,115,22,0.3);
       --red: #ef4444;
       --text: #f1f5f9;
       --muted: #94a3b8;
@@ -45,9 +49,10 @@
       align-items: center;
       padding: 16px 20px;
       padding-top: calc(16px + env(safe-area-inset-top));
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(13, 40, 24, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(52,211,153,0.12);
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
@@ -93,9 +98,10 @@
       width: 100%;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      padding: 12px 20px;
-      border-radius: 16px;
+      padding: 14px 20px;
+      border-radius: 18px;
       margin-bottom: 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
     }
     .stat-box {
       display: flex;
@@ -177,15 +183,15 @@
     }
     .dropzone {
       background: var(--bg-card);
-      border: 2px dashed var(--border);
-      border-radius: 20px;
+      border: 2px dashed rgba(52,211,153,0.15);
+      border-radius: 22px;
       padding: 16px 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      transition: all 0.3s;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
       min-height: 120px;
       position: relative;
       overflow: hidden;
@@ -195,9 +201,9 @@
     .dropzone-desc { font-size: 0.55rem; color: var(--muted); margin-top: 4px; line-height: 1.2; }
     
     /* Hover Glow Active dropzones */
-    .dropzone.drag-over-maggot { border-color: var(--green); background: rgba(16,185,129,0.06); box-shadow: 0 0 15px var(--green-glow); }
-    .dropzone.drag-over-cng { border-color: var(--orange); background: rgba(249,115,22,0.06); box-shadow: 0 0 15px var(--orange-glow); }
-    .dropzone.drag-over-bank { border-color: var(--blue); background: rgba(59,130,246,0.06); box-shadow: 0 0 15px var(--blue-glow); }
+    .dropzone.drag-over-maggot { border-color: var(--green); background: rgba(16,185,129,0.08); box-shadow: 0 0 20px var(--green-glow), inset 0 0 20px rgba(16,185,129,0.05); }
+    .dropzone.drag-over-cng { border-color: var(--orange); background: rgba(249,115,22,0.08); box-shadow: 0 0 20px var(--orange-glow), inset 0 0 20px rgba(249,115,22,0.05); }
+    .dropzone.drag-over-bank { border-color: var(--blue); background: rgba(5,150,105,0.08); box-shadow: 0 0 20px var(--blue-glow), inset 0 0 20px rgba(5,150,105,0.05); }
 
     .dropzone.drag-over-maggot .dropzone-icon { transform: scale(1.15) rotate(-5deg); }
     .dropzone.drag-over-cng .dropzone-icon { transform: scale(1.15) translateY(-3px); }
@@ -220,31 +226,32 @@
     .overlay.show { opacity: 1; pointer-events: auto; }
     .overlay-card {
       background: var(--bg-card);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(52,211,153,0.15);
       border-radius: 28px;
       width: 100%;
       max-width: 400px;
       padding: 32px;
       text-align: center;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 60px rgba(16,185,129,0.05);
     }
     .overlay-icon { font-size: 4rem; margin-bottom: 12px; }
     .overlay-card h2 { font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 8px; }
     .overlay-card p { font-size: 0.82rem; color: var(--muted); margin-bottom: 24px; line-height: 1.4; }
     
     .btn-action {
-      background: var(--green);
+      background: linear-gradient(135deg, #059669, #10B981);
       color: white;
       border: none;
-      border-radius: 14px;
-      padding: 12px 30px;
+      border-radius: 16px;
+      padding: 14px 30px;
       font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
       width: 100%;
-      transition: transform 0.1s, background 0.2s;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 6px 20px rgba(5,150,105,0.35);
     }
-    .btn-action:hover { background: #059669; }
+    .btn-action:hover { background: linear-gradient(135deg, #10B981, #34D399); transform: translateY(-1px); box-shadow: 0 8px 28px rgba(16,185,129,0.4); }
     .btn-action:active { transform: scale(0.97); }
 
     /* ===== CONFETTI SPARKLES ===== */
@@ -267,10 +274,13 @@
   <!-- NAVBAR -->
   <nav>
     <div class="nav-logo">
-      <div class="logo-icon">♻️</div>
+      <div style="background:linear-gradient(135deg,#059669,#10B981); padding:5px 10px; border-radius:10px; box-shadow:0 2px 8px rgba(5,150,105,0.3); display:flex; align-items:center;"><i class="ph-bold ph-game-controller" style="color:white; font-size:1rem;"></i></div>
       <span>Game<span style="color:var(--green)">Sirkular</span></span>
     </div>
-    <a href="dashboard.html" class="back-btn"><i class="ph ph-house"></i> Dashboard</a>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="shop.html" class="back-btn" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.15); padding:6px 14px; border-radius:12px;"><i class="ph-bold ph-storefront"></i> Toko</a>
+      <a href="dashboard.html" class="back-btn" style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.15); padding:6px 14px; border-radius:12px;"><i class="ph-bold ph-squares-four"></i> Dashboard</a>
+    </div>
   </nav>
 
   <!-- GAME AREA -->

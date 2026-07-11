@@ -10,18 +10,19 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
     :root {
-      --bg-dark: #070b19;
-      --bg-card: #0f172a;
-      --bg-card2: #1e293b;
-      --border: rgba(255,255,255,0.08);
+      --bg-dark: #071A0E;
+      --bg-card: #0D2818;
+      --bg-card2: #1B4332;
+      --border: rgba(52,211,153,0.1);
       --green: #10b981;
       --green-glow: rgba(16,185,129,0.25);
-      --blue: #3b82f6;
-      --blue-glow: rgba(59,130,246,0.25);
+      --blue: #059669;
+      --blue-glow: rgba(5,150,105,0.25);
       --orange: #f97316;
       --orange-glow: rgba(249,115,22,0.25);
       --text: #f1f5f9;
       --muted: #94a3b8;
+      --red: #ef4444;
     }
     
     * {
@@ -51,9 +52,10 @@
       align-items: center;
       padding: 16px 24px;
       padding-top: calc(16px + env(safe-area-inset-top));
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(13, 40, 24, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(52,211,153,0.12);
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
@@ -108,7 +110,7 @@
     .hero {
       padding: 120px 24px 40px;
       text-align: center;
-      background: radial-gradient(circle at top, rgba(16,185,129,0.06), transparent 60%);
+      background: radial-gradient(ellipse 800px 400px at 50% 0%, rgba(16,185,129,0.1), transparent 70%);
     }
     .hero-eyebrow {
       font-size: 0.75rem;
@@ -116,21 +118,29 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--green);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16,185,129,0.08);
+      border: 1px solid rgba(16,185,129,0.15);
+      padding: 5px 16px;
+      border-radius: 100px;
     }
     .hero h1 {
       font-family: 'Outfit', sans-serif;
       font-size: 2.2rem;
       font-weight: 900;
       color: white;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
     }
     .hero p {
       font-size: 0.9rem;
       color: var(--muted);
       max-width: 600px;
       margin: 0 auto;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     /* ===== LAYOUT CONTAINER ===== */
@@ -290,18 +300,19 @@
     .overlay-card p { font-size: 0.78rem; color: var(--muted); margin-bottom: 18px; line-height: 1.4; }
     
     .btn-action {
-      background: var(--green);
+      background: linear-gradient(135deg, #059669, #10B981);
       color: white;
       border: none;
-      border-radius: 12px;
-      padding: 10px 24px;
+      border-radius: 14px;
+      padding: 12px 24px;
       font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
       width: 100%;
-      transition: transform 0.1s;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 4px 16px rgba(5,150,105,0.3);
     }
-    .btn-action:hover { background: #059669; }
+    .btn-action:hover { background: linear-gradient(135deg, #10B981, #34D399); transform: translateY(-1px); }
     .btn-action:active { transform: scale(0.97); }
 
     .particle {
@@ -451,20 +462,27 @@
     .product-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 16px;
+      border-radius: 22px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       align-items: stretch;
       gap: 12px;
-      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
+      overflow: hidden;
+    }
+    .product-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: linear-gradient(90deg, transparent, rgba(16,185,129,0.3), transparent);
+      opacity: 0; transition: opacity 0.3s;
     }
     .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.2);
+      border-color: rgba(52,211,153,0.2);
     }
+    .product-card:hover::before { opacity: 1; }
     
     .product-image-container {
       width: 100%;
@@ -561,29 +579,32 @@
     .price-unit { font-size: 0.65rem; color: var(--muted); font-weight: 500; }
     
     .btn-buy-round {
-      width: 32px; height: 32px;
-      background: var(--blue);
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, #059669, #10B981);
       border: none;
       color: white;
-      border-radius: 50%;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       font-size: 0.95rem;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 2px 8px rgba(5,150,105,0.3);
     }
     .btn-buy-round:hover {
-      background: #2563eb;
-      transform: scale(1.08);
+      background: linear-gradient(135deg, #10B981, #34D399);
+      transform: scale(1.1) translateY(-1px);
+      box-shadow: 0 4px 16px rgba(16,185,129,0.4);
     }
     .btn-buy-round:active {
       transform: scale(0.95);
     }
     .btn-buy-round:disabled {
-      background: #334155;
-      color: var(--muted);
+      background: #1B4332;
+      color: rgba(255,255,255,0.3);
       cursor: not-allowed;
+      box-shadow: none;
     }
 
     /* ===== CART PANEL ===== */
@@ -679,11 +700,11 @@
     
     .btn-checkout {
       width: 100%;
-      background: var(--blue);
+      background: linear-gradient(135deg, #059669, #10B981);
       color: white;
       border: none;
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 14px;
+      padding: 13px;
       font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
@@ -691,13 +712,20 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: background 0.2s;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 4px 16px rgba(5,150,105,0.3);
     }
-    .btn-checkout:hover { background: #2563eb; }
+    .btn-checkout:hover {
+      background: linear-gradient(135deg, #10B981, #34D399);
+      box-shadow: 0 6px 24px rgba(16,185,129,0.4);
+      transform: translateY(-1px);
+    }
     .btn-checkout:disabled {
-      background: #334155;
-      color: var(--muted);
+      background: #1B4332;
+      color: rgba(255,255,255,0.3);
       cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
     }
 
     /* ===== CHECKOUT MODAL ===== */
@@ -821,23 +849,23 @@
   <!-- NAVIGATION -->
   <nav>
     <div class="nav-logo">
-      <div class="logo-icon">♻️</div>
+      <div class="logo-icon" style="background:linear-gradient(135deg,#059669,#10B981); padding:5px 10px; border-radius:10px; box-shadow:0 2px 8px rgba(5,150,105,0.3);"><i class="ph-bold ph-recycle" style="color:white; font-size:1rem;"></i></div>
       <span>Green<span style="color:var(--green)">Sampah</span></span>
-      <div class="nav-badge">Toko Komunitas</div>
+      <div class="nav-badge" style="background:rgba(16,185,129,0.12); color:#6ee7b7; border:1px solid rgba(16,185,129,0.25);">Toko Komunitas</div>
     </div>
     <div class="nav-actions">
-      <div class="wallet-pill">
+      <div class="wallet-pill" style="border-color:rgba(52,211,153,0.15); background:rgba(16,185,129,0.06);">
         <span>💵 Saldo Warga:</span>
-        <strong id="warga-balance">Rp 0</strong>
+        <strong id="warga-balance" style="color:#34D399;">Rp 0</strong>
       </div>
-      <button class="edu-link-tab active" id="header-item-toko" onclick="switchMobileTab('toko')" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2); color:#10b981; font-weight:700; border-radius:100px; padding:6px 12px; cursor:pointer; font-size:0.75rem; display:flex; align-items:center; gap:4px;">
+      <button class="edu-link-tab active" id="header-item-toko" onclick="switchMobileTab('toko')" style="background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); color:#34D399; font-weight:700; border-radius:12px; padding:6px 14px; cursor:pointer; font-size:0.75rem; display:flex; align-items:center; gap:5px;">
         <i class="ph-bold ph-storefront"></i> Toko
       </button>
-      <button class="edu-link-tab" id="header-item-game" onclick="switchMobileTab('game')" style="background:rgba(245,158,11,0.15); border-color:rgba(245,158,11,0.3); color:#f59e0b; font-weight:700; border-radius:100px; padding:6px 12px; cursor:pointer; font-size:0.75rem; display:flex; align-items:center; gap:4px;">
+      <button class="edu-link-tab" id="header-item-game" onclick="switchMobileTab('game')" style="background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.25); color:#f59e0b; font-weight:700; border-radius:12px; padding:6px 14px; cursor:pointer; font-size:0.75rem; display:flex; align-items:center; gap:5px;">
         <i class="ph-bold ph-game-controller"></i> Game
       </button>
-      <a href="dashboard.html" class="back-link">🖥️ Dashboard</a>
-      <a href="simulator.html" class="back-link">🧪 Simulator</a>
+      <a href="dashboard.html" class="back-link"><i class="ph-bold ph-chart-pie-slice"></i> Dashboard</a>
+      <a href="simulator.html" class="back-link"><i class="ph-bold ph-flask"></i> Simulator</a>
     </div>
   </nav>
 

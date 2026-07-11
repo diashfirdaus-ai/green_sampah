@@ -4,149 +4,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zero-Waste Command Center</title>
+    <title>Zero-Waste Command Center — GreenSampah</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forest: { deep: '#071A0E', DEFAULT: '#0D2818', mid: '#1B4332' },
+                        leaf: { dark: '#065F46', DEFAULT: '#059669', bright: '#10B981', mint: '#34D399', spring: '#A7F3D0', pale: '#D1FAE5', ghost: '#ECFDF5' },
+                    },
+                    fontFamily: {
+                        display: ['Outfit', 'Inter', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
 
-        .hidden-view {
-            display: none !important;
-        }
+        .hidden-view { display: none !important; }
 
         .active-tab {
-            background-color: #059669 !important;
+            background: linear-gradient(135deg, #059669, #10B981) !important;
             color: white !important;
-            box-shadow: 0 10px 15px -3px rgba(6, 78, 59, 0.5) !important;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.35) !important;
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.4s ease-in-out;
-        }
+        .animate-fade-in { animation: fadeIn 0.45s cubic-bezier(0.4,0,0.2,1); }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Chat Scrollbar */
-        .chat-scroll::-webkit-scrollbar {
-            width: 6px;
-        }
+        /* Scrollbar */
+        .chat-scroll::-webkit-scrollbar { width: 5px; }
+        .chat-scroll::-webkit-scrollbar-track { background: transparent; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #A7F3D0; border-radius: 4px; }
 
-        .chat-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #F8FAFC; }
+        ::-webkit-scrollbar-thumb { background: #D1FAE5; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #A7F3D0; }
 
-        .chat-scroll::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        /* Background untuk Chat */
+        /* Chat background pattern */
         .bg-chat-pattern {
-            background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+            background-color: #E8F5E9;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2334D399' fill-opacity='0.06'%3E%3Cpath d='M20 20c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10c0 5.52-4.48 10-10 10S0 25.52 0 20s4.48-10 10-10c0-5.52 4.48-10 10-10z'/%3E%3C/g%3E%3C/svg%3E");
         }
+
+        /* Sidebar gradient accent */
+        .sidebar-accent {
+            background: linear-gradient(180deg, #0D2818 0%, #1B4332 40%, #065F46 100%);
+        }
+
+        /* Glass card effect */
+        .glass-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(16,185,129,0.08);
+        }
+
+        /* KPI card hover */
+        .kpi-card {
+            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+        }
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.06);
+        }
+
+        /* Nav button transitions */
+        .nav-btn {
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            border: 1px solid transparent;
+        }
+        .nav-btn:hover {
+            border-color: rgba(52,211,153,0.15);
+        }
+
+        /* Pulse dot */
+        .status-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #34D399;
+            box-shadow: 0 0 8px rgba(52,211,153,0.6);
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.3); }
+        }
+
+        /* Simulation button glow */
+        .sim-btn-green:hover { box-shadow: 0 4px 16px rgba(16,185,129,0.3); }
+        .sim-btn-orange:hover { box-shadow: 0 4px 16px rgba(249,115,22,0.3); }
+
+        ::selection { background: rgba(16,185,129,0.2); }
     </style>
 </head>
 
-<body class="min-h-screen bg-slate-50 flex text-slate-800 overflow-hidden">
+<body class="min-h-screen bg-gray-50 flex text-slate-800 overflow-hidden">
 
     <!-- ================= SIDEBAR ================= -->
-    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col shadow-2xl shrink-0 z-20 h-screen">
+    <aside class="w-[260px] sidebar-accent text-slate-300 flex flex-col shadow-2xl shrink-0 z-20 h-screen">
+        <!-- Brand -->
         <div class="p-6">
-            <div class="flex items-center gap-2 text-emerald-400 mb-2">
-                <i class="ph-fill ph-database text-3xl"></i>
-                <h1 class="text-xl font-bold text-white tracking-tight">Zero<span class="text-emerald-400">Waste</span>
-                </h1>
+            <div class="flex items-center gap-2.5 mb-3">
+                <div class="bg-gradient-to-br from-leaf-bright to-leaf p-2 rounded-xl shadow-lg shadow-leaf/20">
+                    <i class="ph-bold ph-recycle text-xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold text-white tracking-tight font-display">Green<span class="text-leaf-mint">Sampah</span></h1>
+                </div>
             </div>
-            <p class="text-[10px] text-slate-400 font-medium bg-slate-800 inline-block px-2 py-1 rounded">Super App v3.0
-            </p>
+            <div class="flex items-center gap-2 mt-1">
+                <span class="status-dot"></span>
+                <p class="text-[10px] text-leaf-spring font-semibold bg-forest-mid/60 px-2.5 py-1 rounded-full border border-leaf/15">
+                    Command Center v3.0
+                </p>
+            </div>
         </div>
 
-        <nav class="flex-1 px-4 space-y-1 mt-2 overflow-y-auto">
-            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-4 tracking-wider">Modul Utama</p>
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 space-y-1 mt-1 overflow-y-auto">
+            <p class="text-[10px] uppercase font-bold text-leaf-spring/50 mb-2 ml-2 mt-3 tracking-widest">Modul Utama</p>
             <button onclick="switchTab('dashboard')" id="btn-tab-dashboard"
-                class="nav-btn active-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white">
-                <i class="ph-bold ph-squares-four text-xl"></i> Dashboard
+                class="nav-btn active-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-forest-mid/60 hover:text-white text-sm font-medium">
+                <i class="ph-bold ph-squares-four text-lg"></i> Dashboard
             </button>
 
-            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Telemetri IoT</p>
+            <p class="text-[10px] uppercase font-bold text-leaf-spring/50 mb-2 ml-2 mt-5 tracking-widest">Telemetri IoT</p>
             <button onclick="switchTab('biopond')" id="btn-tab-biopond"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white">
-                <i class="ph-bold ph-bug text-xl"></i> Bio-Pond BSF
+                class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-forest-mid/60 hover:text-white text-sm font-medium">
+                <i class="ph-bold ph-bug text-lg"></i> Bio-Pond BSF
             </button>
             <button onclick="switchTab('biocng')" id="btn-tab-biocng"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white relative">
-                <i class="ph-bold ph-fire text-xl"></i> Reaktor BioCNG
+                class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-forest-mid/60 hover:text-white relative text-sm font-medium">
+                <i class="ph-bold ph-fire text-lg"></i> Reaktor BioCNG
                 <span id="biocng-alert-badge"
                     class="hidden ml-auto w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
             </button>
 
-            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Otomasi AI</p>
+            <p class="text-[10px] uppercase font-bold text-leaf-spring/50 mb-2 ml-2 mt-5 tracking-widest">Otomasi AI</p>
             <button onclick="switchTab('chat')" id="btn-tab-chat"
-                class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white relative">
-                <i class="ph-bold ph-chat-circle-dots text-xl"></i> WhatsApp Agent
+                class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-forest-mid/60 hover:text-white relative text-sm font-medium">
+                <i class="ph-bold ph-chat-circle-dots text-lg"></i> WhatsApp Agent
                 <span id="chat-alert-badge"
                     class="hidden absolute right-4 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
             </button>
 
-            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Simulator</p>
+            <p class="text-[10px] uppercase font-bold text-leaf-spring/50 mb-2 ml-2 mt-5 tracking-widest">Simulator</p>
             <a href="simulator.html"
-                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white text-slate-300 no-underline"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-forest-mid/60 hover:text-white text-slate-300 no-underline text-sm font-medium transition-all border border-transparent hover:border-leaf/15"
                 style="text-decoration:none;">
-                <i class="ph-bold ph-flask text-xl text-emerald-400"></i>
-                <span class="font-medium">Simulator Sirkular</span>
-                <span class="ml-auto text-[9px] font-bold bg-emerald-500 text-white px-2 py-0.5 rounded-full">NEW</span>
+                <i class="ph-bold ph-flask text-lg text-leaf-mint"></i>
+                <span>Simulator Sirkular</span>
+                <span class="ml-auto text-[9px] font-bold bg-leaf text-white px-2 py-0.5 rounded-full">NEW</span>
             </a>
 
-            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Toko Komunitas</p>
+            <p class="text-[10px] uppercase font-bold text-leaf-spring/50 mb-2 ml-2 mt-5 tracking-widest">Toko Komunitas</p>
             <a href="shop.html"
-                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white text-slate-300 no-underline"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-forest-mid/60 hover:text-white text-slate-300 no-underline text-sm font-medium transition-all border border-transparent hover:border-leaf/15"
                 style="text-decoration:none;">
-                <i class="ph-bold ph-shopping-cart text-xl text-blue-400"></i>
-                <span class="font-medium">Marketplace Hijau</span>
-                <span class="ml-auto text-[9px] font-bold bg-blue-500 text-white px-2 py-0.5 rounded-full">SHOP</span>
+                <i class="ph-bold ph-shopping-bag text-lg text-sky-400"></i>
+                <span>Marketplace Hijau</span>
+                <span class="ml-auto text-[9px] font-bold bg-sky-500 text-white px-2 py-0.5 rounded-full">SHOP</span>
             </a>
             <a href="game.html"
-                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-slate-800 hover:text-white text-slate-300 no-underline"
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-forest-mid/60 hover:text-white text-slate-300 no-underline text-sm font-medium transition-all border border-transparent hover:border-leaf/15"
                 style="text-decoration:none;">
-                <i class="ph-bold ph-game-controller text-xl text-amber-400"></i>
-                <span class="font-medium">Game Sirkular</span>
+                <i class="ph-bold ph-game-controller text-lg text-amber-400"></i>
+                <span>Game Sirkular</span>
                 <span class="ml-auto text-[9px] font-bold bg-amber-500 text-slate-900 px-2 py-0.5 rounded-full">GAME</span>
             </a>
 
-            <p class="text-[10px] uppercase font-bold text-slate-500 mb-2 ml-2 mt-6 tracking-wider">Hibah</p>
+            <p class="text-[10px] uppercase font-bold text-leaf-spring/50 mb-2 ml-2 mt-5 tracking-widest">Hibah</p>
             <a href="index.html"
-                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:bg-amber-900 hover:text-white text-slate-300 no-underline"
-                style="text-decoration:none; background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(212,175,55,0.04)); border: 1px solid rgba(212,175,55,0.2);">
-                <i class="ph-bold ph-trophy text-xl text-yellow-400"></i>
-                <span class="font-medium text-yellow-200">Proposal Green Jobs</span>
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-amber-900/30 hover:text-white text-slate-300 no-underline text-sm font-medium transition-all border border-amber-500/15 bg-amber-500/5"
+                style="text-decoration:none;">
+                <i class="ph-bold ph-trophy text-lg text-yellow-400"></i>
+                <span class="text-yellow-200">Proposal Green Jobs</span>
                 <span class="ml-auto text-[9px] font-bold bg-yellow-500 text-slate-900 px-2 py-0.5 rounded-full">🏆</span>
             </a>
         </nav>
 
-        <div class="p-6 mt-auto border-t border-slate-800">
-            <div class="bg-slate-800 rounded-xl p-4 flex items-center gap-3 border border-slate-700">
-                <div class="bg-emerald-500/20 p-2 rounded-lg"><i class="ph-fill ph-users text-emerald-400 text-xl"></i>
+        <!-- Footer user card -->
+        <div class="p-5 mt-auto border-t border-leaf/10">
+            <div class="bg-forest-mid/60 rounded-2xl p-4 flex items-center gap-3 border border-leaf/10">
+                <div class="bg-leaf/15 p-2.5 rounded-xl">
+                    <i class="ph-fill ph-users text-leaf-mint text-xl"></i>
                 </div>
                 <div>
-                    <p class="text-[10px] text-slate-400">Warga Terdaftar</p>
+                    <p class="text-[10px] text-leaf-spring/50 font-medium">Warga Terdaftar</p>
                     <p class="text-lg font-bold text-white" id="val-citizens">42 KK</p>
                 </div>
             </div>
@@ -154,108 +214,138 @@
     </aside>
 
     <!-- ================= MAIN CONTENT ================= -->
-    <main class="flex-1 p-8 h-screen overflow-y-auto relative">
+    <main class="flex-1 p-8 h-screen overflow-y-auto relative bg-gradient-to-br from-gray-50 via-leaf-ghost/30 to-gray-50">
+        <!-- Header -->
         <header class="mb-8 flex flex-col md:flex-row md:justify-between md:items-end gap-4">
             <div>
-                <h1 id="page-title" class="text-3xl font-bold text-slate-800 mb-1">Dashboard Ekonomi Sirkular</h1>
-                <p id="page-desc" class="text-slate-500">Pusat Kendali Pengelolaan Sampah & Transisi Energi Tingkat RW
-                </p>
+                <h1 id="page-title" class="text-3xl font-extrabold text-slate-800 mb-1 font-display tracking-tight">Dashboard Ekonomi Sirkular</h1>
+                <p id="page-desc" class="text-slate-500 text-sm">Pusat Kendali Pengelolaan Sampah & Transisi Energi Tingkat RW</p>
             </div>
-            <div
-                class="hidden lg:flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm text-sm font-medium text-slate-600">
-                Node Server: <span class="text-emerald-500 flex items-center gap-1"><i
-                        class="ph-fill ph-check-circle"></i> Online</span>
+            <div class="hidden lg:flex items-center gap-3 bg-white/80 backdrop-blur-sm px-5 py-2.5 rounded-2xl border border-leaf-pale shadow-sm text-sm font-medium text-slate-600">
+                <span class="status-dot"></span>
+                Node Server: <span class="text-leaf font-bold flex items-center gap-1"><i class="ph-fill ph-check-circle"></i> Online</span>
             </div>
         </header>
 
         <!-- VIEW: DASHBOARD -->
         <div id="view-dashboard" class="space-y-6 animate-fade-in block">
             <!-- KPI Cards -->
-            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Sampah Kering -->
+                <div class="kpi-card glass-card p-5 rounded-2xl shadow-sm flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
                         <p class="text-slate-500 text-sm font-medium">Sampah Kering</p>
-                        <div class="bg-blue-100 p-2 rounded-lg"><i class="ph-fill ph-scales text-xl text-blue-600"></i>
+                        <div class="bg-sky-50 p-2.5 rounded-xl border border-sky-100">
+                            <i class="ph-fill ph-scales text-xl text-sky-500"></i>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-slate-800"><span id="val-dry">125.5</span> <span
-                            class="text-sm font-normal text-slate-500">kg</span></h3>
+                    <h3 class="text-2xl font-extrabold text-slate-800"><span id="val-dry">125.5</span> <span class="text-sm font-normal text-slate-400">kg</span></h3>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
+                <!-- Stok Maggot -->
+                <div class="kpi-card glass-card p-5 rounded-2xl shadow-sm flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
                         <p class="text-slate-500 text-sm font-medium">Stok Maggot BSF</p>
-                        <div class="bg-emerald-100 p-2 rounded-lg"><i
-                                class="ph-fill ph-bug text-xl text-emerald-600"></i></div>
+                        <div class="bg-leaf-ghost p-2.5 rounded-xl border border-leaf-pale">
+                            <i class="ph-fill ph-bug text-xl text-leaf"></i>
+                        </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-slate-800"><span id="val-maggot">12.0</span> <span
-                            class="text-sm font-normal text-slate-500">kg</span></h3>
+                    <h3 class="text-2xl font-extrabold text-slate-800"><span id="val-maggot">12.0</span> <span class="text-sm font-normal text-slate-400">kg</span></h3>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
+                <!-- Tabung BioCNG -->
+                <div class="kpi-card glass-card p-5 rounded-2xl shadow-sm flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
                         <p class="text-slate-500 text-sm font-medium">Tabung BioCNG</p>
-                        <div class="bg-orange-100 p-2 rounded-lg"><i
-                                class="ph-fill ph-fire text-xl text-orange-600"></i></div>
+                        <div class="bg-orange-50 p-2.5 rounded-xl border border-orange-100">
+                            <i class="ph-fill ph-fire text-xl text-orange-500"></i>
+                        </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-slate-800"><span id="val-biocng">8</span> <span
-                            class="text-sm font-normal text-slate-500">Unit</span></h3>
+                    <h3 class="text-2xl font-extrabold text-slate-800"><span id="val-biocng">8</span> <span class="text-sm font-normal text-slate-400">Unit</span></h3>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col lg:col-span-2">
-                    <div class="flex justify-between items-start mb-2">
+                <!-- Emisi Karbon -->
+                <div class="kpi-card glass-card p-5 rounded-2xl shadow-sm flex flex-col lg:col-span-2">
+                    <div class="flex justify-between items-start mb-3">
                         <p class="text-slate-500 text-sm font-medium">Emisi Karbon Terhindari</p>
-                        <div class="bg-teal-100 p-2 rounded-lg"><i
-                                class="ph-fill ph-cloud-rain text-xl text-teal-600"></i></div>
+                        <div class="bg-teal-50 p-2.5 rounded-xl border border-teal-100">
+                            <i class="ph-fill ph-leaf text-xl text-teal-500"></i>
+                        </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-slate-800"><span id="val-carbon">58.5</span> <span
-                            class="text-sm font-normal text-slate-500">kg CO2e</span></h3>
-                    <p class="text-teal-600 text-xs mt-1 font-medium">Memenuhi standar ESG & NDC Indonesia</p>
+                    <h3 class="text-2xl font-extrabold text-slate-800"><span id="val-carbon">58.5</span> <span class="text-sm font-normal text-slate-400">kg CO2e</span></h3>
+                    <p class="text-leaf text-xs mt-1.5 font-semibold flex items-center gap-1">
+                        <i class="ph-fill ph-check-circle"></i> Memenuhi standar ESG & NDC Indonesia
+                    </p>
                 </div>
 
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex flex-col">
-                    <div class="flex justify-between items-start mb-2">
+                <!-- Total Pendapatan -->
+                <div class="kpi-card glass-card p-5 rounded-2xl shadow-sm flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
                         <p class="text-slate-500 text-sm font-medium">Total Pendapatan</p>
-                        <div class="bg-amber-100 p-2 rounded-lg"><i
-                                class="ph-fill ph-currency-circle-dollar text-xl text-amber-600"></i></div>
+                        <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-100">
+                            <i class="ph-fill ph-currency-circle-dollar text-xl text-amber-500"></i>
+                        </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-slate-800" id="val-revenue">Rp 450.000</h3>
+                    <h3 class="text-2xl font-extrabold text-slate-800" id="val-revenue">Rp 450.000</h3>
                 </div>
             </div>
 
             <!-- Simulation Controls -->
-            <div class="bg-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
-                <i class="ph-fill ph-factory text-6xl text-slate-800 absolute right-10 top-10 pointer-events-none"></i>
-                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">Orkestrasi Super-App (Simulasi)</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
+            <div class="bg-gradient-to-br from-forest to-forest-mid rounded-2xl p-7 text-white shadow-xl relative overflow-hidden border border-leaf/10">
+                <!-- Background decorations -->
+                <div class="absolute top-0 right-0 w-40 h-40 bg-leaf/5 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-leaf/5 rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+                <i class="ph-fill ph-factory text-7xl text-leaf/8 absolute right-8 top-8 pointer-events-none"></i>
+
+                <h2 class="text-xl font-bold mb-5 flex items-center gap-3 relative z-10 font-display">
+                    <div class="bg-leaf/15 p-2 rounded-xl"><i class="ph-bold ph-gear-six text-leaf-mint text-xl"></i></div>
+                    Orkestrasi Super-App (Simulasi)
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 relative z-10">
                     <!-- Maggot Simulator -->
-                    <div class="space-y-3 bg-slate-800 p-4 rounded-xl border border-slate-700">
-                        <h3 class="font-semibold text-emerald-400 text-sm flex items-center gap-2"><i
-                                class="ph-bold ph-leaf"></i> Sirkular Pangan (Maggot)</h3>
+                    <div class="space-y-3 bg-forest-mid/50 p-5 rounded-2xl border border-leaf/10 backdrop-blur-sm">
+                        <h3 class="font-bold text-leaf-mint text-sm flex items-center gap-2">
+                            <i class="ph-bold ph-leaf text-lg"></i> Sirkular Pangan (Maggot)
+                        </h3>
                         <button onclick="simDepositOrganic()"
-                            class="w-full bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-sm text-left flex items-center gap-3 transition-all cursor-pointer">
-                            <div class="bg-slate-600 p-1.5 rounded"><i class="ph-bold ph-download-simple"></i></div> 1.
-                            Warga Setor Sampah Dapur
+                            class="sim-btn-green w-full bg-forest/50 hover:bg-forest/80 p-3.5 rounded-xl text-sm text-left flex items-center gap-3 transition-all cursor-pointer border border-leaf/8 hover:border-leaf/20">
+                            <div class="bg-leaf/15 p-2 rounded-lg"><i class="ph-bold ph-download-simple text-leaf-mint"></i></div>
+                            <div>
+                                <span class="font-semibold block">1. Warga Setor Sampah Dapur</span>
+                                <span class="text-xs text-leaf-spring/50">Catat berat via IoT timbangan</span>
+                            </div>
                         </button>
                         <button onclick="simHarvestMaggot()"
-                            class="w-full bg-emerald-600 hover:bg-emerald-500 p-3 rounded-lg text-sm text-left flex items-center gap-3 transition-all cursor-pointer">
-                            <div class="bg-emerald-700 p-1.5 rounded"><i class="ph-bold ph-bug"></i></div> 2. Panen &
-                            Jual Maggot Otomatis
+                            class="sim-btn-green w-full bg-leaf hover:bg-leaf-bright p-3.5 rounded-xl text-sm text-left flex items-center gap-3 transition-all cursor-pointer shadow-lg shadow-leaf/20">
+                            <div class="bg-leaf-dark p-2 rounded-lg"><i class="ph-bold ph-bug text-white"></i></div>
+                            <div>
+                                <span class="font-semibold block">2. Panen & Jual Maggot</span>
+                                <span class="text-xs text-white/70">Otomatis broadcast ke peternak</span>
+                            </div>
                         </button>
                     </div>
+
                     <!-- BioCNG Simulator -->
-                    <div class="space-y-3 bg-slate-800 p-4 rounded-xl border border-slate-700">
-                        <h3 class="font-semibold text-orange-400 text-sm flex items-center gap-2"><i
-                                class="ph-bold ph-lightning"></i> Sirkular Energi (BioCNG)</h3>
+                    <div class="space-y-3 bg-forest-mid/50 p-5 rounded-2xl border border-leaf/10 backdrop-blur-sm">
+                        <h3 class="font-bold text-orange-300 text-sm flex items-center gap-2">
+                            <i class="ph-bold ph-lightning text-lg"></i> Sirkular Energi (BioCNG)
+                        </h3>
                         <button onclick="simDepositSlurry()"
-                            class="w-full bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-sm text-left flex items-center gap-3 transition-all cursor-pointer">
-                            <div class="bg-slate-600 p-1.5 rounded"><i class="ph-bold ph-drop"></i></div> 1. Input
-                            Limbah ke Digester
+                            class="sim-btn-orange w-full bg-forest/50 hover:bg-forest/80 p-3.5 rounded-xl text-sm text-left flex items-center gap-3 transition-all cursor-pointer border border-leaf/8 hover:border-orange-400/20">
+                            <div class="bg-orange-500/15 p-2 rounded-lg"><i class="ph-bold ph-drop text-orange-300"></i></div>
+                            <div>
+                                <span class="font-semibold block">1. Input Limbah ke Digester</span>
+                                <span class="text-xs text-leaf-spring/50">Fermentasi anaerobik dimulai</span>
+                            </div>
                         </button>
                         <button onclick="simHarvestBioCNG()"
-                            class="w-full bg-orange-600 hover:bg-orange-500 p-3 rounded-lg text-sm text-left flex items-center gap-3 transition-all cursor-pointer">
-                            <div class="bg-orange-700 p-1.5 rounded"><i class="ph-bold ph-fire"></i></div> 2. Botolkan &
-                            Jual Gas ke UMKM
+                            class="sim-btn-orange w-full bg-orange-600 hover:bg-orange-500 p-3.5 rounded-xl text-sm text-left flex items-center gap-3 transition-all cursor-pointer shadow-lg shadow-orange-500/20">
+                            <div class="bg-orange-700 p-2 rounded-lg"><i class="ph-bold ph-fire text-white"></i></div>
+                            <div>
+                                <span class="font-semibold block">2. Botolkan & Jual Gas ke UMKM</span>
+                                <span class="text-xs text-white/70">Broadcast ke grup UMKM</span>
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -264,12 +354,18 @@
 
         <!-- VIEW: BIO-POND -->
         <div id="view-biopond" class="hidden-view animate-fade-in">
-            <div class="p-10 text-center bg-white rounded-2xl border border-slate-200 shadow-sm mt-10">
-                <i class="ph-fill ph-bug text-7xl mx-auto text-slate-300 mb-4 block"></i>
-                <h2 class="text-xl font-bold text-slate-600">Modul Bio-Pond Aktif</h2>
-                <p class="text-slate-500 mt-2">Sensor IoT BSF berjalan normal (Suhu 31.5°C).<br>Silakan navigasi ke
-                    modul <strong>Reaktor BioCNG</strong> untuk melihat demonstrasi peringatan bahaya (Hazard Warning)
-                    IoT.</p>
+            <div class="p-12 text-center glass-card rounded-2xl shadow-sm mt-10">
+                <div class="bg-leaf-ghost w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-5 border border-leaf-pale">
+                    <i class="ph-fill ph-bug text-4xl text-leaf"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-700 font-display">Modul Bio-Pond Aktif</h2>
+                <p class="text-slate-500 mt-3 text-sm leading-relaxed max-w-md mx-auto">
+                    Sensor IoT BSF berjalan normal (Suhu 31.5°C).<br>
+                    Silakan navigasi ke modul <strong class="text-leaf">Reaktor BioCNG</strong> untuk melihat demonstrasi peringatan bahaya (Hazard Warning) IoT.
+                </p>
+                <div class="mt-6 flex items-center justify-center gap-2 text-sm text-leaf font-semibold">
+                    <span class="status-dot"></span> Semua sensor online
+                </div>
             </div>
         </div>
 
@@ -277,10 +373,10 @@
         <div id="view-biocng" class="hidden-view animate-fade-in space-y-6">
             <div class="flex justify-between items-center mb-6">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-800">Telemetri Reaktor BioCNG</h2>
+                    <h2 class="text-xl font-bold text-slate-800 font-display">Telemetri Reaktor BioCNG</h2>
                 </div>
                 <div id="biocng-status-badge"
-                    class="px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 bg-emerald-100 text-emerald-700 border border-emerald-200">
+                    class="px-5 py-2.5 rounded-2xl font-bold text-sm flex items-center gap-2 bg-leaf-ghost text-leaf border border-leaf-pale">
                     <i class="ph-fill ph-check-circle text-lg"></i> STATUS: OPTIMAL
                 </div>
             </div>
@@ -288,67 +384,69 @@
             <!-- Sensor Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Pressure -->
-                <div
-                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center relative overflow-hidden">
-                    <div id="bar-pressure"
-                        class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-red-500"></div>
-                    <i id="icon-pressure" class="ph-fill ph-gauge text-5xl mx-auto mb-4 text-orange-500"></i>
+                <div class="glass-card p-7 rounded-2xl shadow-sm text-center relative overflow-hidden kpi-card">
+                    <div id="bar-pressure" class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-orange-400 to-amber-400 rounded-b-full"></div>
+                    <div class="bg-orange-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-orange-100">
+                        <i id="icon-pressure" class="ph-fill ph-gauge text-3xl text-orange-500"></i>
+                    </div>
                     <p class="text-slate-500 font-medium text-sm">Tekanan Reaktor</p>
-                    <h3 id="ui-pressure" class="text-4xl font-black mt-2 text-slate-800">1.2 <span
-                            class="text-lg">Bar</span></h3>
-                    <p class="text-xs text-slate-400 mt-2">Batas Aman: &lt; 2.0 Bar</p>
+                    <h3 id="ui-pressure" class="text-4xl font-black mt-2 text-slate-800">1.2 <span class="text-lg">Bar</span></h3>
+                    <p class="text-xs text-slate-400 mt-3 bg-slate-50 rounded-lg py-1.5 px-3 inline-block">Batas Aman: &lt; 2.0 Bar</p>
                 </div>
                 <!-- Methane -->
-                <div
-                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 to-emerald-500"></div>
-                    <i class="ph-fill ph-fire text-5xl mx-auto mb-4 text-teal-500"></i>
+                <div class="glass-card p-7 rounded-2xl shadow-sm text-center relative overflow-hidden kpi-card">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-teal-400 to-leaf rounded-b-full"></div>
+                    <div class="bg-teal-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-teal-100">
+                        <i class="ph-fill ph-fire text-3xl text-teal-500"></i>
+                    </div>
                     <p class="text-slate-500 font-medium text-sm">Kadar Metana (CH4)</p>
                     <h3 id="ui-methane" class="text-4xl font-black mt-2 text-slate-800">65%</h3>
-                    <p class="text-xs text-slate-400 mt-2">Siap dibakar: &gt; 60%</p>
+                    <p class="text-xs text-slate-400 mt-3 bg-slate-50 rounded-lg py-1.5 px-3 inline-block">Siap dibakar: &gt; 60%</p>
                 </div>
                 <!-- pH -->
-                <div
-                    class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-indigo-400"></div>
-                    <i class="ph-fill ph-drop text-5xl mx-auto mb-4 text-indigo-400"></i>
+                <div class="glass-card p-7 rounded-2xl shadow-sm text-center relative overflow-hidden kpi-card">
+                    <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-400 to-purple-400 rounded-b-full"></div>
+                    <div class="bg-indigo-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-indigo-100">
+                        <i class="ph-fill ph-drop text-3xl text-indigo-400"></i>
+                    </div>
                     <p class="text-slate-500 font-medium text-sm">pH Digester</p>
                     <h3 id="ui-ph" class="text-4xl font-black mt-2 text-slate-800">7.1</h3>
-                    <p class="text-xs text-slate-400 mt-2">Optimal: 6.8 - 7.2</p>
+                    <p class="text-xs text-slate-400 mt-3 bg-slate-50 rounded-lg py-1.5 px-3 inline-block">Optimal: 6.8 - 7.2</p>
                 </div>
             </div>
 
             <!-- Danger Control Panel -->
-            <div class="bg-orange-50 p-6 rounded-2xl border border-orange-200 shadow-sm mt-4">
-                <h3 class="font-bold text-orange-900 mb-4 flex items-center gap-2"><i class="ph-fill ph-warning"></i>
-                    Uji Coba Keamanan Reaktor (AI Safety Protocol)</h3>
+            <div class="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-2xl border border-orange-200/60 shadow-sm">
+                <h3 class="font-bold text-orange-800 mb-4 flex items-center gap-2 font-display">
+                    <div class="bg-orange-100 p-2 rounded-xl"><i class="ph-fill ph-warning text-orange-500"></i></div>
+                    Uji Coba Keamanan Reaktor (AI Safety Protocol)
+                </h3>
                 <div class="flex flex-wrap gap-4">
                     <button onclick="triggerOverpressure()"
-                        class="bg-white text-red-600 hover:bg-red-50 border border-red-200 px-5 py-3 rounded-xl font-medium transition-all shadow-sm cursor-pointer text-sm">
-                        Simulasi Overpressure (Tekanan Kritis)
+                        class="bg-white text-red-600 hover:bg-red-50 border border-red-200 px-6 py-3 rounded-xl font-semibold transition-all shadow-sm cursor-pointer text-sm hover:shadow-md hover:shadow-red-100">
+                        <i class="ph-bold ph-warning-circle mr-1"></i> Simulasi Overpressure (Tekanan Kritis)
                     </button>
                     <button onclick="resolveOverpressure()" id="btn-resolve-biocng"
-                        class="hidden bg-emerald-600 text-white hover:bg-emerald-700 px-5 py-3 rounded-xl font-medium transition-all shadow-sm cursor-pointer text-sm">
-                        Selesaikan Darurat (Buka Katup)
+                        class="hidden bg-leaf text-white hover:bg-leaf-bright px-6 py-3 rounded-xl font-semibold transition-all shadow-sm cursor-pointer text-sm shadow-leaf/20">
+                        <i class="ph-bold ph-check-circle mr-1"></i> Selesaikan Darurat (Buka Katup)
                     </button>
                 </div>
-                <p class="text-xs text-orange-700 mt-3">*Jika ditekan, LLM Agent akan mengirim peringatan tingkat tinggi
+                <p class="text-xs text-orange-600/70 mt-3">*Jika ditekan, LLM Agent akan mengirim peringatan tingkat tinggi
                     ke WhatsApp Teknisi dan memutus aliran input secara virtual.</p>
             </div>
         </div>
 
         <!-- VIEW: CHAT AI -->
         <div id="view-chat"
-            class="hidden-view flex-col h-[calc(100vh-140px)] bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden animate-fade-in">
+            class="hidden-view flex-col h-[calc(100vh-140px)] bg-white rounded-2xl shadow-md border border-leaf-pale overflow-hidden animate-fade-in">
             <!-- Header Chat -->
-            <div class="bg-[#075E54] text-white p-4 flex justify-between items-center z-10 shrink-0">
+            <div class="bg-gradient-to-r from-forest-mid to-leaf-dark text-white p-4 flex justify-between items-center z-10 shrink-0">
                 <div class="flex items-center gap-3">
-                    <div class="bg-white/20 p-2 rounded-full"><i class="ph-fill ph-robot text-2xl"></i></div>
+                    <div class="bg-white/15 p-2.5 rounded-xl backdrop-blur-sm"><i class="ph-fill ph-robot text-2xl"></i></div>
                     <div>
-                        <h3 class="font-bold text-lg leading-tight">Super-Agent LLM</h3>
-                        <p class="text-[11px] text-emerald-100 flex items-center gap-1">
-                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span> Mengelola Maggot &
-                            BioCNG
+                        <h3 class="font-bold text-lg leading-tight font-display">Super-Agent LLM</h3>
+                        <p class="text-[11px] text-leaf-spring flex items-center gap-1.5">
+                            <span class="status-dot" style="width:6px;height:6px;"></span> Mengelola Maggot & BioCNG
                         </p>
                     </div>
                 </div>
@@ -356,17 +454,17 @@
 
             <!-- Chat Area -->
             <div id="chat-container"
-                class="flex-1 bg-chat-pattern bg-[#E5DDD5] p-4 overflow-y-auto space-y-4 chat-scroll">
+                class="flex-1 bg-chat-pattern p-5 overflow-y-auto space-y-4 chat-scroll">
                 <!-- Chat dicreate lewat JavaScript -->
             </div>
 
             <!-- Input Area -->
             <form id="chat-form" onsubmit="handleSendChat(event)"
-                class="bg-[#F0F0F0] p-3 flex gap-2 items-center shrink-0">
+                class="bg-leaf-ghost/50 p-3.5 flex gap-3 items-center shrink-0 border-t border-leaf-pale">
                 <input type="text" id="chat-input" placeholder="Lapor ke AI Agent (misal: Katup gas sudah ditutup)..."
-                    class="flex-1 rounded-full py-3 px-5 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#075E54] shadow-sm text-sm">
+                    class="flex-1 rounded-2xl py-3 px-5 border border-leaf-pale focus:outline-none focus:ring-2 focus:ring-leaf/40 focus:border-leaf shadow-sm text-sm bg-white">
                 <button type="submit"
-                    class="bg-[#00897B] text-white w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#00695C] transition-colors shadow-sm cursor-pointer">
+                    class="bg-leaf text-white w-12 h-12 flex items-center justify-center rounded-2xl hover:bg-leaf-bright transition-all shadow-lg shadow-leaf/20 cursor-pointer">
                     <i class="ph-fill ph-paper-plane-right text-xl"></i>
                 </button>
             </form>
@@ -388,7 +486,7 @@
                 activeCitizens: 42
             },
             biocng: {
-                status: 'OPTIMAL', // OPTIMAL | KRITIS
+                status: 'OPTIMAL',
                 pressure: 1.2,
                 methane: 65,
                 ph: 7.1
@@ -398,7 +496,6 @@
             ]
         };
 
-        // UI Text Mapping untuk Tab Titles
         const pageTitles = {
             'dashboard': { title: 'Dashboard Ekonomi Sirkular', desc: 'Pusat Kendali Pengelolaan Sampah & Transisi Energi Tingkat RW' },
             'biopond': { title: 'Monitoring Maggot BSF', desc: 'Telemetri IoT Pertanian Urban' },
@@ -414,7 +511,6 @@
             renderChats();
         });
 
-        // Sync with local database (API / localStorage)
         function loadStateFromLocalStorage() {
             if (window.location.protocol.startsWith('http')) {
                 fetch('/api/stats')
@@ -452,7 +548,6 @@
             }
         }
 
-        // Real-time synchronization interval (every 2 seconds)
         setInterval(loadStateFromLocalStorage, 2000);
 
         window.addEventListener('storage', (e) => {
@@ -476,9 +571,7 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // --- STREAMING_CHUNK:Core UI updaters... ---
         // --- 4. UI UPDATER FUNCTIONS ---
-
         function updateDashboardUI() {
             document.getElementById('val-dry').innerText = state.stats.dryWaste.toFixed(1);
             document.getElementById('val-maggot').innerText = state.stats.maggotStock.toFixed(1);
@@ -491,35 +584,29 @@
         function updateBioCNGUI() {
             const isKritis = state.biocng.status === 'KRITIS';
 
-            // Update Values
             document.getElementById('ui-pressure').innerHTML = `${state.biocng.pressure.toFixed(1)} <span class="text-lg">Bar</span>`;
             document.getElementById('ui-methane').innerText = `${state.biocng.methane}%`;
             document.getElementById('ui-ph').innerText = state.biocng.ph.toFixed(1);
 
-            // Update Badge Status
             const badge = document.getElementById('biocng-status-badge');
             if (isKritis) {
-                badge.className = 'px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 bg-red-100 text-red-700 border border-red-200 animate-pulse';
+                badge.className = 'px-5 py-2.5 rounded-2xl font-bold text-sm flex items-center gap-2 bg-red-50 text-red-700 border border-red-200 animate-pulse';
                 badge.innerHTML = `<i class="ph-fill ph-warning text-lg"></i> STATUS: KRITIS`;
                 document.getElementById('ui-pressure').classList.add('text-red-600');
                 document.getElementById('ui-pressure').classList.remove('text-slate-800');
                 document.getElementById('icon-pressure').classList.add('text-red-500', 'animate-bounce');
                 document.getElementById('icon-pressure').classList.remove('text-orange-500');
                 document.getElementById('btn-resolve-biocng').classList.remove('hidden');
-
-                // Sidebar Alerts
                 document.getElementById('biocng-alert-badge').classList.remove('hidden');
                 document.getElementById('chat-alert-badge').classList.remove('hidden');
             } else {
-                badge.className = 'px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 bg-emerald-100 text-emerald-700 border border-emerald-200';
+                badge.className = 'px-5 py-2.5 rounded-2xl font-bold text-sm flex items-center gap-2 bg-leaf-ghost text-leaf border border-leaf-pale';
                 badge.innerHTML = `<i class="ph-fill ph-check-circle text-lg"></i> STATUS: OPTIMAL`;
                 document.getElementById('ui-pressure').classList.remove('text-red-600');
                 document.getElementById('ui-pressure').classList.add('text-slate-800');
                 document.getElementById('icon-pressure').classList.remove('text-red-500', 'animate-bounce');
                 document.getElementById('icon-pressure').classList.add('text-orange-500');
                 document.getElementById('btn-resolve-biocng').classList.add('hidden');
-
-                // Clear Sidebar Alerts
                 document.getElementById('biocng-alert-badge').classList.add('hidden');
                 document.getElementById('chat-alert-badge').classList.add('hidden');
             }
@@ -527,28 +614,27 @@
 
         function renderChats() {
             const container = document.getElementById('chat-container');
-            container.innerHTML = ''; // Clear
+            container.innerHTML = '';
 
             state.chats.forEach(msg => {
                 const isBot = msg.sender === 'Bot';
                 const isUser = msg.sender === 'Kader/Teknisi';
-                const isThirdParty = !isBot && !isUser;
 
                 let alignClass = isBot ? 'justify-start' : 'justify-end';
-                let bubbleClass = isBot ? 'bg-white rounded-tl-none' :
-                    isUser ? 'bg-[#DCF8C6] rounded-tr-none' :
-                        'bg-blue-50 border border-blue-100 rounded-tl-none';
+                let bubbleClass = isBot ? 'bg-white rounded-tl-none shadow-sm' :
+                    isUser ? 'bg-leaf-pale rounded-tr-none shadow-sm' :
+                        'bg-sky-50 border border-sky-100 rounded-tl-none shadow-sm';
 
                 let html = `
                     <div class="flex ${alignClass} animate-fade-in">
-                        <div class="max-w-[85%] rounded-xl p-3 shadow-sm relative ${bubbleClass}">
-                            ${!isBot && !isUser ? `<p class="text-xs font-bold text-blue-700 mb-1">${msg.sender}</p>` : ''}
-                            ${isBot ? `<p class="text-xs font-bold text-[#075E54] mb-1"><i class="ph-fill ph-robot"></i> AI Super-Agent</p>` : ''}
+                        <div class="max-w-[85%] rounded-2xl p-3.5 relative ${bubbleClass}">
+                            ${!isBot && !isUser ? `<p class="text-xs font-bold text-sky-600 mb-1">${msg.sender}</p>` : ''}
+                            ${isBot ? `<p class="text-xs font-bold text-forest-mid mb-1.5"><i class="ph-fill ph-robot"></i> AI Super-Agent</p>` : ''}
                             
                             <p class="text-[14px] whitespace-pre-wrap leading-relaxed text-slate-800">${msg.text}</p>
                             
                             <span class="text-[10px] text-slate-400 mt-2 block text-right">
-                                ${msg.time} ${isUser ? '<i class="ph-bold ph-check-circle text-blue-500 ml-1"></i>' : ''}
+                                ${msg.time} ${isUser ? '<i class="ph-bold ph-check-circle text-leaf ml-1"></i>' : ''}
                             </span>
                         </div>
                     </div>
@@ -560,62 +646,45 @@
 
         function addChatMessage(sender, text) {
             state.chats.push({ sender, text, time: getCurrentTime() });
-
-            // Re-render UI ONLY if chat is open, else just update array
-            // But to ensure it's there when we open it, we just call render
             renderChats();
         }
 
-        // --- STREAMING_CHUNK:Interaction and simulation logic... ---
         // --- 5. NAVIGATION LOGIC ---
         function switchTab(tabId) {
-            // Sembunyikan semua view
             ['dashboard', 'biopond', 'biocng', 'chat'].forEach(id => {
                 document.getElementById(`view-${id}`).classList.add('hidden-view');
                 document.getElementById(`view-${id}`).classList.remove('block', 'flex');
-
-                // Hapus style active dari tombol
                 document.getElementById(`btn-tab-${id}`).classList.remove('active-tab');
             });
 
-            // Tampilkan view yang dituju
             const targetView = document.getElementById(`view-${tabId}`);
             targetView.classList.remove('hidden-view');
 
             if (tabId === 'chat') {
-                targetView.classList.add('flex'); // Chat butuh display flex
+                targetView.classList.add('flex');
                 scrollToBottom();
             } else {
                 targetView.classList.add('block');
             }
 
-            // Aktifkan tombol
             document.getElementById(`btn-tab-${tabId}`).classList.add('active-tab');
-
-            // Ganti Header Title
             document.getElementById('page-title').innerText = pageTitles[tabId].title;
             document.getElementById('page-desc').innerText = pageTitles[tabId].desc;
         }
 
         // --- 6. SIMULATION ACTIONS ---
-
-        // SIMULASI 1: Setor Organik (Maggot)
         function simDepositOrganic() {
             const added = parseFloat((Math.random() * 5 + 2).toFixed(1));
             state.stats.organicWaste += added;
-            state.stats.carbonSaved += (added * 0.5); // mitigasi metana
+            state.stats.carbonSaved += (added * 0.5);
             updateDashboardUI();
-
             addChatMessage('Bot', `♻️ [Timbangan IoT]: Deposit ${added}kg Sampah Basah (Sisa Makanan). Arahkan ke Bio-Pond BSF Blok 2.`);
         }
 
-        // SIMULASI 2: Panen Maggot
         function simHarvestMaggot() {
             state.stats.maggotStock += 15;
             updateDashboardUI();
-
             addChatMessage('Bot', `🐛 [Panen BSF]: 15kg Fresh Maggot siap. Menyiarkan ketersediaan ke Grup "Peternak Ikan Lokal"...`);
-
             setTimeout(() => {
                 addChatMessage('Pak Ahmad (Peternak)', 'Ambil 10kg mas. Otw Bank Sampah.');
                 state.stats.revenue += 70000;
@@ -624,75 +693,58 @@
             }, 2000);
         }
 
-        // SIMULASI 3: Input Limbah ke BioCNG
         function simDepositSlurry() {
             const added = parseFloat((Math.random() * 10 + 5).toFixed(1));
             state.stats.carbonSaved += (added * 0.8);
             updateDashboardUI();
-
             addChatMessage('Bot', `💩 [Flow Meter IoT]: Input ${added} Liter limbah cair/organik masuk ke Digester BioCNG Utama. Proses fermentasi anaerobik dimulai.`);
         }
 
-        // SIMULASI 4: Botolkan & Jual BioCNG
         function simHarvestBioCNG() {
             state.stats.biocngStock += 3;
             updateDashboardUI();
-
             addChatMessage('Bot', `🔥 [Kompresor BioCNG]: Proses pemurnian selesai. Berhasil membotolkan 3 Tabung BioCNG (Setara LPG 3Kg).\n\nMembuat draft WA ke Grup "Paguyuban UMKM Tahu Tempe"...`);
-
             setTimeout(() => {
                 addChatMessage('Bu Siti (UMKM Gorengan)', 'Saya pesan 2 tabung ya buat goreng sore ini. Nanti anak saya yang ambil.');
-                state.stats.revenue += 30000; // Rp15.000 x 2
+                state.stats.revenue += 30000;
                 state.stats.biocngStock -= 2;
                 updateDashboardUI();
             }, 3000);
         }
 
-        // SIMULASI 5: Bahaya BioCNG (Overpressure)
         function triggerOverpressure() {
             state.biocng.status = 'KRITIS';
             state.biocng.pressure = 3.8;
             state.biocng.methane = 45;
             state.biocng.ph = 5.5;
-
             updateBioCNGUI();
-            switchTab('chat'); // Pindah otomatis ke chat
-
+            switchTab('chat');
             addChatMessage('Bot', `🚨 [ALERT - REAKTOR BioCNG]: \nTekanan gas melonjak tajam ke 3.8 Bar (Overpressure) dan pH drop ke 5.5 (Asam).\n\n⚠️ TINDAKAN DARURAT:\nSistem IoT gagal membuka katup otomatis. Kader piket mohon SEGERA putar Safety Valve Manual ke arah kiri untuk membuang gas berlebih!`);
         }
 
-        // SIMULASI 6: Penyelesaian Bahaya
         function resolveOverpressure() {
             state.biocng.status = 'OPTIMAL';
             state.biocng.pressure = 1.5;
             state.biocng.methane = 65;
             state.biocng.ph = 7.0;
-
             updateBioCNGUI();
-
             addChatMessage('Kader/Teknisi', 'Safety valve manual sudah saya buka min, tekanan perlahan turun.');
-
             setTimeout(() => {
                 addChatMessage('Bot', `✅ [Sensor Pulih]: Tekanan BioCNG kembali aman di 1.5 Bar. pH stabil. Terima kasih atas respon cepatnya, potensi ledakan digester berhasil dicegah.`);
             }, 1500);
         }
 
-        // SIMULASI 7: Chat Manual Form Submit
         function handleSendChat(e) {
             e.preventDefault();
             const input = document.getElementById('chat-input');
             const text = input.value.trim();
-
             if (!text) return;
-
             addChatMessage('Kader/Teknisi', text);
             input.value = '';
-
             setTimeout(() => {
                 addChatMessage('Bot', 'Instruksi/Laporan diterima dan diunggah ke cloud database ESG Kelurahan.');
             }, 1000);
         }
-
     </script>
 </body>
 
